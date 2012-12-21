@@ -1,0 +1,25 @@
+pkgname=libksba
+pkgver=1.3.0
+pkgrel=1
+category=security
+pkgdesc="KSBA is an X.509 Library"
+arch=('i686' 'x86_64')
+url="http://www.gnupg.org"
+source=('libksba.install')
+md5sums=('88e09b531a1d1b6a90f707552262b3ec')
+install=libksba.install
+license=('LGPG')
+makedepends=('gettext' 'libiconv' 'libgpg-error' 'perl')
+depends=('gettext' 'libiconv' 'libgpg-error')
+build() {
+  cd "$portsdir/$category/$pkgname"
+  make
+  make deinstall  
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+}
+
