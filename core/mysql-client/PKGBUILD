@@ -1,0 +1,25 @@
+pkgname=mysql-client
+pkgver=5.5.28
+pkgrel=1
+category=databases
+pkgdesc="Multithreaded SQL database (client)"
+arch=('i686' 'x86_64')
+url="http://www.mysql.com/"
+source=('mysql-client.install')
+md5sums=('aba45d91dad6e2cd4ebfc4765b3dbe1b')
+install=mysql-client.install
+license=('GPL')
+makedepends=('cmake' 'cmake-modules')
+
+build() {
+     cd "$portsdir/$category/mysql55-client"
+     make
+     make deinstall
+     make package PACKAGES="$srcdir"
+}
+
+package() {
+     cd "$pkgdir"
+     tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+}
+
