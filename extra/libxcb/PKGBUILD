@@ -1,0 +1,31 @@
+pkgname=libxcb
+pkgver=1.7
+pkgrel=1
+category=x11
+pkgdesc="x11 client-side library"
+arch=('i686' 'x86_64')
+url="http://xorg.freedesktop.org"
+license=('custom')
+depends=('xcb-proto>=1.7' 'libxdmcp' 'libxau')
+makedepends=('pkgconfig' 'libxslt' 'python2')
+options=('!libtool')
+
+build() {
+
+  CONFIGURE_ENV=""
+  NEEDED_LIBS="-L/usr/local/lib -lXau"
+
+
+  cd "$portsdir/$category/$pkgname"
+  make clean
+  make CONFIGURE_ENV=$CONFIGURE_ENV NEEDED_LIBS="${NEEDED_LIBS}"
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+}
+
+
