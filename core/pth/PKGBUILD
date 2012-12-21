@@ -1,0 +1,25 @@
+pkgname=pth
+pkgver=2.0.7
+pkgrel=1
+category=devel
+pkgdesc="GNU Portable Threads"
+arch=('i686' 'x86_64')
+url="http://www.gnu.org/software/pth/"
+source=('pth.install')
+md5sums=('5678eb232af42ef4a82d221ee3623d50')
+install=pth.install
+license=('GPL')
+
+build() {
+     cd "$portsdir/$category/$pkgname"
+     make
+     make deinstall
+     make package PACKAGES="$srcdir"
+}
+
+package() {
+     cd "$pkgdir"
+     tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+     rm -rf +MANIFEST +MTREE_DIRS
+}
+

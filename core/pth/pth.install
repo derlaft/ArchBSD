@@ -1,0 +1,8 @@
+post_install() {
+	/sbin/ldconfig -m /usr/local/lib/pth
+}
+
+pre_remove() {
+	/sbin/ldconfig -R
+}
+
