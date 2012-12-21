@@ -1,0 +1,26 @@
+pkgname=libpciaccess
+pkgver=0.12.1
+pkgrel=1
+category=devel
+pkgdesc="X11 PCI access library"
+arch=(i686 x86_64)
+license=('custom')
+url="http://xorg.freedesktop.org/"
+depends=('pciids')
+makedepends=('pkgconfig' 'xorg-util-macros')
+options=('!libtool')
+
+build() {
+  cd "$portsdir/$category/$pkgname"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+}
+
+
