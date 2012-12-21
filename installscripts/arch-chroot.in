@@ -1,0 +1,34 @@
+#!/bin/bash
+
+shopt -s extglob
+
+m4_include(common)
+
+usage() {
+  cat <<EOF
+usage: ${0##*/} chroot-dir [command]
+
+    -h             Print this help message
+
+If 'command' is unspecified, ${0##*/} will launch /bin/sh.
+
+EOF
+}
+
+if [[ -z $1 || $1 = @(-h|--help) ]]; then
+  usage
+  exit $(( $# ? 0 : 1 ))
+fi
+
+(( EUID == 0 )) || die 'This script must be run with root privileges'
+chrootdir=$1
+shift
+
+[[ -d $chrootdir ]] || die "Can't create chroot on non-directory %s" "$chrootdir"
+
+trap '{ api_fs_umount "$chrootdir"; umount "$chrootdir/etc/resolv.conf"; } 2>/dev/null' EXIT
+
+api_fs_mount "$chrootdir" || die "failed to setup API filesystems in chroot %s" "$chrootdir"
+track_mount /etc/resolv.conf "$chrootdir/etc/resolv.conf" --bind
+
+SHELL=/bin/sh chroot "$chrootdir" "$@"
