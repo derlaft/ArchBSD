@@ -1,0 +1,23 @@
+pkgname=glproto
+pkgver=1.4.15
+pkgrel=1
+category=x11
+pkgdesc="GLX extension headers"
+arch=(any)
+url="http://xorg.freedesktop.org"
+license=('custom')
+
+build() {
+  cd "$portsdir/$category/$pkgname"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+}
+
+
