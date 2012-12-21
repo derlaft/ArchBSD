@@ -1,0 +1,25 @@
+pkgname=xmlto
+pkgver=0.0.25
+pkgrel=1
+category=textproc
+pkgdesc="Front-end to an XSL toolchain"
+arch=('i686' 'x86_64')
+url="http://cyberelk.net/tim/software/xmlto/"
+license=('GPL')
+depends=('libxslt' 'perl-yaml-syck' 'perl-test-pod')
+makedepends=('docbook-xsl')
+
+build() {
+  cd "$portsdir/$category/$pkgname"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+}
+
+
