@@ -1,0 +1,24 @@
+pkgname=pacman-mirrorlist
+pkgver=20121213
+pkgrel=1
+pkgdesc="Arch BSD mirror list for use by pacman"
+arch=('any')
+url="http://www.archbsd.net/mirrorlist/"
+license=('GPL')
+backup=(usr/local/etc/pacman.d/mirrorlist)
+source=(mirrorlist)
+
+# NOTE on building this package:
+# * Go to the trunk/ directory
+# * Run bash -c ". PKGBUILD; updatelist"
+# * Update the checksums, update pkgver
+# * Build the package
+
+build() {
+  mkdir -p $pkgdir/usr/local//etc/pacman.d
+  install -m644 $srcdir/mirrorlist $pkgdir/usr/local/etc/pacman.d/
+}
+
+md5sums=('03e2157a5b53cb3374407d31898ec9c2')
+sha256sums=('6f500d3527b8976a143fed4df2bd4593a92fe5947963cdcf2db584c97e233a1d')
+
