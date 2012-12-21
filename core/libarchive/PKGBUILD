@@ -1,0 +1,27 @@
+pkgname=libarchive
+pkgver=3.0.4
+pkgrel=1
+pkgepoch=1
+category=archivers
+pkgdesc="library that can create and read several streaming archive formats"
+arch=('i686' 'x86_64')
+url="http://libarchive.googlecode.com/"
+source=('libarchive.install')
+md5sums=('04318bd718b5899bed4f220596dde531')
+install=libarchive.install
+license=('BSD')
+depends=('libiconv' 'libxml2' 'pkgconf')
+
+build() {
+     cd "$portsdir/$category/$pkgname"
+     make clean
+     make
+     make deinstall	
+     make package PACKAGES="$srcdir"
+
+}
+
+package() {
+  cd "$pkgdir"
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_${pkgrel},${pkgepoch}.txz"
+}
