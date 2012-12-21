@@ -1,0 +1,23 @@
+pkgname=pciids
+pkgver=20121208
+pkgrel=1
+category=misc
+pkgdesc="Database of all known IDs used in PCI devices"
+arch=(any)
+url="http://pciids.sourceforge.net/"
+license=('custom')
+
+build() {
+  cd "$portsdir/$category/$pkgname"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+}
+
+
