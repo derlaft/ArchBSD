@@ -1,0 +1,27 @@
+pkgname=perl
+pkgver=5.16.2
+pkgrel=1
+category=lang
+pkgdesc="A highly capable, feature-rich programming language"
+arch=('i686' 'x86_64')
+url="http://www.perl.org"
+source=('perl.install')
+md5sums=('39fa196553ba4dbd895d4f05dc3fee35')
+install=perl.install
+license=(''GPL' 'PerlArtistic'')
+depends=('freebsd-world')
+
+build() {
+  cd "$portsdir/$category/${pkgname}5.16"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+}
+
+
