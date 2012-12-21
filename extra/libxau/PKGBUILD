@@ -1,0 +1,31 @@
+pkgname=libxau
+_pkgname=libXau
+pkgver=1.0.6
+pkgrel=1
+category=x11
+pkgdesc="11 authorisation library"
+arch=('i686' 'x86_64')
+url="http://xorg.freedesktop.org"
+source=('libxau.install')
+md5sums=('04318bd718b5899bed4f220596dde531')
+install=libxau.install
+license=('custom')
+depends=('xproto>=7.0.18')
+makedepends=('pkgconfig')
+options=('!libtool')
+
+build() {
+
+  cd "$portsdir/$category/$_pkgname"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${_pkgname}-${pkgver}.txz"
+}
+
+
