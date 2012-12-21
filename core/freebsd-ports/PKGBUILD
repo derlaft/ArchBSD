@@ -1,0 +1,19 @@
+pkgname=freebsd-ports
+pkgver=20121216
+pkgrel=1
+category=devel
+pkgdesc="Snap shot of the FreeBSD port tree"
+arch=('i686' 'x86_64')
+url="http://freebsd.org"
+license=('BSD')
+groups=('base-devel')
+
+build() {
+	mkdir -p $pkgdir/usr/ports
+	portsnap fetch
+}
+
+package() {
+	portsnap -p $pkgdir/usr/ports extract
+}
+
