@@ -1,0 +1,28 @@
+pkgname=bash
+pkgver=4.2.37
+pkgrel=1
+category=shells
+pkgdesc="The GNU Project's Bourne Again SHell"
+arch=('i686' 'x86_64')
+url="http://cnswww.cns.cwru.edu/~chet/bash/"
+license=('GPL')
+groups=('base')
+source=('bash.install')
+md5sums=('c20eaf886cae7a552c769372b907090a')
+install=bash.install
+depends=('gettext' 'libiconv')
+
+build() {
+     cd "$portsdir/$category/$pkgname"
+     make clean
+     make
+     make deinstall
+     make package PACKAGES="$srcdir"
+}
+
+package() {
+     cd "$pkgdir"
+     tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+     rm -rf +MANIFEST +MTREE_DIRS
+}
+

@@ -1,0 +1,51 @@
+post_install() {
+	install-info --quiet /usr/local/info/bash.info /usr/local/info/dir
+	
+	BASH="$(echo ${PKG_PREFIX-/usr/local}/bin/bash | /usr/bin/sed -e 's|//|/|g')"
+	RBASH="$(echo ${PKG_PREFIX-/usr/local}/bin/rbash | /usr/bin/sed -e 's|//|/|g')"
+    	SHELLS="/etc/shells"
+
+	if [ -d "${SHELLS%25/*}" ] && ! grep -qs "^$BASH\$" "$SHELLS"; then
+        	if [ `id -u` -eq 0 ]; then
+        		echo "$BASH" >> "$SHELLS"
+        	else
+		          echo "Not root, please add $BASH to $SHELLS manually"
+        	fi
+	fi
+      
+	if [ -d "${SHELLS%25/*}" ] && ! grep -qs "^$RBASH\$" "$SHELLS"; then
+        	if [ `id -u` -eq 0 ]; then
+		        echo "$RBASH" >> "$SHELLS"
+	        else
+        		echo "Not root, please add $RBASH to $SHELLS manually"
+	        fi
+	fi
+}
+post_remove() {
+
+	BASH="$(echo ${PKG_PREFIX-/usr/local}/bin/bash | /usr/bin/sed -e 's|//|/|g')"
+	RBASH="$(echo ${PKG_PREFIX-/usr/local}/bin/rbash | /usr/bin/sed -e 's|//|/|g')"
+	SHELLS="${PKG_DESTDIR-}/etc/shells"
+
+	if grep -qs "^$BASH\$" "$SHELLS"; then
+        	if [ `id -u` -eq 0 ]; then
+		        TMPSHELLS=`mktemp -t shells`
+		        grep -v "^$BASH\$" "$SHELLS" > "$TMPSHELLS"
+		        cat "$TMPSHELLS" > "$SHELLS"
+		        rm "$TMPSHELLS"
+	       else
+        		echo "Not root, please remove $BASH from $SHELLS manually"
+	      fi
+         fi
+     
+	 if grep -qs "^$RBASH\$" "$SHELLS"; then
+        	 if [ `id -u` -eq 0 ]; then
+		         TMPSHELLS=`mktemp -t shells`
+		         grep -v "^$RBASH\$" "$SHELLS" > "$TMPSHELLS"
+		         cat "$TMPSHELLS" > "$SHELLS"
+		         rm "$TMPSHELLS"
+	        else
+        		 echo "Not root, please remove $RBASH from $SHELLS manually"
+	        fi
+	fi
+}
