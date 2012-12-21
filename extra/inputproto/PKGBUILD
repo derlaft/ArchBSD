@@ -2,15 +2,17 @@ pkgname=inputproto
 pkgver=2.0.2
 pkgrel=1
 category=x11
-pkgdesc="Input extension headers"
-arch=(any)
-url="http://xorg.freedesktop.org"
+pkgdesc="X11 input extension wire protocol"
+arch=('any')
+url="http://xorg.freedesktop.org/"
 license=('custom')
+makedepends=('xorg-util-macros')
 
 build() {
+
   cd "$portsdir/$category/$pkgname"
   make clean
-  make
+  make 
   make deinstall
   make package PACKAGES="$srcdir"
 }
