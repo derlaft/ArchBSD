@@ -1,0 +1,29 @@
+pkgname=gpgme
+pkgver=1.3.2
+pkgrel=1
+category=security
+pkgdesc="A library to make access to GnuPG easier"
+arch=('i686' 'x86_64')
+url="http://www.gnupg.org"
+license=('lGPL')
+source=('gpgme.install')
+md5sums=('a1ed80888895ca0747a6a5b5c0726c47')
+makedepends=('gettext' 'gmake' 'libassuan' 'libgcrypt' 'libgpg-error' 'libiconv' 'libksba' 'pth' 'libtool')
+depends=('gnupg' 'openldap-client' 'pinentry' 'gettext' 'libassuan' 'libgcrypt' 'libgpg-error' 'libiconv' 'libksba' 'pth')
+optdepends=('openldap-client' 'curl')
+install=gpgme.install
+
+build() {
+  cd "$portsdir/$category/$pkgname"
+  make clean
+  make
+  make deinstall  
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+  rm -rf +MANIFEST +MTREE_DIRS
+}
+
