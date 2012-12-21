@@ -1,0 +1,27 @@
+pkgname=gmake
+pkgver=3.82
+pkgrel=1
+category=devel
+pkgdesc="The GNU general-purpose parser generator"
+arch=('i686' 'x86_64')
+url="http://www.gnu.org/software/bison/"
+source=('bison.install')
+md5sums=('f92524347e020f9f912782f347b11f36')
+install=bison.install
+license=('GPL')
+groups=('base-devel')
+depends=('gettext' 'libiconv' 'm4')
+makedepends=('gettext' 'libiconv')
+
+build() {
+     cd "$portsdir/$category/$pkgname"
+     make
+     make deinstall
+     make package PACKAGES="$srcdir"
+}
+
+package() {
+     cd "$pkgdir"
+     tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_$pkgrel.txz"
+}
+
