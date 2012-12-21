@@ -1,0 +1,24 @@
+pkgname=cmake
+pkgver=2.8.9
+pkgrel=1
+category=devel
+pkgdesc="A cross-platform Makefile generator"
+arch=('i686' 'x86_64')
+url="http://www.cmake.com"
+license=('BSD')
+depends=('cmake-modules')
+
+build() {
+     cd "$portsdir/$category/$pkgname"
+     make clean
+     make
+     make deinstall
+     make package PACKAGES="$srcdir"
+}
+
+package() {
+     cd "$pkgdir"
+     tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+     rm -rf +MANIFEST +MTREE_DIRS
+}
+
