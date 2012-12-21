@@ -1,0 +1,11 @@
+post_upgrade() {
+	if usr/local/bin/pacman-key -l >/dev/null 2>&1; then
+		usr/local/bin/pacman-key --populate archbsd
+	fi
+}
+
+post_install() {
+	if [ -x usr/local/bin/pacman-key ]; then
+		post_upgrade
+	fi
+}
