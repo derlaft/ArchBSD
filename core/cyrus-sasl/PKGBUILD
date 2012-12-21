@@ -1,0 +1,26 @@
+pkgname=cyrus-sasl
+pkgver=2.1.26
+pkgrel=1
+category=security
+pkgdesc="RFC 2222 SASL (Simple Authentication and Security Layer)"
+arch=('i686' 'x86_64')
+url="http://cyrusimap.web.cmu.edu/"
+license=('GPL')
+source=('cyrus-sasl.install')
+md5sums=('79ff1dc444e74a3c5c71c59ab14db751')
+install=cyrus-sasl.install
+makedepends=('libtool' 'mysql-client')
+
+build() {
+  cd "$portsdir/$category/${pkgname}2"
+  make clean
+  make
+  make deinstall  
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_$pkgrel.txz"
+}
+
