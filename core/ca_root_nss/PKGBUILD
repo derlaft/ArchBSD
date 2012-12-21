@@ -1,0 +1,23 @@
+pkgname=ca_root_nss
+pkgver=3.14
+pkgrel=1
+category=security
+pkgdesc="The root certificate bundle from the Mozilla Project"
+arch=('i686' 'x86_64')
+url="http://www.mozilla.org/projects/security/pki/nss/"
+license=('MIT')
+makedepends=('perl')
+build() {
+  cd "$portsdir/$category/$pkgname"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+}
+
+
