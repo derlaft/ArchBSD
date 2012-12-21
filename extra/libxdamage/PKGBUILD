@@ -1,0 +1,28 @@
+pkgname=libxdamage
+_pkgname=libXdamage
+pkgver=1.1.3
+pkgrel=1
+category=x11
+pkgdesc="X Damage extension library"
+arch=('i686' 'x86_64')
+source=('libxdamage.install')
+md5sums=('57ee0b40b0a23df31c06e7128e877a91')
+url="http://xorg.freedesktop.org/"
+license=('custom')
+options=('!libtool')
+install=libxdamage.install
+
+build() {
+  cd "$portsdir/$category/$_pkgname"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${_pkgname}-${pkgver}.txz"
+}
+
+
