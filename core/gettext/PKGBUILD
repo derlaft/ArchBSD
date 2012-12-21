@@ -1,0 +1,29 @@
+pkgname=gettext
+pkgver=0.18.1.1
+pkgrel=1
+category=devel
+pkgdesc="GNU internationalization library"
+arch=('i686' 'x86_64')
+url="http://www.gnu.org/software/gettext/"
+license=('GPL')
+groups=('base')
+source=('gettext.install')
+md5sums=('69b7d47cd996749862138e8b6ec29d80')
+install=gettext.install
+depends=('libiconv' 'libtool')
+makedepends=('libiconv')
+optdepends=('cvs: for autopoint tool')
+
+build() {
+     cd "$portsdir/$category/$pkgname"
+     make clean
+     make
+     make deinstall
+     make package PACKAGES="$srcdir"
+}
+
+package() {
+     cd "$pkgdir"
+     tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+}
+
