@@ -1,0 +1,25 @@
+pkgname=libassuan
+pkgver=2.0.3
+pkgrel=1
+category=security
+pkgdesc="IPC library used by GnuPG and gpgme"
+arch=('i686' 'x86_64')
+url="http://www.gnupg.org"
+license=('GPL')
+source=('libassuan.install')
+md5sums=('119b962583bd38cc5dc12467750395dd')
+install=libassuan.install
+makedepends=('gettext' 'libiconv' 'libtool' 'libgpg-error')
+depends=('gettext' 'libiconv' 'libgpg-error')
+build() {
+  cd "$portsdir/$category/$pkgname"
+  make
+  make deinstall  
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+}
+
