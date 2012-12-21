@@ -1,0 +1,29 @@
+pkgname=libxslt
+pkgver=1.1.26
+pkgrel=3
+category=textproc
+pkgdesc="The XSLT C library for GNOME"
+arch=('i686' 'x86_64')
+url="http://xmlsoft.org/XSLT/"
+source=('libxslt.install')
+md5sums=('400b8cb3fb43d4f13a3a7d400569314e')
+install=libxslt.install
+license=('custom')
+depends=('libxml2' 'libgcrypt')
+makedepends=('python2')
+options=('!libtool')
+
+build() {
+  cd "$portsdir/$category/$pkgname"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_${pkgrel}.txz"
+}
+
+
