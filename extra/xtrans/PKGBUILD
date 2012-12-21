@@ -1,0 +1,26 @@
+pkgname=xtrans
+pkgver=1.2.6
+pkgrel=1
+category=x11
+pkgdesc="X transport library"
+arch=(any)
+source=('xtrans.install')
+md5sums=('57ee0b40b0a23df31c06e7128e877a91')
+install=xtrans.install
+url="http://xorg.freedesktop.org"
+license=('custom')
+
+build() {
+  cd "$portsdir/$category/$pkgname"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+}
+
+
