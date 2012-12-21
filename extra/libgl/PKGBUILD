@@ -1,0 +1,26 @@
+pkgname=libgl
+_pkgname=libGL
+pkgver=7.11.2
+pkgrel=2
+category=graphics
+pkgdesc="OpenGL hardware acceleration drivers for the DRI"
+arch=('i686' 'x86_64')
+url="http://dri.sourceforge.net/"
+license=('custom')
+depends=('damageproto' 'expat' 'fixesproto' 'kbproto' 'libX11' 'libXau' 'libXdamage' 'libXdmcp' 'libXext' 'libXfixes' 'libXxf86vm' 
+	'libdrm' 'libpciaccess' 'libxcb' 'pciids' 'pkgconf' 'xextproto' 'xf86vidmodeproto' 'xproto')
+builddepends=('bison' 'dri2proto' 'gettext' 'glproto' 'gmake' 'libiconv' 'libxml' 'm4' 'makedepend' 'python2')
+build() {
+  cd "$portsdir/$category/$_pkgname"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${_pkgname}-${pkgver}_${pkgrel}.txz"
+}
+
+
