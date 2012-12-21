@@ -1,0 +1,25 @@
+pkgname=fixesproto
+pkgver=5.0
+pkgrel=1
+category=x11
+pkgdesc="X11 Fixes extension wire protocol"
+arch=(any)
+url="http://xorg.freedesktop.org"
+license=('custom')
+depends=('xproto' 'xextproto')
+makedepends=('xorg-util-macros')
+
+build() {
+  cd "$portsdir/$category/$pkgname"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+}
+
+
