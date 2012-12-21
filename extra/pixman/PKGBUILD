@@ -1,0 +1,25 @@
+pkgname=pixman
+pkgver=0.24.2
+pkgrel=1
+category=x11
+pkgdesc="The pixel-manipulation library for X and cairo"
+arch=('i686' 'x86_64')
+url="http://xorg.freedesktop.org"
+license=('custom')
+depends=('freebsd-world')
+options=('!libtool')
+
+build() {
+  cd "$portsdir/$category/$pkgname"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+}
+
+
