@@ -1,0 +1,25 @@
+pkgname=openldap-client
+pkgver=2.4.33
+pkgrel=1
+category=net
+pkgdesc="Open source LDAP client implementation"
+arch=('i686' 'x86_64')
+url="http://www.OpenLDAP.org/"
+source=('openldap.install')
+md5sums=('3d7c0d53d1fd4b238ec33d80747bc944')
+install=openldap.install
+license=('Openldap')
+
+build() {
+  cd "$portsdir/$category/openldap24-client"
+  make clean
+  make
+  make deinstall  
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_${pkgrel}.txz"
+}
+

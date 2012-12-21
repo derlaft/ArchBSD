@@ -1,0 +1,12 @@
+post_install() {
+	[ -f /usr/local/etc/openldap/ldap.conf ] || cp /usr/local/etc/openldap/ldap.conf.default /usr/local/etc/openldap/ldap.conf
+	/sbin/ldconfig -m /usr/local/lib
+}
+
+pre_remove(){
+	if cmp -s /usr/local/etc/openldap/ldap.conf /usr/local/etc/openldap/ldap.conf.default; then 
+		rm -f /usr/local/etc/openldap/ldap.conf; 
+	fi
+	/sbin/ldconfig -R
+}
+
