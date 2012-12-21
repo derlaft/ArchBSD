@@ -1,0 +1,27 @@
+pkgname=pinentry
+pkgver=0.8.1
+pkgrel=2
+category=security
+pkgdesc="A collection of simple PIN or passphrase entry dialogs"
+arch=('i686' 'x86_64')
+url="http://www.gnupg.org"
+source=('pinentry.install')
+md5sums=('2ee763abd8029ba0e2c480c93b992b26')
+install=pinentry.install
+license=('GPG')
+depends=('gettext' 'libiconv' 'libgpg-error' 'libgcrypt' 'libksba')
+
+build() {
+  cd "$portsdir/$category/$pkgname"
+  make clean
+  make
+  make deinstall  
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_${pkgrel}.txz"
+  rm -rf +MANIFEST +MTREE_DIRS
+}
+
