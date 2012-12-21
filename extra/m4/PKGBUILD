@@ -1,0 +1,24 @@
+pkgname=m4
+pkgver=1.4.16
+pkgrel=1
+category=devel
+pkgdesc="GNU m4"
+arch=('i686' 'x86_64')
+url="http://www.gnu.org/software/m4/"
+source=('m4.install')
+md5sums=('5d53d9a7c05ad597dab3bae246f3f059')
+install=m4.install
+license=('GPL')
+
+build() {
+     cd "$portsdir/$category/$pkgname"
+     make
+     make deinstall
+     make package PACKAGES="$srcdir"
+}
+
+package() {
+     cd "$pkgdir"
+     tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_$pkgrel,${pkgrel}.txz"
+}
+
