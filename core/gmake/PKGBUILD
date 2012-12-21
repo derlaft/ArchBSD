@@ -1,0 +1,26 @@
+pkgname=gmake
+pkgver=3.82
+pkgrel=1
+category=devel
+pkgdesc="GNU version of 'make' utility"
+arch=('i686' 'x86_64')
+url="http://www.gnu.org/software/make/"
+source=('gmake.install')
+md5sums=('ccbf16bd9a4eac3095354500ab014b42')
+install=gmake.install
+license=('GPL')
+depends=('gettext' 'libiconv')
+makedepends=('gettext' 'libiconv')
+
+build() {
+     cd "$portsdir/$category/$pkgname"
+     make
+     make deinstall
+     make package PACKAGES="$srcdir"
+}
+
+package() {
+     cd "$pkgdir"
+     tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_$pkgrel.txz"
+}
+
