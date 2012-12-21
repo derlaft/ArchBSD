@@ -1,0 +1,11 @@
+--- a/scripts/Makefile	2012-12-14 04:08:58.000000000 +0000
++++ b/scripts/Makefile	2012-12-14 04:08:50.000000000 +0000
+@@ -771,7 +771,7 @@
+ $(OURSCRIPTS): Makefile
+ 	@echo '    ' GEN $@;
+ 	@$(RM) $@
+-	@test -f $(srcdir)/$@.sh.in && m4 -P -I $(srcdir) $(srcdir)/$@.sh.in | $(edit) >$@
++	@test -f $(srcdir)/$@.sh.in && gm4 -P -I $(srcdir) $(srcdir)/$@.sh.in | $(edit) >$@
+ 	@chmod +x $@
+ 	@chmod a-w $@
+ 

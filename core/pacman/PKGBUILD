@@ -1,0 +1,77 @@
+pkgname=pacman
+pkgver=4.0.3
+pkgrel=5
+pkgdesc="A library-based package manager with dependency support"
+arch=('i686' 'x86_64')
+url="http://www.archlinux.org/pacman/"
+license=('GPL')
+groups=('base')
+depends=('bash' 'libarchive>=3.0.2' 'curl>=7.19.4' 'gpgme' 'pacman-mirrorlist' 'archbsd-keyring')
+makedepends=('asciidoc' 'gsed' 'gmake')
+optdepends=('fakeroot: for makepkg usage as normal user')
+backup=(usr/local/etc/pacman.conf usr/local/etc/makepkg.conf)
+install=pacman.install
+options=(!libtool)
+source=(ftp://ftp.archlinux.org/other/pacman/$pkgname-$pkgver.tar.gz
+        0001-Add-conflict-for-replacing-owned-empty-directory.patch
+        0002-Check-empty-subdirectory-ownership.patch
+        0003-Ensure-pre_upgrade-scriptlet-gets-old-package-version.patch
+        pacman.conf
+        pacman.conf.x86_64
+        makepkg.conf
+	Makefile.patch
+	makepkg.patch)
+
+md5sums=('387965c7125e60e5f0b9ff3b427fe0f9'
+         'e0c7c9026dfbb5a042a6cb05c3810fd6'
+         '02db451be806335ce189ffadb5cf84b9'
+         '9926eb703225b8e34d54e222685d63d8'
+         'cf1c19a9c10154103825fc68d480e9f0'
+         'c2f603b062e90b617603770d0f844f32'
+         '2ed194458e349f70c4b5dd493b1714fb'
+         'b328b118c7971884df88748ee8a29512'
+         'dd866f0673baed2b0794f23a5c66693d')
+
+build() {
+  cd $srcdir/$pkgname-$pkgver
+
+  patch -p1 -i $srcdir/0001-Add-conflict-for-replacing-owned-empty-directory.patch
+  patch -p1 -i $srcdir/0002-Check-empty-subdirectory-ownership.patch
+  patch -p1 -i $srcdir/0003-Ensure-pre_upgrade-scriptlet-gets-old-package-version.patch
+  patch -p1 -i $srcdir/makepkg.patch
+
+  ./configure --prefix=/usr/local --sysconfdir=/usr/local/etc \
+    --localstatedir=/var --disable-doc LDFLAGS="-L/usr/local/lib" \
+   CPPFLAGS="-I/usr/local/include -I/usr/local/include/curl -I/usr/local/include/gpgme"
+  patch -p1 -i $srcdir/Makefile.patch
+  gmake
+}
+
+package() {
+  cd $srcdir/$pkgname-$pkgver
+  gmake DESTDIR=$pkgdir install
+
+  # install Arch specific stuff
+  mkdir -p $pkgdir/usr/local/etc
+  case "$CARCH" in
+    i686)
+      install -m644 $srcdir/pacman.conf $pkgdir/usr/local/etc/pacman.conf
+      mycarch="i686"
+      mychost="i686-archbsd-freebsd"
+      myflags="-march=i686"
+      ;;
+    x86_64)
+      install -m644 $srcdir/pacman.conf.x86_64 $pkgdir/usr/local/etc/pacman.conf
+      mycarch="x86_64"
+      mychost="x86_64-archbsd-freebsd"
+      myflags="-march=x86-64"
+      ;;
+  esac
+  install -m644 $srcdir/makepkg.conf $pkgdir/usr/local/etc/
+  # set things correctly in the default conf file
+  gsed -i $pkgdir/usr/local/etc/makepkg.conf \
+    -e "s|@CARCH[@]|$mycarch|g" \
+    -e "s|@CHOST[@]|$mychost|g" \
+    -e "s|@CARCHFLAGS[@]|$myflags|g"
+
+}
