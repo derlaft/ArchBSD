@@ -1,0 +1,22 @@
+pkgname=pkgconf
+pkgver=0.8.9
+pkgrel=1
+category=devel
+pkgdesc="Utility to help to configure compiler and linker flags"
+arch=('i686' 'x86_64')
+url="https://github.com/pkgconf/pkgconf"
+license=('BSD')
+
+build() {
+     cd "$portsdir/$category/$pkgname"
+     make clean
+     make
+     make deinstall
+     make package PACKAGES="$srcdir"
+}
+
+package() {
+     cd "$pkgdir"
+     rm -rf +MANIFEST +MTREE_DIRS
+}
+
