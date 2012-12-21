@@ -1,0 +1,23 @@
+pkgname=inputproto
+pkgver=2.0.2
+pkgrel=1
+category=x11
+pkgdesc="Input extension headers"
+arch=(any)
+url="http://xorg.freedesktop.org"
+license=('custom')
+
+build() {
+  cd "$portsdir/$category/$pkgname"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+}
+
+
