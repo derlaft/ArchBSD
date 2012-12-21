@@ -1,0 +1,24 @@
+pkgname=xcb-proto
+pkgver=1.7.1
+pkgrel=1
+category=x11
+pkgdesc="The X protocol C-language Binding (XCB) protocol"
+arch=(any)
+url="http://xorg.freedesktop.org"
+license=('custom')
+makedepends=('python2' 'libxml2')
+
+build() {
+  cd "$portsdir/$category/$pkgname"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+}
+
+
