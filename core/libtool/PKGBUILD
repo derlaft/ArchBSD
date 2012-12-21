@@ -1,0 +1,26 @@
+pkgname=libtool
+pkgver=2.4.2
+pkgrel=1
+category=devel
+pkgdesc="Generic shared library support script"
+arch=('i686' 'x86_64')
+url="http://www.gnu.org/software/libtool/"
+source=('libtool.install')
+md5sums=('586745e7a0b05f7ee272577f1b2f6f7c')
+install=libtool.install
+license=('GPL')
+
+build() {
+     cd "$portsdir/$category/$pkgname"
+     make clean
+     make
+     make deinstall
+     make package PACKAGES="$srcdir"
+}
+
+package() {
+     cd "$pkgdir"
+     tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+     rm -rf +MANIFEST +MTREE_DIRS
+}
+
