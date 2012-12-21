@@ -1,0 +1,29 @@
+pkgname=gnupg
+pkgver=2.0.19
+pkgrel=2
+category=security
+pkgdesc="The GNU Privacy Guard"
+arch=('i686' 'x86_64')
+url="http://www.gnupg.org"
+license=('GPL')
+source=('gnupg.install')
+md5sums=('0c8858d10460e7b3f9d15e69826855e7')
+makedepends=('gettext' 'gmake' 'libassuan' 'libgcrypt' 'libgpg-error' 'libiconv' 'libksba' 'pth')
+depends=('gettext' 'libassuan' 'libgcrypt' 'libgpg-error' 'libiconv' 'libksba' 'pth')
+optdepends=('openldap-client' 'curl')
+install=gnupg.install
+
+build() {
+  cd "$portsdir/$category/$pkgname"
+  make clean
+  make
+  make deinstall  
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_$pkgrel.txz"
+  rm -rf +MANIFEST +MTREE_DIRS
+}
+
