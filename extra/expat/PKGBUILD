@@ -1,0 +1,25 @@
+pkgname=expat
+_pkgname=expat2
+pkgver=2.0.1
+pkgrel=2
+category=textproc
+pkgdesc="An XML parser library"
+arch=('i686' 'x86_64')
+url="http://expat.sourceforge.net/"
+license=('custom')
+options=('!libtool')
+
+build() {
+  cd "$portsdir/$category/$_pkgname"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_${pkgrel}.txz"
+}
+
+
