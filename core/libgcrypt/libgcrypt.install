@@ -1,0 +1,20 @@
+post_install() {
+	/sbin/ldconfig -m /usr/local/lib
+	install-info --quiet /usr/local/info/gcrypt.info /usr/local/info/dir
+}
+
+pre-remove() {
+	/sbin/ldconfig -R
+	install-info --quiet --delete /usr/local/info/gcrypt.info /usr/local/info/dir
+}
+
+post_remove() {
+	if [ -f /usr/local/info/dir ]; then 
+		if sed -e '1,/Menu:/d' /usr/local/info/dir | grep -q '^[*] '; then 
+			true; 
+		else 
+			rm /usr/local/info/dir; 
+		fi; 
+	fi
+}
+

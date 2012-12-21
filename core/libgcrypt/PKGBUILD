@@ -1,0 +1,27 @@
+pkgname=libgcrypt
+pkgver=1.5.0
+pkgrel=1
+category=security
+pkgdesc="General purpose crypto library based on code used in GnuPG"
+arch=('i686' 'x86_64')
+url="http://www.gnupg.org"
+source=('libgcrypt.install')
+md5sums=('29b6d8e687f066e99cd7bff30c83a0d7')
+install=libgcrypt.install
+license=('GPL')
+makedepends=('gettext' 'libiconv' 'libtool' 'libgpg-error')
+depends=('gettext' 'libiconv' 'libgpg-error')
+build() {
+  cd "$portsdir/$category/$pkgname"
+  make clean
+  make
+  make deinstall  
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_$pkgrel.txz"
+  rm -rf +MANIFEST +MTREE_DIRS
+}
+
