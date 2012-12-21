@@ -1,0 +1,34 @@
+pkgname=openrc
+pkgver=0.11.8
+pkgrel=1
+pkgdesc='Dependency based init system that works with sysvinit.'
+arch=('i686' 'x86_64')
+groups=('base')
+url='http://www.gentoo.org/proj/en/base/openrc/'
+license=('BSD')
+backup=(etc/inittab
+        etc/rc.conf
+        etc/conf.d/{bootmisc,consolefont,dmesg,fsck,hostname,hwclock,keymaps}
+        etc/conf.d/{killprocs,localmount,modules,netmount,network,staticroute}
+        etc/conf.d/{tmpfiles,urandom})
+source=(http://dev.gentoo.org/~williamh/dist/$pkgname-$pkgver.tar.bz2)
+
+md5sums=('d896371d533a22de4cf57c7371c4d6e8')
+
+_makeargs=(BRANDING='Arch BSD')
+
+build() {
+    cd "$srcdir"/$pkgname-$pkgver
+    #For some reason it fails to build the binaries for FreeBSD:
+    #Thsi fixes the 'exec format error' on boot
+    
+    gsed -i 's/os-${OS}/os-FreeBSD/g' mk/os.mk
+    gmake "${_makeargs}"
+}
+
+package() {
+    cd "$srcdir/$pkgname-$pkgver"
+    gmake DESTDIR="$pkgdir" "${_makeargs[@]}" install
+    rm -rfi ${pkgdir}/usr/share/man/man8/rc.8
+}
+
