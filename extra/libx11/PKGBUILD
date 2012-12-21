@@ -1,0 +1,28 @@
+pkgname=libx11
+_pkgname=libX11
+pkgver=1.4.4
+pkgrel=1
+category=x11
+pkgdesc="X11 client-side library"
+arch=('i686' 'x86_64')
+url="http://xorg.freedesktop.org"
+license=('custom')
+depends=('libxcb' 'xproto' 'kbproto')
+makedepends=('xorg-util-macros' 'xextproto' 'xtrans' 'inputproto')
+
+build() {
+  CONFIGURE_ARGS="--datadir=/usr/local/lib --without-xmlto --disable-specs --disable-static --disable-xf86bigfont"
+
+  cd "$portsdir/$category/$_pkgname"
+  make clean
+  make CONFIGURE_ARGS+="${CONFIGURE_ARGS}"
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${_pkgname}-${pkgver},${pkgrel}.txz"
+}
+
+
