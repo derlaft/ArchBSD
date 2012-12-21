@@ -1,0 +1,25 @@
+pkgname=xf86driproto
+pkgver=2.1.1
+pkgrel=1
+category=x11
+pkgdesc="XFree86-DRI extension headers"
+arch=('any')
+url="http://xorg.freedesktop.org/"
+license=('custom')
+makedepends=('xorg-util-macros')
+
+build() {
+
+  cd "$portsdir/$category/$pkgname"
+  make clean
+  make 
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+}
+
+
