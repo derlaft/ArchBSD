@@ -1,0 +1,27 @@
+pkgname=python2
+pkgver=2.7.3
+pkgrel=3
+category=lang
+pkgdesc="A high-level scripting language"
+arch=('i686' 'x86_64')
+url="http://www.python.org/"
+license=('PSF')
+source=('python27.install')
+md5sums=('04318bd718b5899bed4f220596dde531')
+depends=('gettext' 'libiconv')
+conflicts=('python<3')
+install=python27.install
+build() {
+  cd "$portsdir/$category/${pkgname}7"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${pkgname}7-${pkgver}_${pkgrel}.txz"
+}
+
+
