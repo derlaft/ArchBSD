@@ -1,0 +1,65 @@
+# Written by: Amzo
+pkgbase="freebsd"
+pkgname="${pkgbase}-kernel"
+pkgver=9.1
+pkgrel=4
+groups=(base)
+arch=('i686' 'x86_64')
+url="http://freebsd.org"
+license=('BSD')
+source=('ARCHBSD_i686'
+	'ARCHBSD_x86_64'
+	'ARCHBSD_i686.patch'
+	'ARCHBSD_x86_64.patch')
+
+md5sums=('1da3141782687c8d455b63ae747d6c32'
+         '92f91f5796ed8e59c666a7b4909d454b'
+         'a5ecdc82304d6ff426fdb4182f9adc10'
+         '9ab0e68675bab4a90a07dc7f0ae19d79')
+
+makedepends=("freebsd-source")
+options=('docs')
+
+#unset MAKE M4 CC
+
+# Disable --as-needed
+LDFLAGS="${LDFLAGS//-Wl,--as-needed}"
+
+build() {
+# Building
+cd /usr/src
+if [[ "$CARCH" == "x86_64" ]]; then
+	if [ -e /usr/src/sys/amd64/conf/ARCHBSD_x86_64 ]; then
+		rm -rf /usr/src/sys/amd64/conf/ARCHBSD_x86_64
+	fi
+		ln -s $srcdir/ARCHBSD_x86_64 /usr/src/sys/amd64/conf/ARCHBSD_x86_64
+		patch /usr/src/sys/amd64/amd64/identcpu.c  $srcdir/ARCHBSD_x86_64.patch
+		make buildkernel TARGET=amd64 KERNCONF=ARCHBSD_x86_64 || (echo buildkernel failed... && return 1)
+else
+        if [ -e /usr/src/sys/i386/conf/ARCHBSD_i686 ]; then
+                rm -rf /usr/src/sys/i386/conf/ARCHBSD_i686
+	fi
+		patch /usr/src/sys/i386/i386/identcpu.c $srcdir/ARCHBSD_i686.patch
+                ln -s $srcdir/ARCHBSD_i686 /usr/src/sys/i386/conf/ARCHBSD_i686
+                make buildkernel TARGET=i386 KERNCONF=ARCHBSD_i686 || (echo buildkernel failed... && return 1)
+
+fi
+}
+
+# Package kernel
+
+package_freebsd-kernel() {
+
+pkgdesc="FreeBSD 9.1 kernel package"
+options=('!strip')
+cd /usr/src
+
+	if [[ "$CARCH" == "x86_64" ]]; then
+                make installkernel TARGET=amd64 KERNCONF=ARCHBSD_x86_64 || (echo installkernel failed... && return 1)
+	else
+                make installkernel TARGET=i386 KERNCONF=ARCHBSD_i686 || (echo buildkernel failed... && return 1)
+ 
+	fi
+
+}
+
