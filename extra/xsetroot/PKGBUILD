@@ -1,0 +1,28 @@
+pkgname=xorg-xsetroot
+_pkgname=xsetroot
+pkgver=1.1.0
+pkgrel=1
+category=x11
+pkgdesc="Classic X utility to set your root window background to a given pattern or color"
+arch=('i686' 'x86_64')
+url="http://xorg.freedesktop.org/"
+license=('custom')
+depends=('libxmu' 'libx11' 'libxcursor')
+makedepends=('xorg-util-macros' 'xbitmaps')
+groups=('xorg-apps' 'xorg')
+
+build() {
+
+  cd "$portsdir/$category/$_pkgname"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${_pkgname}-${pkgver}.txz"
+}
+
+

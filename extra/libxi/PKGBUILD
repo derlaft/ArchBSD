@@ -1,0 +1,27 @@
+pkgname=libxi
+_pkgname=libXi
+pkgver=1.4.5
+pkgrel=1
+category=x11
+pkgdesc="X11 Input extension library"
+arch=('i686' 'x86_64')
+url="http://xorg.freedesktop.org"
+depends=('libxext' 'inputproto')
+makedepends=('pkgconfig' 'xorg-util-macros')
+license=('custom')
+
+build() {
+
+  cd "$portsdir/$category/$_pkgname"
+  make clean
+  make 
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${_pkgname}-${pkgver},${pkgrel}.txz"
+}
+
+

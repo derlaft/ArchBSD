@@ -1,0 +1,28 @@
+pkgname=xorg-xauth
+_pkgname=xauth
+pkgver=1.0.6
+pkgrel=1
+category=x11
+kgdesc="X.Org authorization settings program"
+arch=(i686 x86_64)
+license=('custom')
+url="http://xorg.freedesktop.org/"
+depends=('libxmu')
+makedepends=('xorg-util-macros')
+groups=('xorg-apps' 'xorg')
+
+build() {
+
+  cd "$portsdir/$category/$_pkgname"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${_pkgname}-${pkgver}.txz"
+}
+
+

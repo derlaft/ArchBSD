@@ -1,0 +1,25 @@
+pkgname=dbus-glib
+pkgver=0.94
+pkgrel=1
+category=devel
+pkgdesc="GLib bindings for DBUS"
+arch=(i686 x86_64)
+license=('GPL')
+url="http://www.freedesktop.org/wiki/Software/DBusBindings"
+depends=('dbus-core' 'glib2')
+makedepends=('pkgconfig')
+
+build() {
+  cd "${portsdir}/${category}/${pkgname}"
+  make clean
+  make
+  make deinstall
+  make PACKAGES="${srcdir}" package
+
+}
+
+
+package() {
+  cd ${pkgdir}
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+}

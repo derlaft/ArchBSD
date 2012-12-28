@@ -1,0 +1,15 @@
+post_install() {
+    echo "Updating /etc/shells"; cp etc/shells etc/shells.bak; (grep -v usr/local/bin/zsh etc/shells.bak; echo /usr/local/bin/zsh) >etc/shells; rm -f etc/shells.bak
+    cp etc/shells etc/shells.bak; (grep -v /usr/local/bin/rzsh etc/shells.bak; echo /usr/local/bin/rzsh) >etc/shells; rm -f etc/shells.bak
+    mkdir -p usr/local/share/zsh/site-functions 2> /dev/null || true
+}
+
+post_upgrade() {
+	post_install
+}
+pre_remove() {
+    echo "Updating /etc/shells"; cp etc/shells etc/shells.bak; (grep -v usr/local/bin/zsh etc/shells.bak) >etc/shells; rm -f etc/shells.bak
+    cp etc/shells etc/shells.bak; (grep -v usr/local/bin/rzsh etc/shells.bak) >etc/shells; rm -f etc/shells.bak
+}
+
+

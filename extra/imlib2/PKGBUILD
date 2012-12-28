@@ -1,0 +1,25 @@
+pkgname=imlib2
+pkgver=1.4.5
+pkgrel=2
+category=graphics
+pkgdesc="Library that does image file loading and saving as well as rendering, manipulation, arbitrary polygon support"
+url="http://sourceforge.net/projects/enlightenment/"
+arch=('i686' 'x86_64')
+license=('BSD')
+depends=('libtiff' 'giflib' 'freetype2' 'libxext' 'libpng' 'libid3tag' 'libjpeg-turbo')
+options=('!libtool')
+
+build() {
+  cd "$portsdir/$category/$pkgname"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_${pkgrel},${pkgrel}.txz"
+}
+
+

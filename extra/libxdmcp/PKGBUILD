@@ -7,7 +7,7 @@ pkgdesc="X11 Display Manager Control Protocol library"
 arch=('i686' 'x86_64')
 url="http://xorg.freedesktop.org"
 license=('custom')
-depends=('xproto' 'glibc')
+depends=('xproto')
 makedepends=('xorg-util-macros')
 options=('!libtool')
 

@@ -1,0 +1,25 @@
+pkgname=menu-cache
+pkgver=0.3.3
+pkgrel=1
+category=x11
+pkgdesc='Caching mechanism for freedesktop.org compliant menus'
+arch=('i686' 'x86_64')
+license=('GPL2')
+url='http://lxde.org/'
+groups=('lxde')
+depends=('intltool' 'glib2')
+options=('!libtool')
+
+build() {
+  cd "${portsdir}/${category}/${pkgname}"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="${srcdir}"
+}
+
+package() {
+  cd "${pkgdir}"
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+}
+

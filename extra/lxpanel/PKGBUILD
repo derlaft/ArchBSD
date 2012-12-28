@@ -1,0 +1,24 @@
+pkgname=lxpanel
+pkgver=0.5.10
+pkgrel=1
+category=x11
+pkgdesc='Lightweight X11 desktop panel for LXDE'
+arch=('i686' 'x86_64')
+license=('GPL2')
+url='http://lxde.org/'
+groups=('lxde')
+depends=('gtk2' 'alsa-lib' 'menu-cache' 'lxmenu-data' 'libwnck')
+
+build() {
+  cd "${portsdir}/${category}/${pkgname}"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="${srcdir}"
+}
+
+package() {
+  cd "${pkgdir}"
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+}
+

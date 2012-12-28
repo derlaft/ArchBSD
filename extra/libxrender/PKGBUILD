@@ -1,0 +1,26 @@
+pkgname=libxrender
+_pkgname=libXrender
+pkgver=0.9.6
+pkgrel=1
+category=x11
+pkgdesc='X Render extension library'
+url='http://xorg.freedesktop.org/'
+arch=('i686' 'x86_64')
+license=('custom')
+depends=('libx11' 'libpthread-stubs' 'renderproto')
+
+build() {
+
+  cd "$portsdir/$category/$_pkgname"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${_pkgname}-${pkgver}.txz"
+}
+
+

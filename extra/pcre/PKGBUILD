@@ -1,0 +1,23 @@
+pkgname=pcre
+pkgver=8.32
+pkgrel=1
+category=devel
+pkgdesc="A library that implements Perl 5-style regular expressions"
+arch=('i686' 'x86_64')
+url="http://www.pcre.org/"
+license=('BSD')
+options=('!libtool')
+
+build() {
+  cd "${portsdir}/${category}/${pkgname}"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="${srcdir}"
+}
+
+package() {
+  cd "${pkgdir}"
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+}
+

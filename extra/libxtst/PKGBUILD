@@ -1,0 +1,27 @@
+pkgname=libxtst
+_pkgname=libXtst
+pkgver=1.2.0
+pkgrel=1
+category=x11
+pkgdesc="X11 Testing -- Resource extension library"
+arch=('i686' 'x86_64')
+url="http://xorg.freedesktop.org/"
+license=('custom')
+depends=('libxext' 'libxi' 'recordproto' 'inputproto')
+makedepends=('xorg-util-macros')
+
+build() {
+
+  cd "$portsdir/$category/$_pkgname"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${_pkgname}-${pkgver}.txz"
+}
+
+

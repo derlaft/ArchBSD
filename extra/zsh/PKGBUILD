@@ -1,0 +1,30 @@
+pkgname=zsh
+pkgver=5.0.2
+pkgrel=3
+category=shells
+pkgdesc="The Z shell"
+arch=('i686' 'x86_64')
+url="http://www.zsh.org//"
+license=('custom')
+source=('zprofile')
+md5sums=('92946911e57d05f1a3f1272b136c85b5')
+
+install=zsh.install
+depends=('libiconv' 'ncurses')
+
+build() {
+     unset LDFLAGS
+     cd "$portsdir/$category/$pkgname"
+     make clean
+     make
+     make deinstall
+     make package PACKAGES="$srcdir"
+}
+
+package() {
+     cd "$pkgdir"
+     tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+     install -d "${pkgdir}/etc/zsh/"	
+     install -m644 "${srcdir}/zprofile" "${pkgdir}/etc/zsh/zprofile"
+}
+

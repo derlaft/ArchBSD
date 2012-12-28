@@ -1,0 +1,27 @@
+pkgname=xorg-setxkbmap
+_pkgname=setxkbmap
+pkgver=1.2.0
+pkgrel=1
+category=x11
+pkgdesc='Set the keyboard using the X Keyboard Extension'
+url='http://xorg.freedesktop.org/'
+license=('custom')
+arch=('i686' 'x86_64')
+depends=('libxkbfile')
+makedepends=('xorg-util-macros')
+
+build() {
+
+  cd "$portsdir/$category/$_pkgname"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${_pkgname}-${pkgver}.txz"
+}
+
+

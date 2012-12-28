@@ -1,0 +1,27 @@
+pkgname=consolekit
+pkgver=0.4.3
+pkgrel=1
+category=sysutils
+pkgdesc="A framework for defining and tracking users, login sessions, and seats"
+arch=('i686' 'x86_64')
+url="http://www.freedesktop.org/wiki/Software/ConsoleKit"
+license=('GPL')
+depends=('dbus' 'dbus-glib' 'glib2' 'polkit' 'libx11')
+makedepends=('pkgconfig' 'libxslt' 'python2')
+options=('!libtool')
+
+build() {
+
+  cd "$portsdir/$category/$pkgname"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+}
+
+

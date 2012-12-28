@@ -1,0 +1,25 @@
+pkgname=libid3tag
+pkgver=0.15.1
+_pkgver=0.15.1b
+pkgrel=1
+category=audio
+pkgdesc="library for id3 tagging"
+arch=('i686' 'x86_64')
+url="http://www.underbit.com/products/mad/"
+license=('GPL')
+options=('!libtool')
+
+build() {
+  cd "$portsdir/$category/$pkgname"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${pkgname}-${_pkgver}.txz"
+}
+
+

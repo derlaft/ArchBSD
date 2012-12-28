@@ -7,7 +7,7 @@ pkgdesc="X11 client-side library"
 arch=('i686' 'x86_64')
 url="http://xorg.freedesktop.org"
 license=('custom')
-depends=('libxcb' 'xproto' 'kbproto')
+depends=('libxau' 'libxdmcp' 'libxcb' 'xproto' 'kbproto')
 makedepends=('xorg-util-macros' 'xextproto' 'xtrans' 'inputproto')
 
 build() {

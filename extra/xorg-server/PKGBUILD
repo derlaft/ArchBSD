@@ -1,0 +1,35 @@
+pkgbase=xorg-server
+pkgname=('xorg-server')
+pkgver=1.10.6
+pkgrel=1
+category=x11-servers
+arch=('i686' 'x86_64')
+license=('custom')
+url="http://xorg.freedesktop.org"
+pkgdesc="Xorg X server"
+depends=(libxdmcp libxfont libpciaccess libdrm 'pixman>=0.24.0' libgcrypt libxau xkeyboard-config xorg-xkbcomp xorg-setxkbmap xorg-fonts-misc dbus)
+# see xorg-server-1.13.0/hw/xfree86/common/xf86Module.h for ABI versions - we provide major numbers that drivers can depend on
+provides=('X-ABI-VIDEODRV_VERSION=10' 'X-ABI-XINPUT_VERSION=12' 'X-ABI-EXTENSION_VERSION=5.0' 'x-server')
+groups=('xorg')
+conflicts=('nvidia-utils<=290.10')
+
+makedepends=('pixman' 'libx11' 'mesa' 'libgl' 'xf86driproto' 'xcmiscproto' 'xtrans' 'bigreqsproto' 'randrproto' 'inputproto' 'fontsproto' 'videoproto'
+             'compositeproto' 'recordproto' 'scrnsaverproto' 'resourceproto' 'xineramaproto' 'libxkbfile' 'libxfont' 'renderproto' 'libpciaccess'
+             'libxv' 'xf86dgaproto' 'libxmu' 'libxrender' 'libxi' 'dmxproto' 'libxaw' 'libdmx' 'libxtst' 'libxres' 'xorg-xkbcomp' 'xorg-util-macros'
+             'xorg-font-util' 'glproto' 'dri2proto' 'libgcrypt')
+options=('!libtool')
+
+build() {
+  cd "${portsdir}/${category}/${pkgname}"
+#  make clean
+  make
+  make deinstall
+  make PACKAGES="${srcdir}" package
+
+}
+
+
+package() {
+  cd ${pkgdir}
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_${pkgrel},${pkgrel}.txz"
+}

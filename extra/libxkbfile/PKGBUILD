@@ -1,0 +1,26 @@
+pkgname=libxkbfile
+pkgver=1.0.7
+pkgrel=1
+category=x11
+pkgdesc="X11 keyboard file manipulation library"
+arch=('i686' 'x86_64')
+license=('custom')
+url="http://xorg.freedesktop.org/"
+depends=('libx11')
+makedepends=('xorg-util-macros')
+
+build() {
+
+  cd "$portsdir/$category/$pkgname"
+  make clean
+  make 
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+}
+
+

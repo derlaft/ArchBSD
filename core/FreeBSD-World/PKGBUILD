@@ -58,7 +58,8 @@ rm -rfi ${pkgdir}/usr/share/man/man8/rc.8.gz
 install -m644 $srcdir/loader.conf ${pkgdir}/boot/
 install -m644 $srcdir/sysctl.conf ${pkgdir}/etc/
 
-backup=(boot/device.hints)
+backup=('boot/device.hints'
+	'boot/loader.conf')
 
 cd "$pkgdir"
 

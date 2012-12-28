@@ -1,0 +1,27 @@
+pkgname=openbox
+pkgver=3.5.0
+pkgrel=3
+category=x11-wm
+pkgdesc="A highly configurable and lightweight X11 window manager"
+arch=('i686' 'x86_64')
+url="http://openbox.org"
+license=('GPL')
+depends=('startup-notification' 'libxml2' 'libxinerama' 'libxrandr'
+     'libxcursor' 'pango' 'imlib2')
+optdepends=('pyxdg: for the xdg-autostart script')
+groups=('lxde')
+install=$pkgname.install
+
+build() {
+  cd "${portsdir}/${category}/${pkgname}"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="${srcdir}"
+}
+
+package() {
+  cd "${pkgdir}"
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_${pkgrel}.txz"
+}
+

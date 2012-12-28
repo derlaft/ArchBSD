@@ -1,0 +1,29 @@
+pkgname=dwm
+pkgver=6.0
+pkgrel=1
+category=x11-wm
+pkgdesc="A dynamic window manager for X"
+url="http://dwm.suckless.org"
+arch=('i686' 'x86_64')
+license=('MIT')
+options=(zipman)
+depends=('libx11' 'libxinerama')
+install=dwm.install
+source=(dwm.desktop)
+md5sums=('939f403a71b6e85261d09fc3412269ee')
+
+build() {
+
+  cd "$portsdir/$category/$pkgname"
+  make clean
+  make 
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_${pkgrel}.txz"
+}
+
+

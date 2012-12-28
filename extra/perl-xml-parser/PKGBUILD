@@ -1,0 +1,28 @@
+pkgname=perl-xml-parser
+_pkgname=p5-XML-Parser
+pkgver=2.41
+pkgrel=1
+category=textproc
+pkgdesc="Expat-based XML parser module for perl"
+arch=('i686' 'x86_64')
+license=('GPL' 'PerlArtistic')
+url="http://search.cpan.org/dist/${_pkgname}/"
+depends=('perl' 'expat')
+replaces=('perlxml')
+provides=("perlxml=${pkgver}")
+
+build() {
+
+  cd "$portsdir/$category/$_pkgname"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${_pkgname}-${pkgver}.txz"
+}
+
+

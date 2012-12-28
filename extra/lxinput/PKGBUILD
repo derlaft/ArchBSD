@@ -1,0 +1,25 @@
+pkgname=lxinput
+pkgver=0.3.1
+pkgrel=1
+category=sysutils
+pkgdesc="A small program to configure keyboard and mouse for LXDE."
+arch=('i686' 'x86_64')
+url="http://lxde.org/"
+license=('GPL')
+groups=('lxde')
+depends=('gtk2>=2.12.0')
+makedepends=('pkgconfig' 'intltool')
+
+build() {
+  cd "${portsdir}/${category}/${pkgname}"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="${srcdir}"
+}
+
+package() {
+  cd "${pkgdir}"
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_${pkgrel}.txz"
+}
+

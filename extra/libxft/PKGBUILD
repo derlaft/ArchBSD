@@ -1,0 +1,27 @@
+pkgname=libxft
+_pkgname=libXft
+pkgver=2.1.14
+pkgrel=1
+category=x11-fonts
+pkgdesc="FreeType-based font drawing library for X"
+arch=('i686' 'x86_64')
+license=('custom')
+url="http://xorg.freedesktop.org/"
+depends=('fontconfig' 'libxrender')
+makedepends=('pkgconfig')
+
+build() {
+
+  cd "$portsdir/$category/$_pkgname"
+  make clean
+  make 
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${_pkgname}-${pkgver}.txz"
+}
+
+

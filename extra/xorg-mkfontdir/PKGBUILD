@@ -1,0 +1,28 @@
+pkgname=xorg-mkfontdir
+_pkgname=mkfontdir
+pkgver=1.0.6
+pkgrel=1
+category=x11-fonts
+pkgdesc="Create an index of X font files in a directory"
+arch=(any)
+url="http://xorg.freedesktop.org/"
+license=('custom')
+depends=('xorg-mkfontscale')
+makedepends=('xorg-util-macros')
+groups=('xorg' 'xorg-apps')
+
+build() {
+
+  cd "$portsdir/$category/$_pkgname"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${_pkgname}-${pkgver}.txz"
+}
+
+

@@ -1,0 +1,26 @@
+pkgname=glib2
+_pkgname=glib20
+pkgver=2.28.8
+pkgrel=5
+category=devel
+pkgdesc="Common C routines used by GTK+ and other libs"
+url="http://www.gtk.org/"
+arch=(i686 x86_64)
+license=('LGPL')
+depends=('pcre' 'libffi')
+makedepends=('pkg-config' 'python2' 'libxslt' 'docbook-xml')
+optdepends=('python2: for gdbus-codegen')
+
+build() {
+  cd "${portsdir}/${category}/${_pkgname}"
+#  make clean
+  make
+  make deinstall
+  make package PACKAGES="${srcdir}"
+}
+
+package() {
+  cd "${pkgdir}"
+  tar xpf "${srcdir}/${category}/glib-${pkgver}_${pkgrel}.txz"
+}
+

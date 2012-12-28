@@ -1,0 +1,27 @@
+pkgname=giflib
+pkgver=4.2.0
+pkgrel=2
+category=graphics
+pkgdesc="A library for reading and writing gif images"
+url="http://sourceforge.net/projects/giflib/"
+arch=('i686' 'x86_64')
+license=('MIT')
+depends=('libx11')
+provides=("libungif=${pkgver}")
+conflicts=('libungif')
+replaces=('libungif')
+options=('!libtool')
+
+build() {
+  cd "${portsdir}/${category}/${pkgname}"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="${srcdir}"
+}
+
+package() {
+  cd "${pkgdir}"
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_${pkgrel}.txz"
+}
+

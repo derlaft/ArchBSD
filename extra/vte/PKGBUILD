@@ -1,0 +1,23 @@
+pkgname=vte
+pkgver=0.26.2
+pkgrel=3
+category=x11-toolkits
+pkgdesc="Virtual Terminal Emulator widget for use with GTK2"
+arch=('i686' 'x86_64')
+license=('LGPL')
+options=('!libtool' '!emptydirs')
+depends=('gtk2' 'ncurses')
+
+build() {
+  cd "${portsdir}/${category}/${pkgname}"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="${srcdir}"
+}
+
+package() {
+  cd "${pkgdir}"
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_${pkgrel}.txz"
+}
+

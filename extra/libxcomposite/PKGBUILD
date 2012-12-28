@@ -1,0 +1,25 @@
+pkgname=libxcomposite
+_pkgname=libXcomposite
+pkgver=0.4.3
+pkgrel=1
+category=x11
+pkgdesc="X11 Composite extension library"
+arch=('i686' 'x86_64')
+url="http://xorg.freedesktop.org/"
+license=('custom')
+depends=('libxfixes' 'compositeproto')
+makedepends=('xorg-util-macros')
+
+build() {
+  cd "${portsdir}/${category}/${_pkgname}"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="${srcdir}"
+}
+
+package() {
+  cd "${pkgdir}"
+  tar xpf "${srcdir}/${category}/${_pkgname}-${pkgver},${pkgrel}.txz"
+}
+

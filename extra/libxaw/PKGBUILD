@@ -1,0 +1,27 @@
+pkgname=libxaw
+_pkgname=libXaw
+pkgver=1.0.9
+pkgrel=2
+category=x11-toolkits
+pkgdesc="X11 Athena Widget library"
+arch=('i686' 'x86_64')
+license=('custom')
+url="http://xorg.freedesktop.org/"
+depends=('libxmu' 'libxpm' 'libx11' 'libxp' 'libpthread-stubs' 'printproto')
+makedepends=('xorg-util-macros')
+
+build() {
+
+  cd "$portsdir/$category/$_pkgname"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${_pkgname}-${pkgver},${pkgrel}.txz"
+}
+
+

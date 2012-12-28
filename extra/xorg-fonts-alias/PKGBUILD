@@ -1,0 +1,26 @@
+pkgname=xorg-fonts-alias
+_pkgname=font-alias
+pkgver=1.0.3
+pkgrel=1
+category=x11-fonts
+pkgdesc="X.org font alias files"
+arch=('any')
+url="http://xorg.freedesktop.org/"
+license=('custom')
+depends=('freetype2' 'libfontenc' 'mkfontdir' 'mkfontscale' 'xproto')
+install=fonts.install
+build() {
+
+  cd "$portsdir/$category/$_pkgname"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${_pkgname}-${pkgver}.txz"
+}
+
+

@@ -1,0 +1,26 @@
+pkgname=fontconfig
+pkgver=2.9.0
+pkgrel=1
+category=x11-fonts
+pkgdesc="A library for configuring and customizing font access"
+arch=(i686 x86_64)
+url="http://www.fontconfig.org/release/"
+license=('custom')
+depends=('expat' 'freetype2')
+install=fontconfig.install
+
+build() {
+
+  cd "$portsdir/$category/$pkgname"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver},${pkgrel}.txz"
+}
+
+

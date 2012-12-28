@@ -1,0 +1,24 @@
+pkgname=libpthread-stubs
+pkgver=0.3
+pkgrel=3
+category=devel
+pkgdesc="This library provides weak aliases for pthread functions"
+arch=(i686 x86_64)
+license=('GPL')
+url="http://xcb.freedesktop.org/"
+makedepends=('pkgconfig')
+
+build() {
+  cd "${portsdir}/${category}/${pkgname}"
+  make clean
+  make
+  make deinstall
+  make PACKAGES="${srcdir}" package
+
+}
+
+
+package() {
+  cd ${pkgdir}
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_${pkgrel}.txz"
+}

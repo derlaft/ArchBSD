@@ -1,0 +1,25 @@
+pkgname=randrproto
+pkgver=1.3.2
+pkgrel=1
+category=x11
+pkgdesc="X11 RandRextension wire protocol"
+arch=('any')
+url="http://xorg.freedesktop.org/"
+license=('custom')
+makedepends=('xorg-util-macros')
+
+build() {
+
+  cd "$portsdir/$category/$pkgname"
+  make clean
+  make 
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+}
+
+

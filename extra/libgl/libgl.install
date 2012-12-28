@@ -1,0 +1,13 @@
+post_install() {
+	if [ -f usr/local/lib/.nvidia/libGL.so.1 ]; then
+	  /bin/ln -f usr/local/lib/.nvidia/libGL.so.1 usr/local/lib/libGL.so
+	  /bin/ln -f usr/local/lib/.nvidia/libGL.so.1 usr/local/lib/libGL.so.1
+	else
+	  /bin/ln -f usr/local/lib/.libGL/libGL.so.1 usr/local/lib/libGL.so
+	  /bin/ln -f usr/local/lib/.libGL/libGL.so.1 usr/local/lib/libGL.so.1
+	fi
+}
+
+post_remove() {
+	/bin/rm -f usr/local/lib/libGL.so*
+}

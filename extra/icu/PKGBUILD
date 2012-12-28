@@ -1,0 +1,22 @@
+pkgname=icu
+pkgver=4.8.1.1
+pkgrel=1
+category=devel
+pkgdesc="International Components for Unicode library"
+arch=(i686 x86_64)
+url="http://www.icu-project.org/"
+license=('custom:"icu"')
+
+build() {
+  cd "${portsdir}/${category}/${pkgname}"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="${srcdir}"
+}
+
+package() {
+  cd "${pkgdir}"
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_${pkgrel}.txz"
+}
+

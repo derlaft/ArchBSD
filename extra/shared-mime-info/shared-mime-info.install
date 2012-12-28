@@ -1,0 +1,28 @@
+post_install() {
+for mdir in usr/local/shared/mime; do
+	    if [ -d ${mdir} ]; then
+		usr/local/bin/update-mime-database ${mdir}
+	    fi
+done
+exit 0
+}
+
+post_upgrade() {
+  post_install
+}
+
+post_deinstall() [
+
+    [ -f usr/local/share/mime/XMLnamespaces ] && rm -f usr/local/share/mime/XMLnamespaces || true
+    [ -f usr/local/share/mime/aliases ] && rm -f usr/local/share/mime/aliases || true
+    [ -f usr/local/share/mime/generic-icons ] && rm -f usr/local/share/mime/generic-icons || true
+    [ -f usr/local/share/mime/globs ] && rm -f usr/local/share/mime/globs || true
+    [ -f usr/local/share/mime/globs2 ] && rm -f usr/local/share/mime/globs2 || true
+    [ -f usr/local/share/mime/icons ] && rm -f usr/local/share/mime/icons || true
+    [ -f usr/local/share/mime/magic ] && rm -f usr/local/share/mime/magic || true
+    [ -f usr/local/share/mime/mime.cache ] && rm -f usr/local/share/mime/mime.cache || true
+    [ -f usr/local/share/mime/subclasses ] && rm -f usr/local/share/mime/subclasses || true
+    [ -f usr/local/share/mime/treemagic ] && rm -f usr/local/share/mime/treemagic || true
+    [ -f usr/local/share/mime/types ] && rm -f usr/local/share/mime/types || true
+    [ -f usr/local/share/mime/version ]&&  rm -f usr/local/share/mime/version || true
+}

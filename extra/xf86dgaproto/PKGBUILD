@@ -1,0 +1,24 @@
+pkgname=xf86dgaproto
+pkgver=2.1
+pkgrel=1
+category=x11
+pkgdesc="X11 Direct Graphics Access extension wire protocol"
+arch=('any')
+url="http://xorg.freedesktop.org/"
+license=('custom')
+
+build() {
+
+  cd "$portsdir/$category/$pkgname"
+  make clean
+  make 
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+}
+
+

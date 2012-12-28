@@ -1,0 +1,23 @@
+pkgname=intltool
+pkgver=0.41.1
+pkgrel=1
+category=textproc
+pkgdesc="The internationalization tool collection"
+arch=('any')
+url="https://edge.launchpad.net/intltool"
+license=('GPL')
+depends=('perl-xml-parser')
+
+build() {
+  cd "${portsdir}/${category}/${pkgname}"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="${srcdir}"
+}
+
+package() {
+  cd "${pkgdir}"
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+}
+

@@ -1,0 +1,27 @@
+pkgname=links
+pkgver=2.7
+pkgrel=1
+category=www
+pkgdesc="A text WWW browser, similar to Lynx"
+arch=('i686' 'x86_64')
+url="http://links.twibright.com/"
+license=('GPL')
+makedepends=('libtiff' 'libpng' 'libxt')
+optdepends=('libx11: for using xlinks' 'libtiff: for using xlinks' 'libpng: for using xlinks')
+provides=('links-g')
+conflicts=('links-g')
+replaces=('links-g')
+
+build() {
+  cd "${portsdir}/${category}/${pkgname}"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="${srcdir}"
+}
+
+package() {
+  cd "${pkgdir}"
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver},${pkgrel}.txz"
+}
+

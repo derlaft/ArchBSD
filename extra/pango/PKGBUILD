@@ -1,0 +1,24 @@
+pkgname=pango
+pkgver=1.28.4
+pkgrel=1
+category=x11-toolkits
+pkgdesc="A library for layout and rendering of text"
+arch=('i686' 'x86_64')
+license=('LGPL')
+depends=('libthai' 'cairo' 'libxft')
+makedepends=('fontconfig' 'cairo' 'libxft' 'libthai' 'gobject-introspection')
+options=('!libtool')
+
+build() {
+  cd "${portsdir}/${category}/${pkgname}"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="${srcdir}"
+}
+
+package() {
+  cd "${pkgdir}"
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_${pkgrel}.txz"
+}
+

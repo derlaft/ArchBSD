@@ -1,0 +1,24 @@
+pkgname=libice
+_pkgname=libICE
+pkgver=1.0.7
+pkgrel=1
+category=x11
+pkgdesc="X11 Inter-Client Exchange library"
+arch=('i686' 'x86_64')
+url="http://xorg.freedesktop.org/"
+depends=('xproto>=7.0.18')
+makedepends=('pkgconfig' 'xtrans>=1.2.5')
+
+build() {
+  cd "${portsdir}/${category}/${_pkgname}"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="${srcdir}"
+}
+
+package() {
+  cd "${pkgdir}"
+  tar xpf "${srcdir}/${category}/${_pkgname}-${pkgver},${pkgrel}.txz"
+}
+

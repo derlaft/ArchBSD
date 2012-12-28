@@ -1,0 +1,25 @@
+pkgname=lxappearance
+pkgver=0.5.2
+pkgrel=1
+category=x11-themes
+pkgdesc="Feature-rich GTK+ theme switcher of the LXDE Desktop"
+arch=('i686' 'x86_64')
+license=('GPL2')
+url="http://lxde.org/"
+groups=('lxde')
+depends=('gtk2' 'intltool')
+makedepends=('pkgconfig')
+
+build() {
+  cd "${portsdir}/${category}/${pkgname}"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="${srcdir}"
+}
+
+package() {
+  cd "${pkgdir}"
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_${pkgrel}.txz"
+}
+

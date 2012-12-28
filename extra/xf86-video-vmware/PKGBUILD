@@ -1,0 +1,28 @@
+pkgname=xf86-video-vmware
+pkgver=12.0.2
+pkgrel=1
+category=x11-drivers
+pkgdesc="X11 vmware display driver"
+arch=('i686' 'x86_64')
+url="http://xorg.freedesktop.org/"
+license=('custom')
+depends=('libdrm' 'mesa')
+makedepends=('xorg-server-devel' 'X-ABI-VIDEODRV_VERSION=10' 'resourceproto' 'scrnsaverproto')
+conflicts=('xorg-server<1.10.0' 'X-ABI-VIDEODRV_VERSION<10' 'X-ABI-VIDEODRV_VERSION>=12')
+groups=('xorg-drivers' 'xorg')
+
+build() {
+
+  cd "$portsdir/$category/$pkgname"
+  make clean
+  make 
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_${pkgrel}.txz"
+}
+
+

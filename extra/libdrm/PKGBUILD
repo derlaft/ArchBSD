@@ -1,0 +1,25 @@
+pkgname=libdrm
+pkgver=2.4.31
+pkgrel=1
+category=graphics
+pkgdesc="Userspace interface to kernel Direct Rendering Module services"
+arch=('i686' 'x86_64')
+url="http://xorg.freedesktop.org/"
+license=('custom')
+depends=('libpciaccess')
+
+build() {
+
+  cd "$portsdir/$category/$pkgname"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_${pkgrel}.txz"
+}
+
+

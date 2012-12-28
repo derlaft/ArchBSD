@@ -1,0 +1,28 @@
+pkgname=xf86-input-mouse
+pkgver=1.7.1
+pkgrel=1
+category=x11-drivers
+pkgdesc="X11 mouse driver"
+arch=('i686' 'x86_64')
+url="http://xorg.freedesktop.org/"
+license=('custom')
+depends=('libdrm' 'mesa')
+makedepends=('xorg-server-devel' 'X-ABI-XINPUT_VERSION=12' 'resourceproto' 'scrnsaverproto')
+conflicts=('xorg-server<1.10.0' 'X-ABI-XINPUT_VERSION<12' 'X-ABI-XINPUT_VERSION>=14')
+groups=('xorg-drivers' 'xorg')
+
+build() {
+
+  cd "$portsdir/$category/$pkgname"
+  make clean
+  make 
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_${pkgrel}.txz"
+}
+
+

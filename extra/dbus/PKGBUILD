@@ -1,0 +1,35 @@
+pkgname=dbus
+pkgver=1.4.14
+pkgrel=4
+category=devel
+pkgdesc="Freedesktop.org message bus system"
+url="http://www.freedesktop.org/Software/dbus"
+arch=(i686 x86_64)
+license=('GPL' 'custom')
+# do not depend on systemd to avoid circular dep,
+# dep on shadow for install scriptlet FS#29341
+depends=('expat')
+makedepends=('libx11')
+optdepends=('libx11: dbus-launch support')
+provides=('dbus-core')
+conflicts=('dbus-core')
+replaces=('dbus-core')
+install=dbus.install
+
+
+build() {
+  cd "${portsdir}/${category}/${pkgname}"
+  make clean
+  make
+  make deinstall
+  make PACKAGES="${srcdir}" package
+
+}
+
+
+package() {
+  cd ${pkgdir}
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_${pkgrel}.txz"
+  install -m755 -d "$pkgdir/etc/init.d/"
+  install -m755 ../dbus "$pkgdir/etc/init.d/dbus"
+}

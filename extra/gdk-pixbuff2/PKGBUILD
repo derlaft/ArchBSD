@@ -1,0 +1,28 @@
+pkgname=gdk-pixbuf2
+_pkgname=gdk-pixbuf
+pkgver=2.23.5
+pkgrel=3
+category=graphics
+pkgdesc="An image loading library"
+arch=('i686' 'x86_64')
+url="http://www.gtk.org/"
+license=('LGPL2.1')
+depends=('glib2' 'libpng' 'libtiff' 'libjpeg' 'libx11')
+makedepends=('gtk-doc' 'gobject-introspection')
+
+build() {
+
+  cd "$portsdir/$category/$pkgname"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${_pkgname}-${pkgver}_${pkgrel}.txz"
+
+}
+
+

@@ -1,0 +1,25 @@
+pkgname=xcb-util
+pkgver=0.3.9
+pkgrel=1
+category=x11
+pkgdesc="Utility libraries for XC Binding"
+arch=('i686' 'x86_64')
+url="http://xcb.freedesktop.org"
+license=('custom')
+depends=('libxcb>=1.7')
+makedepends=('gperf' 'xorg-util-macros')
+options=('!libtool')
+
+build() {
+  cd "${portsdir}/${category}/${pkgname}"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="${srcdir}"
+}
+
+package() {
+  cd "${pkgdir}"
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_${pkgrel},1.txz"
+}
+

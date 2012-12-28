@@ -1,0 +1,29 @@
+pkgname=xkeyboard-config
+pkgver=2.5.1
+pkgrel=1
+category=x11
+pkgdesc="X keyboard configuration files"
+arch=(any)
+license=('custom')
+url="http://www.freedesktop.org/wiki/Software/XKeyboardConfig"
+depends=('xorg-xkbcomp')
+makedepends=('intltool')
+provides=('xkbdata')
+replaces=('xkbdata')
+conflicts=('xkbdata')
+
+build() {
+
+  cd "$portsdir/$category/$pkgname"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+}
+
+

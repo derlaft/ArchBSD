@@ -1,0 +1,24 @@
+pkgname=ncurses
+pkgver=5.9
+pkgrel=1
+category=devel
+pkgdesc="Library for terminal-independent, full-screen output"
+arch=('i686' 'x86_64')
+url="http://invisible-island.net/ncurses/"
+license=('custom')
+
+build() {
+  unset LDFLAGS
+  cd "$portsdir/$category/$pkgname"
+  #make clean
+  make
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_${pkgrel}.txz"
+}
+
+

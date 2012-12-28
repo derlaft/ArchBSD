@@ -1,0 +1,29 @@
+pkgname=libjpeg-turbo
+pkgver=1.2.1
+pkgrel=1
+category=graphics
+pkgdesc="libjpeg derivative with accelerated baseline JPEG compression and decompression"
+arch=('i686' 'x86_64')
+url="http://libjpeg-turbo.virtualgl.org/"
+license=('GPL' 'custom')
+makedepends=('nasm')
+provides=('libjpeg=8.0.2')
+conflicts=('libjpeg')
+replaces=('libjpeg')
+options=('!libtool')
+
+build() {
+
+  cd "$portsdir/$category/$pkgname"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+}
+
+

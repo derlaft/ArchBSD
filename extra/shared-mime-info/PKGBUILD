@@ -1,0 +1,23 @@
+pkgname=shared-mime-info
+pkgver=1.0
+pkgrel=1
+category=misc
+pkgdesc="Freedesktop.org Shared MIME Info"
+arch=('i686' 'x86_64')
+license=('GPL')
+depends=('libxml2' 'glib2')
+makedepends=('intltool' 'pkgconfig')
+install=${pkgname}.install
+build() {
+  cd "${portsdir}/${category}/${pkgname}"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="${srcdir}"
+}
+
+package() {
+  cd "${pkgdir}"
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_${pkgrel}.txz"
+}
+

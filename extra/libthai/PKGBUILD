@@ -1,0 +1,24 @@
+pkgname=libthai
+pkgver=0.1.5
+pkgrel=4
+category=devel
+pkgdesc="Thai language support routines"
+url="http://linux.thai.net/projects/libthai"
+arch=('i686' 'x86_64')
+license=('LGPL')
+makedepends=('pkgconfig')
+options=('!libtool' '!emptydirs')
+
+build() {
+  cd "${portsdir}/${category}/${pkgname}"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="${srcdir}"
+}
+
+package() {
+  cd "${pkgdir}"
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_${pkgrel}.txz"
+}
+

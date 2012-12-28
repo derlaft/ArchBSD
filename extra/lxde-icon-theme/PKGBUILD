@@ -1,0 +1,25 @@
+pkgname=lxde-icon-theme
+pkgver=0.0.1
+pkgrel=1
+category=x11-themes
+pkgdesc="LXDE default default icon theme based on nuoveXT2"
+url="http://lxde.org"
+groups=('lxde')
+depends=('gtk-update-icon-cache')
+license=('GPL')
+arch=(any)
+install=lxde-icon-theme.install
+
+build() {
+  cd "${portsdir}/${category}/${pkgname}"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="${srcdir}"
+}
+
+package() {
+  cd "${pkgdir}"
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_${pkgrel}.txz"
+}
+

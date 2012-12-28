@@ -1,0 +1,24 @@
+pkgname=gtk2
+_pkgname=gtk20
+pkgver=2.24.6
+pkgrel=2
+category=x11-toolkits
+arch=('i686' 'x86_64')
+url="http://www.gtk.org/"
+pkgdesc="GTK+ is a multi-platform toolkit (v2)"
+depends=('atk' 'pango' 'libxcursor' 'libxinerama' 'libxrandr' 'libxi' 'libxcomposite' 'libxdamage' 'shared-mime-info' 'cairo' 'gtk-update-icon-cache' 'libgl')
+license=('GPL')
+
+build() {
+  cd "${portsdir}/${category}/${_pkgname}"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="${srcdir}"
+}
+
+package() {
+  cd "${pkgdir}"
+  tar xpf "${srcdir}/${category}/gtk-${pkgver}_${pkgrel}.txz"
+}
+

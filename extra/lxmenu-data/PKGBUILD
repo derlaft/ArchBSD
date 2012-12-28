@@ -1,0 +1,23 @@
+pkgname=lxmenu-data
+pkgver=0.1.2
+pkgrel=1
+category=x11
+pkgdesc="freedesktop.org desktop menus for LXDE"
+arch=('i686' 'x86_64')
+license=('GPL2')
+url="http://lxde.org/"
+groups=('lxde')
+
+build() {
+  cd "${portsdir}/${category}/${pkgname}"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="${srcdir}"
+}
+
+package() {
+  cd "${pkgdir}"
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+}
+

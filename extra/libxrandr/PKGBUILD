@@ -1,0 +1,26 @@
+pkgname=libxrandr
+_pkgname=libXrandr
+pkgver=1.3.2
+pkgrel=1
+category=x11
+pkgdesc="X11 RandR extension library"
+arch=('i686' 'x86_64')
+license=('custom')
+url="http://xorg.freedesktop.org/"
+depends=('libx11' 'libxext' 'libxrender' 'libpthread-stubs' 'renderproto' 'xextproto' 'libxext' 'randrproto>=1.3.0')
+makedepends=('xorg-util-macros')
+options=('!libtool')
+
+build() {
+  cd "${portsdir}/${category}/${_pkgname}"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="${srcdir}"
+}
+
+package() {
+  cd "${pkgdir}"
+  tar xpf "${srcdir}/${category}/${_pkgname}-${pkgver}.txz"
+}
+

@@ -6,8 +6,6 @@ category=x11
 pkgdesc="11 authorisation library"
 arch=('i686' 'x86_64')
 url="http://xorg.freedesktop.org"
-source=('libxau.install')
-md5sums=('04318bd718b5899bed4f220596dde531')
 install=libxau.install
 license=('custom')
 depends=('xproto>=7.0.18')

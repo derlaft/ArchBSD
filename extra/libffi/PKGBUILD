@@ -1,0 +1,23 @@
+pkgname=libffi
+pkgver=3.0.9
+pkgrel=1
+category=devel
+pkgdesc="A portable, high level programming interface to various calling conventions"
+arch=('i686' 'x86_64')
+url="http://sourceware.org/libffi"
+license=('MIT')
+install=libffi.install
+
+build() {
+  cd "${portsdir}/${category}/${pkgname}"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="${srcdir}"
+}
+
+package() {
+  cd "${pkgdir}"
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+}
+

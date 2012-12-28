@@ -1,0 +1,27 @@
+pkgname=mkfontscale
+pkgver=1.0.9
+pkgrel=1
+category=x11-fonts
+pkgdesc="Create an index of scalable font files for X"
+arch=(i686 x86_64)
+url="http://xorg.freedesktop.org/"
+license=('custom')
+depends=('freetype2' 'libfontenc')
+makedepends=('xorg-util-macros' 'xproto')
+groups=('xorg-apps' 'xorg')
+
+build() {
+
+  cd "$portsdir/$category/$pkgname"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+}
+
+

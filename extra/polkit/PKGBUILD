@@ -1,0 +1,27 @@
+pkgname=polkit
+pkgver=0.99
+pkgrel=2
+category=sysutils
+pkgdesc="Application development toolkit for controlling system-wide privileges"
+arch=(i686 x86_64)
+license=('LGPL')
+url="http://www.freedesktop.org/wiki/Software/polkit"
+depends=('glib2' 'expat')
+makedepends=('intltool' 'gtk-doc' 'gobject-introspection')
+replaces=('policykit')
+install=polkit.install
+
+build() {
+  cd "${portsdir}/${category}/${pkgname}"
+  make clean
+  make
+  make deinstall
+  make PACKAGES="${srcdir}" package
+
+}
+
+
+package() {
+  cd ${pkgdir}
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+}

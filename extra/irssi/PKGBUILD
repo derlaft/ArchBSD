@@ -1,0 +1,28 @@
+pkgname=irssi
+pkgver=0.8.15
+pkgrel=5
+category=irc
+pkgdesc="Modular text mode IRC client with Perl scripting"
+arch=('i686' 'x86_64')
+url="http://irssi.org/"
+license=('GPL')
+depends=('perl' 'glib' 'ncurses' 'pcre')
+optdepends=('perl-libwww: for the scriptassist script')
+backup=('etc/irssi.conf')
+
+build() {
+  unset LDFLAGS
+  cd "$portsdir/$category/$pkgname"
+
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_${pkgrel}.txz"
+}
+
+
