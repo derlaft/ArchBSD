@@ -1,0 +1,11 @@
+post_install() {
+  [ -f usr/local/etc/asound.conf ] || cp -p usr/local/etc/asound.conf.sample usr/local/etc/asound.conf
+   /sbin/ldconfig -m /usr/local/lib
+}
+pre_remove() {
+    if cmp -s usr/local/etc/asound.conf.sample usr/local/etc/asound.conf; then rm -f usr/local/etc/asound.conf; else echo " >>> If permanently deleting this package, /usr/local/etc/asound.conf must be removed manually."; fi
+}
+
+post_deinstall() {
+   /sbin/ldconfig -R
+}

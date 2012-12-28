@@ -1,0 +1,23 @@
+pkgname=alsa-lib
+pkgver=1.0.26
+pkgrel=1
+category=audio
+pkgdesc="An alternative implementation of Linux sound support"
+arch=('i686' 'x86_64')
+url="http://www.alsa-project.org"
+license=('GPL')
+options=(!libtool)
+install=alsa.install
+build() {
+  cd "${portsdir}/${category}/${pkgname}"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="${srcdir}"
+}
+
+package() {
+  cd "${pkgdir}"
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+}
+
