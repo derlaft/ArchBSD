@@ -1,0 +1,25 @@
+pkgname=bigreqsproto
+pkgver=1.1.1
+pkgrel=1
+category=x11
+pkgdesc="X11 Big Requests extension wire protocol"
+arch=('any')
+url="http://xorg.freedesktop.org/"
+license=('custom')
+makedepends=('xorg-util-macros' 'xmlto' 'docbook-xml')
+
+build() {
+
+  cd "$portsdir/$category/$pkgname"
+  make clean
+  make 
+  make deinstall
+  make package PACKAGES="$srcdir"
+}
+
+package() {
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+}
+
+
