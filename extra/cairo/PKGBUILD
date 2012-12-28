@@ -1,0 +1,28 @@
+pkgname=cairo
+pkgver=1.10.2
+pkgrel=5
+category=graphics
+pkgdesc="Cairo vector graphics library"
+arch=(i686 x86_64)
+license=('LGPL' 'MPL')
+url="http://cairographics.org/"
+depends=('libpng' 'libxrender' 'libxext' 'fontconfig' 'pixman>=0.24.0' 'glib2')
+makedepends=('librsvg' 'poppler-glib' 'libspectre' 'gtk-doc' 'valgrind') # 'libdrm')
+optdepends=('xcb-util: for XCB backend') # really needed?
+provides=('cairo-xcb')
+replaces=('cairo-xcb')
+options=('!libtool')
+
+build() {
+  cd "${portsdir}/${category}/${pkgname}"
+  make clean
+  make
+  make deinstall
+  make package PACKAGES="${srcdir}"
+}
+
+package() {
+  cd "${pkgdir}"
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_${pkgrel},2.txz"
+}
+
