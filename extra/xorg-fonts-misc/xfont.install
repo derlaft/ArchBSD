@@ -1,4 +1,15 @@
 post_install() {
+    mkfontscale usr/local/lib/X11/fonts/misc 2>/dev/null || true
+    mkfontdir usr/local/lib/X11/fonts/misc 2>/dev/null || true
+}
+post_remove() {
+    mkfontscale usr/local/lib/X11/fonts/misc 2>/dev/null || true
+    if [ -e usr/local/lib/X11/fonts/misc/fonts.scale -a "`stat -f '%25z' usr/local/lib/X11/fonts/misc/fonts.scale 2>/dev/null`" = '2' ]; then rm usr/local/lib/X11/fonts/misc/fonts.scale; fi
+    mkfontdir usr/local/lib/X11/fonts/misc 2>/dev/null || true
+    if [ -e usr/local/lib/X11/fonts/misc/fonts.dir -a "`stat -f '%25z' usr/local/lib/X11/fonts/misc/fonts.dir 2>/dev/null`" = '2' ]; then rm usr/local/lib/X11/fonts/misc/fonts.dir; fi
+}
+
+post_install() {
   echo -n "Updating font cache... "
   fc-cache -f > /dev/null
   mkfontscale /usr/local/share/fonts/misc

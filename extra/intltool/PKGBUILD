@@ -6,7 +6,8 @@ pkgdesc="The internationalization tool collection"
 arch=('any')
 url="https://edge.launchpad.net/intltool"
 license=('GPL')
-depends=('perl-xml-parser')
+depends=('libiconv' 'perl-xml-parser')
+makedepends=('gmake')
 
 build() {
   cd "${portsdir}/${category}/${pkgname}"

@@ -6,8 +6,8 @@ pkgdesc="Utility libraries for XC Binding"
 arch=('i686' 'x86_64')
 url="http://xcb.freedesktop.org"
 license=('custom')
-depends=('libxcb>=1.7')
-makedepends=('gperf' 'xorg-util-macros')
+depends=('libxcb')
+makedepends=('libcheck' 'libgcrypt' 'libgpg-error' 'libxml2' 'libxslt' 'python2' 'xcb-proto')
 options=('!libtool')
 
 build() {

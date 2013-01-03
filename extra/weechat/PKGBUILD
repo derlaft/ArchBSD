@@ -6,8 +6,8 @@ pkgdesc="Fast, light and extensible IRC client (curses UI)"
 arch=('i686' 'x86_64')
 url="http://www.weechat.org/"
 license=('GPL')
-depends=('curl' 'libgcrypt')
-makedepends=('cmake' 'pkgconfig' 'perl' 'python2' 'lua' 'tcl>=8.6.0' 'ruby' 'aspell')
+depends=('curl' 'libgcrypt' 'ncurses')
+makedepends=('cmake' 'cmake-modules')
 optdepends=('perl' 'python2' 'lua' 'tcl' 'ruby' 'aspell')
 
 build() {

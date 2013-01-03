@@ -6,7 +6,7 @@ pkgdesc="GLib bindings for DBUS"
 arch=(i686 x86_64)
 license=('GPL')
 url="http://www.freedesktop.org/wiki/Software/DBusBindings"
-depends=('dbus-core' 'glib2')
+depends=('dbus' 'gio-fam-backend')
 makedepends=('pkgconfig')
 
 build() {

@@ -6,7 +6,7 @@ pkgdesc="This library provides weak aliases for pthread functions"
 arch=(i686 x86_64)
 license=('GPL')
 url="http://xcb.freedesktop.org/"
-makedepends=('pkgconfig')
+makedepends=('pkgconf')
 
 build() {
   cd "${portsdir}/${category}/${pkgname}"

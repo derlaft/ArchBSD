@@ -1,11 +1,13 @@
 pkgname=freetype2
-pkgver=2.4.9
+pkgver=2.4.11
 pkgrel=1
 category=print
 pkgdesc="TrueType font rendering library"
 arch=('i686' 'x86_64')
 license=('GPL')
 url="http://freetype.sourceforge.net/"
+depends=('pkgconf')
+makedepends=('gmake')
 
 build() {
 
@@ -18,7 +20,7 @@ build() {
 
 package() {
   cd $pkgdir
-  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_${pkgrel}.txz"
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
 }
 
 

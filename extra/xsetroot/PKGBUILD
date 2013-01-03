@@ -7,8 +7,7 @@ pkgdesc="Classic X utility to set your root window background to a given pattern
 arch=('i686' 'x86_64')
 url="http://xorg.freedesktop.org/"
 license=('custom')
-depends=('libxmu' 'libx11' 'libxcursor')
-makedepends=('xorg-util-macros' 'xbitmaps')
+depends=('libxcursor' 'libxmu' 'xbitmaps')
 groups=('xorg-apps' 'xorg')
 
 build() {

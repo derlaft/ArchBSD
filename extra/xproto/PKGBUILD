@@ -6,7 +6,7 @@ pkgdesc="X11 protocol headers"
 arch=(any)
 url="http://xorg.freedesktop.org"
 license=('custom')
-makedepends=('xorg-util-macros')
+depends=('pkgconf')
 
 build() {
   cd "$portsdir/$category/$pkgname"

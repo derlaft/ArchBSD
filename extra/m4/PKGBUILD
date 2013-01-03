@@ -5,8 +5,6 @@ category=devel
 pkgdesc="GNU m4"
 arch=('i686' 'x86_64')
 url="http://www.gnu.org/software/m4/"
-source=('m4.install')
-md5sums=('5d53d9a7c05ad597dab3bae246f3f059')
 install=m4.install
 license=('GPL')
 

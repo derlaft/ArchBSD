@@ -9,7 +9,7 @@ license=('GPL2')
 depends=('libxmu' 'libpng' 'libjpeg' 'libxft')
 makedepends=('cmake' 'freeglut')
 backup=('usr/local/etc/slim.conf' 'usr/local/etc/logrotate.d/slim' 'usr/local/etc/pam.d/slim')
-install=slim.install
+depends=('livjpeg' 'libxft' 'libpng' 'xorg-server')
 build() {
   cd "${portsdir}/${category}/${pkgname}"
   make clean

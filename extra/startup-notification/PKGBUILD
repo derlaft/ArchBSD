@@ -5,7 +5,7 @@ category=x11
 pkgdesc="Monitor and display application startup"
 arch=(i686 x86_64)
 license=('LGPL')
-depends=('libx11' 'xcb-util>=0.3.9')
+depends=('libx11' 'xcb-util')
 options=('!libtool')
 url="http://www.freedesktop.org"
 

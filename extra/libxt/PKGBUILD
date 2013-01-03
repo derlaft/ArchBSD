@@ -1,27 +1,25 @@
 pkgname=libxt
-pkgver=1.1.3
+_pkgname=libXt
+pkgver=1.1.1
 pkgrel=1
 pkgdesc="X11 toolkit intrinsics library"
+category=x11-toolkits
 arch=('i686' 'x86_64')
 url="http://xorg.freedesktop.org/"
 license=('custom')
 depends=('libsm' 'libx11')
-makedepends=('xorg-util-macros')
+makedepends=('bigreqsproto' 'inputproto' 'libcheck' 'libgcrypt' 'libgpg-error' 'libxml2' 'libxslt' 'python2' 'xcb-proto' 'xcmiscproto' 'xextproto' 'xf86bigfontproto')
 options=('!libtool')
-source=("${url}/releases/individual/lib/libXt-${pkgver}.tar.bz2")
-sha1sums=('2cef068bc4d7170e31b89b5c06aeaf4451a7699a')
 
 build() {
-  cd "${srcdir}/libXt-${pkgver}"
-  ./configure --prefix=/usr/local --sysconfdir=/usr/local/etc --disable-static
-  gmake
+  cd "$portsdir/$category/$_pkgname"
+  make clean
+  make 
+  make deinstall
+  make package PACKAGES="$srcdir"
 }
 
 package() {
-  cd "${srcdir}/libXt-${pkgver}"
-  gmake DESTDIR="${pkgdir}" install
-
-  install -m755 -d "${pkgdir}/usr/local/share/licenses/${pkgname}"
-  install -m644 COPYING "${pkgdir}/usr/local/share/licenses/${pkgname}/"
+  cd $pkgdir
+  tar xpf "${srcdir}/${category}/${_pkgname}-${pkgver},${pkgrel}.txz"
 }
-

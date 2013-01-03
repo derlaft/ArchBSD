@@ -7,8 +7,8 @@ pkgdesc="X11 pixmap library"
 arch=('i686' 'x86_64')
 license=('custom')
 url="http://xorg.freedesktop.org/"
-depends=('kbproto' 'libice' 'libsm' 'libx11' 'libxext' 'libxt' 'libpthread-stubs' 'xextproto' 'xproto')
-makedepends=('xorg-util-macros')
+depends=('libxext' 'libxt')
+makedepends=('bigreqsproto' 'inputproto' 'libcheck' 'libgcrypt' 'libgpg-error' 'libxml2' 'libxslt' 'python2' 'xcb-proto' 'xcmiscproto' 'xf86bigfontproto' )
 
 build() {
 

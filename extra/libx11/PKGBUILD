@@ -7,15 +7,13 @@ pkgdesc="X11 client-side library"
 arch=('i686' 'x86_64')
 url="http://xorg.freedesktop.org"
 license=('custom')
-depends=('libxau' 'libxdmcp' 'libxcb' 'xproto' 'kbproto')
-makedepends=('xorg-util-macros' 'xextproto' 'xtrans' 'inputproto')
+depends=('kbproto' 'libxcb')
+makedepends=('bigreqsproto' 'inputproto' 'libcheck' 'libgcrypt' 'libgpg-error' 'libxml2' 'libxslt' 'python2' 'xcb-proto' 'xcmiscproto' 'xextproto' 'xf86bigfontproto' 'xorg-macros' 'xtrans')
 
 build() {
-  CONFIGURE_ARGS="--datadir=/usr/local/lib --without-xmlto --disable-specs --disable-static --disable-xf86bigfont"
-
   cd "$portsdir/$category/$_pkgname"
   make clean
-  make CONFIGURE_ARGS+="${CONFIGURE_ARGS}"
+  make 
   make deinstall
   make package PACKAGES="$srcdir"
 }

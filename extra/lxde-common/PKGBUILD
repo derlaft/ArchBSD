@@ -9,7 +9,7 @@ license=('GPL2')
 groups=('lxde')
 backup=(usr/local/etc/xdg/lxsession/LXDE/desktop.conf
         usr/local/etc/xdg/lxsession/LXDE/autostart)
-depends=('libx11' 'glib2' 'lxde-icon-theme' 'lxsession')
+depends=('gtk2' 'lxde-icon-theme' 'lxsession')
 makedepends=('automake')
 build() {
   cd "${portsdir}/${category}/${pkgname}"

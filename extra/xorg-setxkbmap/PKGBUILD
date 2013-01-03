@@ -8,7 +8,6 @@ url='http://xorg.freedesktop.org/'
 license=('custom')
 arch=('i686' 'x86_64')
 depends=('libxkbfile')
-makedepends=('xorg-util-macros')
 
 build() {
 

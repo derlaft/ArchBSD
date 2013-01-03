@@ -6,7 +6,8 @@ pkgdesc="Nano's ANOther editor, an enhanced free Pico clone"
 arch=(i686 x86_64)
 url="http://www.nano-editor.org/"
 license=('GPL')
-depends=('gettext' 'libiconv')
+depends=('gettext')
+install=nano.install
 
 build() {
   cd "$portsdir/$category/$pkgname"

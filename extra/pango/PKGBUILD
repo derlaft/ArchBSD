@@ -5,7 +5,7 @@ category=x11-toolkits
 pkgdesc="A library for layout and rendering of text"
 arch=('i686' 'x86_64')
 license=('LGPL')
-depends=('libthai' 'cairo' 'libxft')
+depends=('cairo' 'gobject-introspection' 'libxft' 'xorg-fonts-truetype')
 makedepends=('fontconfig' 'cairo' 'libxft' 'libthai' 'gobject-introspection')
 options=('!libtool')
 

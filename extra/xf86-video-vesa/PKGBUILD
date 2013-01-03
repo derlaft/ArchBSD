@@ -6,7 +6,7 @@ pkgdesc="X11 vmware display driver"
 arch=('i686' 'x86_64')
 url="http://xorg.freedesktop.org/"
 license=('custom')
-depends=('libdrm' 'mesa')
+depends=('libxi' 'xorg-server')
 makedepends=('xorg-server-devel' 'X-ABI-VIDEODRV_VERSION=10' 'resourceproto' 'scrnsaverproto')
 conflicts=('xorg-server<1.10.0' 'X-ABI-VIDEODRV_VERSION<10' 'X-ABI-VIDEODRV_VERSION>=12')
 groups=('xorg-drivers' 'xorg')

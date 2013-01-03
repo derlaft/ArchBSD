@@ -6,12 +6,12 @@ pkgdesc="X keyboard configuration files"
 arch=(any)
 license=('custom')
 url="http://www.freedesktop.org/wiki/Software/XKeyboardConfig"
-depends=('xorg-xkbcomp')
+depends=('getetxt')
 makedepends=('intltool')
 provides=('xkbdata')
 replaces=('xkbdata')
 conflicts=('xkbdata')
-
+install=xkeyboard-config.install
 build() {
 
   cd "$portsdir/$category/$pkgname"

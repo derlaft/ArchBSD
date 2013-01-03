@@ -6,8 +6,8 @@ pkgdesc="Application development toolkit for controlling system-wide privileges"
 arch=(i686 x86_64)
 license=('LGPL')
 url="http://www.freedesktop.org/wiki/Software/polkit"
-depends=('glib2' 'expat')
-makedepends=('intltool' 'gtk-doc' 'gobject-introspection')
+depends=('eggdbus' 'gobject-introspection' )
+makedepends=('bigreqsproto' 'bison' 'gmp' 'inputproto' 'intltool' 'libcheck' 'm4' 'mingw32-bin-msvcrt' 'mingw32-binutils' 'mingw32-gcc' 'mpc' 'mpfr' 'xcb-proto' 'xcmiscproto' 'xextproto' 'xf86bigfontproto' )
 replaces=('policykit')
 install=polkit.install
 

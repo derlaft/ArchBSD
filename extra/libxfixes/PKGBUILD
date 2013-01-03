@@ -6,6 +6,7 @@ category=x11
 pkgdesc="X Fixes extension library"
 arch=('i686' 'x86_64')
 url="http://xorg.freedesktop.org/"
+depends=('fixesproto' 'libx11')
 license=('custom')
 options=('!libtool')
 

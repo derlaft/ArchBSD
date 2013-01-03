@@ -7,9 +7,10 @@ pkgdesc="An image loading library"
 arch=('i686' 'x86_64')
 url="http://www.gtk.org/"
 license=('LGPL2.1')
-depends=('glib2' 'libpng' 'libtiff' 'libjpeg' 'libx11')
-makedepends=('gtk-doc' 'gobject-introspection')
-
+depends=('gio-fam-backend' 'jasper' 'libxi' 'libxt' 'libpng' 'libtiff')
+makedepends=('bigreqsproto' 'bison' 'cmake' 'cmake-modules' 'gmp' 'gobject-introspection' 'libcheck' 'libgcrypt' 'libgpg-error' 'libxml2' 'libxslt' 'm4' 'mingw32-bin-msvcrt' 'mingw32-binutils' 'mingw32-gcc' 'mpc' 'mpfr' 
+'xcb-proto' 'xcmiscproto' 'xf86bigfontproto')
+install=gdk-pixbuf.install
 build() {
 
   cd "$portsdir/$category/$pkgname"

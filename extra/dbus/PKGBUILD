@@ -8,7 +8,7 @@ arch=(i686 x86_64)
 license=('GPL' 'custom')
 # do not depend on systemd to avoid circular dep,
 # dep on shadow for install scriptlet FS#29341
-depends=('expat')
+depends=('expat' 'gnome_subr' 'libsm' 'libx11' 'libxml2')
 makedepends=('libx11')
 optdepends=('libx11: dbus-launch support')
 provides=('dbus-core')

@@ -8,7 +8,6 @@ arch=('x86_64' 'i686')
 license=('custom')
 url="http://xorg.freedesktop.org/"
 depends=('libxext' 'xf86vidmodeproto')
-makedepends=('xorg-util-macros')
 options=('!libtool')
 
 build() {

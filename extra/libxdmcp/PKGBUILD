@@ -8,7 +8,6 @@ arch=('i686' 'x86_64')
 url="http://xorg.freedesktop.org"
 license=('custom')
 depends=('xproto')
-makedepends=('xorg-util-macros')
 options=('!libtool')
 
 build() {

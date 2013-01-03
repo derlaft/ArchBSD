@@ -6,7 +6,7 @@ pkgdesc="X11 PCI access library"
 arch=(i686 x86_64)
 license=('custom')
 url="http://xorg.freedesktop.org/"
-depends=('pciids')
+depends=('pciids' 'pkgconf')
 makedepends=('pkgconfig' 'xorg-util-macros')
 options=('!libtool')
 

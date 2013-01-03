@@ -6,9 +6,9 @@ category=x11-toolkits
 arch=('i686' 'x86_64')
 url="http://www.gtk.org/"
 pkgdesc="GTK+ is a multi-platform toolkit (v2)"
-depends=('atk' 'pango' 'libxcursor' 'libxinerama' 'libxrandr' 'libxi' 'libxcomposite' 'libxdamage' 'shared-mime-info' 'cairo' 'gtk-update-icon-cache' 'libgl')
+depends=('gtk-update-icon-cache')
 license=('GPL')
-
+install=gtk.install
 build() {
   cd "${portsdir}/${category}/${_pkgname}"
   make clean

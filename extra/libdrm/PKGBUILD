@@ -6,7 +6,8 @@ pkgdesc="Userspace interface to kernel Direct Rendering Module services"
 arch=('i686' 'x86_64')
 url="http://xorg.freedesktop.org/"
 license=('custom')
-depends=('libpciaccess')
+depends=('libpciaccess' 'libpthread-stubs' )
+makedepends=('gettext' 'gmake' 'libiconv' )
 
 build() {
 

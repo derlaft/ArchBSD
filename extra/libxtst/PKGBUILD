@@ -7,7 +7,7 @@ pkgdesc="X11 Testing -- Resource extension library"
 arch=('i686' 'x86_64')
 url="http://xorg.freedesktop.org/"
 license=('custom')
-depends=('libxext' 'libxi' 'recordproto' 'inputproto')
+depends=('libxi' 'recordproto')
 makedepends=('xorg-util-macros')
 
 build() {

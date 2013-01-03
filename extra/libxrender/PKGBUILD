@@ -7,7 +7,8 @@ pkgdesc='X Render extension library'
 url='http://xorg.freedesktop.org/'
 arch=('i686' 'x86_64')
 license=('custom')
-depends=('libx11' 'libpthread-stubs' 'renderproto')
+depends=('libx11' 'renderproto' )
+makedepends=('bigreqsproto' 'inputproto' 'libcheck' 'libgcrypt' 'libgpg-error' 'libxml2' 'libxslt' 'python2' 'xcb-proto' 'xcmiscproto' 'xextproto' 'xf86bigfontproto' 'xorg-macros' 'xtrans' )
 
 build() {
 

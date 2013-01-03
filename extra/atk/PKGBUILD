@@ -5,8 +5,8 @@ category=accessibility
 pkgdesc="A library providing a set of interfaces for accessibility"
 arch=(i686 x86_64)
 license=('LGPL')
-depends=('glib2' 'gamin' 'gio-fam-backend')
-makedepends=('gobject-introspection')
+depends=('gio-fam-backend' )
+makedepends=('bison' 'gmp' 'gobject-introspection' 'm4' 'mingw32-bin-msvcrt' 'mingw32-binutils' 'mingw32-gcc' 'mpc' 'mpfr' )
 options=('!libtool')
 url='http://www.gtk.org/'
 

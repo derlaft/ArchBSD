@@ -7,13 +7,13 @@ pkgdesc="Common C routines used by GTK+ and other libs"
 url="http://www.gtk.org/"
 arch=(i686 x86_64)
 license=('LGPL')
-depends=('pcre' 'libffi')
-makedepends=('pkg-config' 'python2' 'libxslt' 'docbook-xml')
+depends=('pcre' 'perl' 'pkgconf' 'python2')
+makedepends=('gmake')
 optdepends=('python2: for gdbus-codegen')
-
+install=glib2.install
 build() {
   cd "${portsdir}/${category}/${_pkgname}"
-#  make clean
+  make clean
   make
   make deinstall
   make package PACKAGES="${srcdir}"

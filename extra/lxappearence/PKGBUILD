@@ -7,7 +7,7 @@ arch=('i686' 'x86_64')
 license=('GPL2')
 url="http://lxde.org/"
 groups=('lxde')
-depends=('gtk2' 'intltool')
+depends=('gtk2')
 makedepends=('pkgconfig')
 
 build() {

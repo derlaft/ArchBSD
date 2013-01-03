@@ -8,6 +8,7 @@ arch=('i686' 'x86_64')
 source=('libxdamage.install')
 md5sums=('57ee0b40b0a23df31c06e7128e877a91')
 url="http://xorg.freedesktop.org/"
+depends=('damageproto' 'libXfixes' )
 license=('custom')
 options=('!libtool')
 install=libxdamage.install

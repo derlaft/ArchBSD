@@ -1,0 +1,3 @@
+post_install() {
+    tic usr/local/share/misc/rxvt-unicode.terminfo
+}

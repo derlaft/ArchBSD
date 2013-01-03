@@ -1,0 +1,27 @@
+pkgname=hal
+pkgver=0.5.14
+pkgrel=20
+category=sysutils
+pkgdesc="Hardware Abstraction Layer for simplifying device access"
+url="http://www.freedesktop.org/Software/hal"
+arch=(i686 x86_64)
+license=('GPL' 'custom')
+depends=('consolekit' 'dmidecode' 'libvolume_id' 'pciids' 'policykit' )
+install=hal.install
+
+build() {
+  cd "${portsdir}/${category}/${pkgname}"
+  make clean
+  make
+  make deinstall
+  make PACKAGES="${srcdir}" package
+
+}
+
+
+package() {
+  cd ${pkgdir}
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_${pkgrel}.txz"
+  install -m755 -d "$pkgdir/etc/init.d/"
+  install -m755 ../hald "$pkgdir/etc/init.d/hald"
+}

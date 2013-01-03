@@ -1,5 +1,5 @@
 pkgname=icu
-pkgver=4.8.1.1
+pkgver=50.1
 pkgrel=1
 category=devel
 pkgdesc="International Components for Unicode library"
@@ -17,6 +17,6 @@ build() {
 
 package() {
   cd "${pkgdir}"
-  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_${pkgrel}.txz"
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
 }
 

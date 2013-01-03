@@ -6,7 +6,6 @@ pkgdesc="X11 Big Requests extension wire protocol"
 arch=('any')
 url="http://xorg.freedesktop.org/"
 license=('custom')
-makedepends=('xorg-util-macros' 'xmlto' 'docbook-xml')
 
 build() {
 

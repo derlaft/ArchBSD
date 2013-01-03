@@ -1,20 +1,15 @@
 pkgname=rxvt-unicode
-pkgver=9.15
-pkgrel=2
+pkgver=9.16
+pkgrel=1
 category=x11
 pkgdesc='An unicode enabled rxvt-clone terminal emulator (urxvt)'
 arch=('i686' 'x86_64')
 url='http://software.schmorp.de/pkg/rxvt-unicode.html'
 license=('GPL')
-depends=('libxft' 'gdk-pixbuf2' 'perl')
-optdepends=('gtk2-perl: to use the urxvt-tabbed')
-source=('urxvt.desktop'
-  'urxvtc.desktop'
-  'urxvt-tabbed.desktop'
-)
-md5sums=('88d8786d74b819450adf722180db09fd'
-         'bebf5b6b399b74b557fcedbdb47cc387'
-         '2604896bb107fbb5511bfd6f46d65894')
+depends=('gdk-pixbuf' 'libxft' 'libxpm' 'ncurses')
+source=('urxvt.desktop')
+md5sums=('88d8786d74b819450adf722180db09fd')
+install=urxvt.install
 build() {
 
   cd "$portsdir/$category/$pkgname"
@@ -26,9 +21,9 @@ build() {
 
 package() {
   cd $pkgdir
-  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_${pkgrel}.txz"
+  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
   cd ${srcdir}
-  for _f in urxvt urxvtc urxvt-tabbed; do
+  for _f in urxvt; do
         install -m644 -d "$pkgdir/usr/local/share/applications/"
 	install -m644 $_f.desktop "$pkgdir/usr/local/share/applications/$_f.desktop"
   done

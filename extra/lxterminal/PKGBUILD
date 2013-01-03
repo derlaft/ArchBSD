@@ -7,7 +7,9 @@ arch=('i686' 'x86_64')
 license=('GPL2')
 url="http://lxde.org/"
 groups=('lxde')
-depends=('fontconfig' 'libx11' 'glib2' 'vte' 'gtk2')
+depends=('vte')
+makedepends=('bdftopcf' 'bigreqsproto' 'cmake' 'cmake-modules' 'fontsproto' 'gmp' 'libxfont' 'libcheck' 'libgcrypt' 'libgpg-error' 'libxslt' 'mingw32-bin-msvcrt' 'mingw32-binutils' 'mingw32-gcc' 'mpc' 'mpfr' 'xcb-proto' 
+'xcmiscproto' 'xf86bigfontproto')
 
 build() {
   cd "${portsdir}/${category}/${pkgname}"

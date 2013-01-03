@@ -6,19 +6,15 @@ pkgdesc="x11 client-side library"
 arch=('i686' 'x86_64')
 url="http://xorg.freedesktop.org"
 license=('custom')
-depends=('xcb-proto>=1.7' 'libxdmcp' 'libxau')
-makedepends=('pkgconfig' 'libxslt' 'python2')
+depends=('libxau' 'libxdmcp' 'libpthread-stubs' )
+makedepends=('libcheck' 'xcb-proto' )
 options=('!libtool')
 
 build() {
-
-  CONFIGURE_ENV=""
-  NEEDED_LIBS="-L/usr/local/lib -lXau"
-
-
+  unset LDFLAGS
   cd "$portsdir/$category/$pkgname"
   make clean
-  make CONFIGURE_ENV=$CONFIGURE_ENV NEEDED_LIBS="${NEEDED_LIBS}"
+  make 
   make deinstall
   make package PACKAGES="$srcdir"
 }

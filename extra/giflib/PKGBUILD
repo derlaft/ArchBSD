@@ -6,7 +6,8 @@ pkgdesc="A library for reading and writing gif images"
 url="http://sourceforge.net/projects/giflib/"
 arch=('i686' 'x86_64')
 license=('MIT')
-depends=('libx11')
+depends=('libsm' 'libx11')
+makedepends=('bigreqsproto' 'bison' 'inputproto' 'libcheck' 'm4' 'xcb-proto' 'xcmiscproto' 'xextproto' 'xf86bigfontproto' 'xmlto')
 provides=("libungif=${pkgver}")
 conflicts=('libungif')
 replaces=('libungif')

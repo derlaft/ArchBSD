@@ -7,8 +7,8 @@ pkgdesc="X11 font rasterisation library"
 arch=(i686 x86_64)
 url="http://xorg.freedesktop.org/"
 license=('custom')
-depends=('freetype2' 'libfontenc' 'xproto' 'fontsproto')
-makedepends=('xorg-util-macros' 'xtrans')
+depends=('fontsproto' 'freetype2' 'libfontenc' )
+makedepends=('gettext' 'gmake' 'libiconv' 'libtool' 'xtrans' )
 
 build() {
 

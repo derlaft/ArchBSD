@@ -6,7 +6,7 @@ pkgdesc="Library for terminal-independent, full-screen output"
 arch=('i686' 'x86_64')
 url="http://invisible-island.net/ncurses/"
 license=('custom')
-
+install=ncurses.install
 build() {
   unset LDFLAGS
   cd "$portsdir/$category/$pkgname"

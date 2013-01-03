@@ -9,7 +9,6 @@ url="http://xorg.freedesktop.org"
 install=libxau.install
 license=('custom')
 depends=('xproto>=7.0.18')
-makedepends=('pkgconfig')
 options=('!libtool')
 
 build() {

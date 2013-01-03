@@ -6,7 +6,6 @@ pkgdesc="X11 Resource extension wire protocol"
 arch=('any')
 url="http://xorg.freedesktop.org/"
 license=('custom')
-makedepends=('xorg-util-macros')
 
 build() {
 

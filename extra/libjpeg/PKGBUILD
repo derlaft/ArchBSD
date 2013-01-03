@@ -7,7 +7,7 @@ arch=('i686' 'x86_64')
 url="http://libjpeg-turbo.virtualgl.org/"
 license=('GPL' 'custom')
 makedepends=('nasm')
-provides=('libjpeg=8.0.2')
+makedepends=('gettext' 'gmake' 'libiconv' 'libtool' 'nasm')
 conflicts=('libjpeg')
 replaces=('libjpeg')
 options=('!libtool')

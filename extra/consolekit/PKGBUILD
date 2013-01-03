@@ -6,10 +6,10 @@ pkgdesc="A framework for defining and tracking users, login sessions, and seats"
 arch=('i686' 'x86_64')
 url="http://www.freedesktop.org/wiki/Software/ConsoleKit"
 license=('GPL')
-depends=('dbus' 'dbus-glib' 'glib2' 'polkit' 'libx11')
+depends=('polkit')
 makedepends=('pkgconfig' 'libxslt' 'python2')
 options=('!libtool')
-
+install=consolekit.install
 build() {
 
   cd "$portsdir/$category/$pkgname"

@@ -6,6 +6,8 @@ pkgdesc="A portable, high level programming interface to various calling convent
 arch=('i686' 'x86_64')
 url="http://sourceware.org/libffi"
 license=('MIT')
+depends=('pkgconf')
+makedepends=('bison' 'm4' 'mingw32-gcc' 'perl')
 install=libffi.install
 
 build() {

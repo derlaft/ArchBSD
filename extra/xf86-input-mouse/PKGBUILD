@@ -6,7 +6,7 @@ pkgdesc="X11 mouse driver"
 arch=('i686' 'x86_64')
 url="http://xorg.freedesktop.org/"
 license=('custom')
-depends=('libdrm' 'mesa')
+depends=('libxi' 'xorg-server')
 makedepends=('xorg-server-devel' 'X-ABI-XINPUT_VERSION=12' 'resourceproto' 'scrnsaverproto')
 conflicts=('xorg-server<1.10.0' 'X-ABI-XINPUT_VERSION<12' 'X-ABI-XINPUT_VERSION>=14')
 groups=('xorg-drivers' 'xorg')

@@ -1,0 +1,15 @@
+post_install() {
+    mkdir -p usr/local/etc/ConsoleKit/run-session.d
+    mkdir -p usr/local/etc/ConsoleKit/run-seat.d
+    mkdir -p usr/local/lib/ConsoleKit/run-session.d
+    mkdir -p usr/local/lib/ConsoleKit/run-seat.d
+    mkdir -p var/run/ConsoleKit
+    mkdir -p var/log/ConsoleKit
+    touch -f var/log/ConsoleKit/history
+    /sbin/ldconfig -m /usr/local/lib
+}
+post_remove() {
+    rm -rf var/run/ConsoleKit 2>/dev/null || true
+    rm -rf var/log/ConsoleKit 2>/dev/null || true
+    /sbin/ldconfig -R
+}

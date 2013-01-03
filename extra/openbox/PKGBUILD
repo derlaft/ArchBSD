@@ -6,8 +6,7 @@ pkgdesc="A highly configurable and lightweight X11 window manager"
 arch=('i686' 'x86_64')
 url="http://openbox.org"
 license=('GPL')
-depends=('startup-notification' 'libxml2' 'libxinerama' 'libxrandr'
-     'libxcursor' 'pango' 'imlib2')
+depends=('imlib2' 'libxml2' 'pango' 'startup-notification' )
 optdepends=('pyxdg: for the xdg-autostart script')
 groups=('lxde')
 install=$pkgname.install

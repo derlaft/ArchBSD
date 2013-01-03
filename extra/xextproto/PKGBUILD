@@ -6,7 +6,6 @@ pkgdesc="X11 various extension wire protocol"
 arch=(any)
 url="http://xorg.freedesktop.org"
 license=('custom')
-makedepends=('xmlto' 'xorg-util-macros' 'docbook-xsl')
 
 build() {
   cd "$portsdir/$category/$pkgname"

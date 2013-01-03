@@ -6,7 +6,7 @@ pkgdesc="Library that does image file loading and saving as well as rendering, m
 url="http://sourceforge.net/projects/enlightenment/"
 arch=('i686' 'x86_64')
 license=('BSD')
-depends=('libtiff' 'giflib' 'freetype2' 'libxext' 'libpng' 'libid3tag' 'libjpeg-turbo')
+depends=('freetype2' 'giflib' 'libxext' 'libid3tag' 'libpng' 'libtiff')
 options=('!libtool')
 
 build() {

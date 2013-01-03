@@ -6,8 +6,6 @@ pkgdesc="X11 Damage extension wire protocol"
 arch=(any)
 url="http://xorg.freedesktop.org"
 license=('custom')
-depends=('xproto' 'fixesproto')
-makedepends=('xorg-util-macros')
 
 build() {
   cd "$portsdir/$category/$pkgname"

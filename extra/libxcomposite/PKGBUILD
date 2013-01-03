@@ -7,6 +7,9 @@ pkgdesc="X11 Composite extension library"
 arch=('i686' 'x86_64')
 url="http://xorg.freedesktop.org/"
 license=('custom')
+depends=('compositeproto' 'libxext' 'libxfixes')
+makedepends=('bigreqsproto' 'inputproto' 'libcheck' 'libgcrypt' 'libgpg-error' 'libxml2' 'libxslt' 'python2' 'xcb-proto' 'xcmiscproto' 'xf86bigfontproto' 'xorg-macros' 'xtrans')
+
 depends=('libxfixes' 'compositeproto')
 makedepends=('xorg-util-macros')
 

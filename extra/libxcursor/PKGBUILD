@@ -8,7 +8,7 @@ arch=(i686 x86_64)
 url="http://xorg.freedesktop.org/"
 license=('custom')
 depends=('libxfixes' 'libxrender')
-makedepends=('xorg-util-macros')
+makedepends=('bigreqsproto' 'inputproto' 'libcheck' 'libgcrypt' 'libgpg-error' 'libxml2' 'libxslt' 'python2' 'xcb-proto' 'xcmiscproto' 'xf86bigfontproto' 'xorg-macros' 'xtrans')
 options=('!libtool')
 
 build() {

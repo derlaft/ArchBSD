@@ -6,12 +6,8 @@ pkgdesc="Cairo vector graphics library"
 arch=(i686 x86_64)
 license=('LGPL' 'MPL')
 url="http://cairographics.org/"
-depends=('libpng' 'libxrender' 'libxext' 'fontconfig' 'pixman>=0.24.0' 'glib2')
-makedepends=('librsvg' 'poppler-glib' 'libspectre' 'gtk-doc' 'valgrind') # 'libdrm')
-optdepends=('xcb-util: for XCB backend') # really needed?
-provides=('cairo-xcb')
-replaces=('cairo-xcb')
-options=('!libtool')
+depends=('fontconfig' 'gio-fam-backend' 'libXrender' 'pixman' 'png' 'xcb-util-renderutil' )
+makedepends=('bigreqsproto' 'cmake' 'cmake-modules' 'gio-fam-backend' 'inputproto' 'libcheck' 'libgcrypt' 'libgpg-error' 'libxml2' 'libxslt' 'xcb-proto' 'xcmiscproto' 'xextproto' 'xf86bigfontproto' 'xorg-macros' 'xtrans' )
 
 build() {
   cd "${portsdir}/${category}/${pkgname}"

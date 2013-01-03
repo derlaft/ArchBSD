@@ -6,7 +6,8 @@ pkgdesc="The X protocol C-language Binding (XCB) protocol"
 arch=(any)
 url="http://xorg.freedesktop.org"
 license=('custom')
-makedepends=('python2' 'libxml2')
+depends=('python2')
+makedepends=('gmake' 'libxml2')
 
 build() {
   cd "$portsdir/$category/$pkgname"

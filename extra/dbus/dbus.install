@@ -15,8 +15,8 @@ post_install() {
 
 	USER=messagebus
 	GROUP=${USER}
-	usr/bin/install -d -o ${USER} -g ${GROUP} /var/run/dbus
-	usr/bin/install -d -o ${USER} -g ${GROUP} /var/db/dbus
+	usr/bin/install -d -o ${USER} -g ${GROUP} var/run/dbus
+	usr/bin/install -d -o ${USER} -g ${GROUP} var/db/dbus
 	usr/bin/chgrp ${GROUP} usr/local/libexec/dbus-daemon-launch-helper
 	usr/local/bin/dbus-uuidgen --ensure
 	exit 0
@@ -24,8 +24,8 @@ post_install() {
 
 post_upgrade() {
   # Make sure new rc script can shutdown running dbus
-  if [ -f run/dbus.pid -a -d run/dbus ]; then
-    mv run/dbus.pid run/dbus/pid
+  if [ -f var/run/dbus.pid -a -d var/run/dbus ]; then
+    mv var/run/dbus.pid var/run/dbus/pid
   fi
 }
 

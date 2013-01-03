@@ -6,8 +6,8 @@ pkgdesc="Front-end to an XSL toolchain"
 arch=('i686' 'x86_64')
 url="http://cyberelk.net/tim/software/xmlto/"
 license=('GPL')
-depends=('libxslt' 'perl-yaml-syck' 'perl-test-pod')
-makedepends=('docbook-xsl')
+depends=('bash' 'docbook-xsl' 'getopt' 'libpaper' 'python27' 'w3m')
+makedepends=('bison' 'm4')
 
 build() {
   cd "$portsdir/$category/$pkgname"

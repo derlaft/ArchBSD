@@ -7,8 +7,8 @@ pkgdesc="X11 Athena Widget library"
 arch=('i686' 'x86_64')
 license=('custom')
 url="http://xorg.freedesktop.org/"
-depends=('libxmu' 'libxpm' 'libx11' 'libxp' 'libpthread-stubs' 'printproto')
-makedepends=('xorg-util-macros')
+depends=('libxmu' 'libxp' 'libxpm')
+makedepends=('bigreqsproto' 'inputproto' 'libcheck' 'libgcrypt' 'libgpg-error' 'libxml2' 'libxslt' 'python2' 'xcb-proto' 'xcmiscproto' 'xf86bigfontproto')
 
 build() {
 

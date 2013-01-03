@@ -1,11 +1,11 @@
 pkgname=shared-mime-info
 pkgver=1.0
-pkgrel=1
+pkgrel=2
 category=misc
 pkgdesc="Freedesktop.org Shared MIME Info"
 arch=('i686' 'x86_64')
 license=('GPL')
-depends=('libxml2' 'glib2')
+depends=('gio-fam-backend' 'libxml2' )
 makedepends=('intltool' 'pkgconfig')
 install=${pkgname}.install
 build() {

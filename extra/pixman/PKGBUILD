@@ -6,8 +6,8 @@ pkgdesc="The pixel-manipulation library for X and cairo"
 arch=('i686' 'x86_64')
 url="http://xorg.freedesktop.org"
 license=('custom')
-depends=('freebsd-world')
-options=('!libtool')
+depends=('pkgconf' )
+makedepends=('libtool' 'perl' )
 
 build() {
   cd "$portsdir/$category/$pkgname"

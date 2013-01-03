@@ -7,9 +7,8 @@ pkgdesc="OpenGL hardware acceleration drivers for the DRI"
 arch=('i686' 'x86_64')
 url="http://dri.sourceforge.net/"
 license=('custom')
-depends=('damageproto' 'expat' 'fixesproto' 'kbproto' 'libx11' 'libxau' 'libxdamage' 'libxdmcp' 'libxext' 'libxfixes' 'libxxf86vm' 
-	'libdrm' 'libpciaccess' 'libxcb' 'pciids' 'pkgconf' 'xextproto' 'xf86vidmodeproto' 'xproto')
-builddepends=('bison' 'dri2proto' 'gettext' 'glproto' 'gmake' 'libiconv' 'libxml' 'm4' 'makedepend' 'python2')
+depends=('dri2proto' 'expat' 'libxdamage' 'libxxf86vm' 'libdrm')
+makedepends=('bigreqsproto' 'bison' 'glproto' 'inputproto' 'libcheck' 'libgcrypt' 'libgpg-error' 'libxslt' 'makedepend' 'py-libxml2' 'xcb-proto' 'xcmiscproto' 'xf86bigfontproto' 'xorg-macros' 'xtrans')
 install=libgl.install
 
 build() {
