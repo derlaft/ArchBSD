@@ -29,7 +29,7 @@ build() {
 cd /usr/src
 if [[ "$ARCH" == "x86_64" ]]; then
 		make TARGET=amd64 clean
-		make buildworld TARGET=amd64 DESTDIR="$pkgdir" || (echo buildworld failed... && return 1)
+		make buildworld TARGET=amd64 DESTDIR="$pkgdir" SRCONF=${srcdir}/src.conf || (echo buildworld failed... && return 1)
 else
                 make TARGET=i386 DESTDIR="$pkgdir" buildworld || (echo buildworld failed... && return 1)
 
@@ -45,9 +45,9 @@ cd /usr/src
 
 if [[ "$CARCH" == "x86_64" ]]; then
         cd /usr/src
-        make TARGET=amd64 DESTDIR="$pkgdir"  SRCONF=${srcdir}/src.conf installworld distribution|| (echo buildworld failed... && return 1)
+        make TARGET=amd64 DESTDIR="$pkgdir"  SRCONF=${srcdir}/src.conf installworld distribution || (echo buildworld failed... && return 1)
 else
-        make DESTDIR="$pkgdir" TARGET=i386 installworld 
+        make TARGET=i386 DESTDIR="$pkgdir" SRCONF=${srcdir}/src.conf install distribution || (echo buildworld failed... && return 1)
 fi
 
 #remove rc tools for openrc
