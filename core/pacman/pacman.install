@@ -19,7 +19,7 @@ post_install() {
 }
 
 _check_pubring() {
-    echo " >>> Run  \`pacman-key --init; pacman-key --populate archlinux\`"
+    echo " >>> Run  \`pacman-key --init; pacman-key --populate archbsd\`"
     echo " >>> to import the data required by pacman for package verification."
     echo " >>> See: https://www.archlinux.org/news/having-pacman-verify-packages"
 }
