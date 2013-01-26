@@ -1,35 +1,35 @@
+# Contributor: Anthony Amzo <Amzo@archbsd.net>
+
 pkgname=libiconv
 pkgver=1.14
 pkgrel=1
-category=converters
-pkgdesc="iconv() implementation, for use on systems which don't have one, or whose implementation cannot convert from/to Unicode"
+pkgdesc="A character set conversion library"
 arch=('i686' 'x86_64')
-source=('libiconv.install')
-md5sums=('0e4e5141e42e6148e9e17dc9c745f6fc')
-install=libiconv.install
+license=('GPL3')
 url="http://www.gnu.org/software/libiconv/"
-license=('LGPL')
 depends=('freebsd-world')
-##########################################################
-# This files cause problems when building from the ports #
-# This is because bash depends on it, and  make package  #
-# won't work when it's installed, to overcome            #
-# this, we copy the needed libs to a temporary dir, then #
-# we uninstall libiconv and then copy our copied libs    #
-##########################################################
+install=${pkgname}.install
+source=(http://ftp.gnu.org/pub/gnu/libiconv/${pkgname}-${pkgver}.tar.gz{,.sig})
+md5sums=('e34509b1623cec449dfeb73d7ce9c6c6'
+         '7485aa1ddf6c98fb88931e454edc1810')
 
 build() {
-     cp -Rv /usr/local/lib/libiconv* ${srcdir}
-     cd "$portsdir/$category/$pkgname"
-     make deinstall
-     mv -v ${srcdir}/libiconv* /usr/local/lib/
-     make
-     make package PACKAGES="$srcdir"
+  cd ${srcdir}/${pkgname}-${pkgver}
+
+  ./configure   --prefix=/usr/local --enable-static \
+                --without-libintl-prefix \
+                --docdir=/usr/local/doc
+  make
+}
+
+check() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+  make check
 }
 
 package() {
-  cd "$pkgdir"
-  rm -rf +MANIFEST +MTREE_DIRS
-  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
-  rm -rf +MANIFEST +MTREE_DIRS
+  cd ${srcdir}/${pkgname}-${pkgver}
+  make DESTDIR=${pkgdir} install
+  install -dm755 ${pkgdir}/usr/local/share/licenses/${pkgname}
+  install -m655 ${srcdir}/${pkgname}-${pkgver}/COPYING ${pkgdir}/usr/local/share/licenses/${pkgname}
 }
