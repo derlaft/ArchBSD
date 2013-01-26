@@ -36,17 +36,19 @@ build() {
     --enable-pcre8 --enable-pcre16 --enable-pcre32 --enable-jit \
     --enable-utf --enable-unicode-properties \
     --enable-pcretest-libedit
-  gmake
+  make
 }
 
 check() {
   cd "${srcdir}"/${pkgname}-${pkgver}
-  gmake check
+# disable the stack test
+  sed -i -e 's/do2=yes/do2=no/' RunTest
+  make check
 }
 
 package() {
   cd "${srcdir}"/${pkgname}-${pkgver}
-  gmake DESTDIR="${pkgdir}" install
+  make DESTDIR="${pkgdir}" install
 
   install -dm755 "${pkgdir}"/usr/share/licenses/${pkgname}
   install -m644 LICENCE "${pkgdir}"/usr/share/licenses/${pkgname}/LICENSE
