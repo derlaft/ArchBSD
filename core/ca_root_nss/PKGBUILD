@@ -8,7 +8,7 @@ pkgver=3.14.1
 pkgrel=1
 pkgdesc="The root certificate bundle from the Mozilla Project"
 arch=('i686' 'x86_64')
-license=('GPL3')
+license=('MPL')
 url="http://www.mozilla.org/"
 source=(http://ftp.mozilla.org/pub/mozilla.org/security/${_downloadname}/releases/NSS_3_14_1_WITH_CKBI_1_93_RTM/src/${_downloadname}-${pkgver}.with.ckbi.1.93.tar.gz{,.sig}
 	"MAca-bundle.pl")
@@ -29,4 +29,6 @@ build() {
 package() {
    install -dm755 ${pkgdir}/usr/local/share/certs
    install -m644 ${srcdir}/ca-root-nss.crt ${pkgdir}/usr/local/share/certs
+   install -dm755 ${pkgdir}/usr/local/share/license/${_downloadname}
+   install -m644 ${srcdir}/${_downloadname}-${pkgver}/mozilla/security/nss/COPYING ${pkgdir}/usr/local/share/license/${_downloadname}/LICENSE
 }
