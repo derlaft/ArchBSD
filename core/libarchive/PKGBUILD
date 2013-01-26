@@ -1,27 +1,50 @@
+# $Id: PKGBUILD 167058 2012-09-25 03:07:21Z allan $
+# Maintainer: Dan McGee <dan@archlinux.org>
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
 pkgname=libarchive
 pkgver=3.0.4
-pkgrel=1
-pkgepoch=1
-category=archivers
+pkgrel=2
 pkgdesc="library that can create and read several streaming archive formats"
 arch=('i686' 'x86_64')
 url="http://libarchive.googlecode.com/"
-source=('libarchive.install')
-md5sums=('04318bd718b5899bed4f220596dde531')
-install=libarchive.install
 license=('BSD')
-depends=('libiconv' 'libxml2' 'pkgconf')
+depends=('libiconv' 'pkgconf')
+source=("https://github.com/downloads/libarchive/libarchive/libarchive-${pkgver}.tar.gz"
+        libarchive-3.0.x-fix-mtree-writer.patch
+        patch-libarchive-archive_read_disk_entry_from_file.c
+        )
+md5sums=('af443ca9a10ddbcbf00f7ae34ca7fc16'
+         '6d36a50a7282db6576bd1fbc23f08055'
+         'ea3cf6afe437646b0540029e55e22101')
 
 build() {
-     cd "$portsdir/$category/$pkgname"
-     make clean
-     make
-     make deinstall	
-     make package PACKAGES="$srcdir"
+  cd "$srcdir/$pkgname-$pkgver"
+  patch -p1 -i $srcdir/patch-libarchive-archive_read_disk_entry_from_file.c
+  patch -p1 -i $srcdir/libarchive-3.0.x-fix-mtree-writer.patch
 
+  CFLAGS="${CFLAGS} -I/usr/local/include -DHAVE_BSDXML_H=1"
+  CPPFLAGS="${CFLAGS} -I/usr/local/include"
+  LDFLAGS="${LDFLAGS} -L/usr/local/lib -lbsdxml"
+
+  ./configure --prefix=/usr/local \
+              --sysconfdir=/usr/local/etc \
+              --mandir=/usr/local/man \
+              --infodir=/usr/local/info \
+              --without-openssl --without-expat --without-xml2
+  make
+}
+
+check() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  make check
 }
 
 package() {
-  cd "$pkgdir"
-  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_${pkgrel},${pkgepoch}.txz"
+  cd "$srcdir/$pkgname-$pkgver"
+  make DESTDIR="$pkgdir" install
+
+  install -d -m755 "$pkgdir"/usr/local/share/licenses/libarchive/COPYING
+  install    -m644 COPYING "$pkgdir"/usr/local/share/licenses/libarchive/COPYING
 }
