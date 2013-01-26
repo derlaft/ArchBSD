@@ -1,9 +1,9 @@
 post_install() {
-	install-info --quiet /usr/local/info/make.info /usr/local/info/dir
+	install-info --quiet /usr/local/info/make.info.gz /usr/local/info/dir
 }
 
 pre_remove() {
-	install-info --quiet --delete /usr/local/info/make.info /usr/local/info/dir
+	install-info --quiet --delete /usr/local/info/make.info.gz /usr/local/info/dir
 }
 
 post_remove() {
