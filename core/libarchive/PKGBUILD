@@ -31,7 +31,8 @@ build() {
               --sysconfdir=/usr/local/etc \
               --mandir=/usr/local/man \
               --infodir=/usr/local/info \
-              --without-openssl --without-expat --without-xml2
+              --with-openssl --without-nettle \
+              --without-expat --without-xml2
   make
 }
 
