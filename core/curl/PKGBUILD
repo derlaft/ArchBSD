@@ -1,26 +1,81 @@
+# $Id: PKGBUILD 171938 2012-11-24 17:37:34Z dreisner $
+# Maintainer: Dave Reisner <dreisner@archlinux.org>
+# Contributor: Angel Velasquez <angvp@archlinux.org>
+# Contributor: Eric Belanger <eric@archlinux.org>
+# Contributor: Lucien Immink <l.immink@student.fnt.hvu.nl>
+# Contributor: Daniel J Griffiths <ghost1227@archlinux.us>
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
 pkgname=curl
-pkgver=7.24.0
+pkgver=7.28.1
 pkgrel=1
-category=ftp
 pkgdesc="An URL retrieval utility and library"
 arch=('i686' 'x86_64')
 url="http://curl.haxx.se"
-source=('curl.install')
-md5sums=('04318bd718b5899bed4f220596dde531')
-install=curl.install
 license=('MIT')
 depends=('ca_root_nss')
+options=('!libtool')
+source=("http://curl.haxx.se/download/$pkgname-$pkgver.tar.gz"{,.asc}
+	    patch-configure
+	    patch-lib__url.c
+	    patch-src-tool_operate.c
+	    )
+md5sums=('252ef351c0fc307b2d8ea1ee31542072'
+         'e3cea743ef286f5aff1f1d27137e9828'
+         'e185d12a072313f0aa3fdc21f2d4bc31'
+         '0f525e858606e1f5dfabb4c1561bd1f8'
+         '8d79d96667240fd52a0ebd793a0eb738')
 
 build() {
-  cd "$portsdir/$category/$pkgname"
-  make clean
+  cd "$pkgname-$pkgver"
+
+  patch -p0 -i ${srcdir}/patch-configure
+  patch -p0 -i ${srcdir}/patch-lib__url.c
+  patch -p0 -i ${srcdir}/patch-src-tool_operate.c
+
+# ports are odd at times
+# sed -i -e '/^SUBDIRS = / s|$$| docs|; /^DIST_SUBDIRS = / s| docs||; /cd docs &&/d' Makefile.in
+  sed -i e '/require "valgrind.pm";/d' tests/runtests.pl
+
+# difference between ports and Arch:
+# ports: --disable-threaded-resolver
+#        --enable-rtsp --enable-pop3 --disable-werror
+#        --enable-smtp --enable-imap
+# different --with-ca-bundle
+# added --without-{libssh2,librtmp,libidn}
+#     since those not there to add to the deps yet
+  ./configure \
+      --prefix=/usr/local \
+      --mandir=/usr/local/man \
+      --sysconfdir=/usr/local/etc \
+      --infodir=/usr/local/info \
+      --disable-dependency-tracking \
+      --disable-ldap \
+      --disable-ldaps \
+      --enable-ipv6 \
+      --enable-manual \
+      --enable-versioned-symbols \
+      --disable-threaded-resolver \
+      --enable-rtsp --enable-smtp \
+      --enable-pop3 --enable-imap \
+      --without-libidn \
+      --with-random=/dev/urandom \
+      --with-ca-bundle=/usr/local/share/certs/ca-root-nss.crt \
+      --without-libssh2 --without-librtmp --without-libidn
+
   make
-  make deinstall  
-  make package PACKAGES="$srcdir"
 }
 
 package() {
-  cd $pkgdir
-  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_${pkgrel}.txz"
-}
+  cd "$pkgname-$pkgver"
 
+  make DESTDIR="$pkgdir" install
+
+  # license
+  install -dm755 "$pkgdir/usr/local/share/licenses/$pkgname/COPYING"
+  install -m644 COPYING "$pkgdir/usr/local/share/licenses/$pkgname/COPYING"
+
+  # devel
+  install -dm755 "$pkgdir/usr/local/share/aclocal/libcurl.m4"
+  install -m644 docs/libcurl/libcurl.m4 "$pkgdir/usr/local/share/aclocal/libcurl.m4"
+}
