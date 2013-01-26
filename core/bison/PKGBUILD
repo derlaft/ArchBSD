@@ -1,27 +1,46 @@
-pkgname=gmake
-pkgver=3.82
+# $Id: PKGBUILD 173327 2012-12-19 01:16:33Z allan $
+# Maintainer: Allan McRae <allan@archlinux.org>
+# Contributor: Eric Belanger <eric@archlinux.org>
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
+pkgname=bison
+pkgver=2.7
 pkgrel=1
-category=devel
 pkgdesc="The GNU general-purpose parser generator"
 arch=('i686' 'x86_64')
-url="http://www.gnu.org/software/bison/"
-source=('bison.install')
-md5sums=('f92524347e020f9f912782f347b11f36')
-install=bison.install
-license=('GPL')
-groups=('base-devel')
+license=('GPL3')
+url="http://www.gnu.org/software/bison/bison.html"
 depends=('gettext' 'libiconv' 'm4')
-makedepends=('gettext' 'libiconv')
+groups=('base-devel')
+install=bison.install
+source=(ftp://ftp.gnu.org/gnu/bison/${pkgname}-${pkgver}.tar.xz{,.sig})
+md5sums=('234cdfac99257cf99ac4a03c898f37b9'
+         '853204af1f9a5602d84989b4852e317e')
 
 build() {
-     cd "$portsdir/$category/$pkgname"
-     make
-     make deinstall
-     make package PACKAGES="$srcdir"
+  cd ${srcdir}/${pkgname}-${pkgver}
+
+  CFLAGS="${CFLAGS} -I/usr/local/include"
+  LDFLAGS="${LDFLAGS} -L/usr/local/lib"
+
+  # ports pkg disables yacc
+  rm -f doc/bison.info*
+  sed -i -e 's/MANS = yacc.1/MANS =/' doc/Makefile.in
+
+  ./configure --prefix=/usr/local --datadir=/usr/local/share \
+              --sysconfdir=/usr/local/etc \
+              --mandir=/usr/local/man \
+              --infodir=/usr/local/info \
+              --disable-yacc
+  make
+}
+
+check() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+  make check
 }
 
 package() {
-     cd "$pkgdir"
-     tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_$pkgrel.txz"
+  cd ${srcdir}/${pkgname}-${pkgver}
+  make DESTDIR=${pkgdir} install
 }
-
