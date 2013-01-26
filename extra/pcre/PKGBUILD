@@ -36,7 +36,7 @@ build() {
     --enable-pcre8 --enable-pcre16 --enable-pcre32 --enable-jit \
     --enable-utf --enable-unicode-properties \
     --enable-pcretest-libedit
-  make
+  gmake
 }
 
 check() {
@@ -46,7 +46,7 @@ check() {
 
 package() {
   cd "${srcdir}"/${pkgname}-${pkgver}
-  make DESTDIR="${pkgdir}" install
+  gmake DESTDIR="${pkgdir}" install
 
   install -dm755 "${pkgdir}"/usr/share/licenses/${pkgname}
   install -m644 LICENCE "${pkgdir}"/usr/share/licenses/${pkgname}/LICENSE
