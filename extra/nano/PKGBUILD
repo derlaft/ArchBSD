@@ -24,8 +24,8 @@ build() {
   cd ${srcdir}/${pkgname}-${pkgver}
 
   # Apply patches from ports
-  patch -Np0 -i ${srcdir}/patch-doc_man_Makefile.in
-  patch -Np0 -i ${srcdir}/patch-doc_man_fr_Makefile.in
+  patch -p0 -i ${srcdir}/patch-doc_man_Makefile.in
+  patch -p0 -i ${srcdir}/patch-doc_man_fr_Makefile.in
 
   ./configure --prefix=/usr/local \
     --sysconfdir=/usr/local/etc \
