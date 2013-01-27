@@ -1,26 +1,75 @@
-pkgname=libtool
+# $Id: PKGBUILD 168333 2012-10-08 22:50:22Z allan $
+# Maintainer: Allan McRae <allan@archlinux.org>
+# Contributor: judd <jvinet@zeroflux.org>
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
+# Arch PKGBUILD:
+# # NOTE: requires rebuild with each new gcc version
+
+pkgname=('libtool' 'libltdl')
 pkgver=2.4.2
-pkgrel=1
-category=devel
-pkgdesc="Generic shared library support script"
+pkgrel=7
+pkgdesc="A generic library support script"
 arch=('i686' 'x86_64')
-url="http://www.gnu.org/software/libtool/"
-source=('libtool.install')
-md5sums=('586745e7a0b05f7ee272577f1b2f6f7c')
-install=libtool.install
+url="http://www.gnu.org/software/libtool"
 license=('GPL')
+options=('!libtool')
+## makedepends=('gsed')
+source=(ftp://ftp.gnu.org/pub/gnu/libtool/${pkgname}-${pkgver}.tar.xz{,.sig}
+        patch-libltdl-Makefile.in
+        patch-libltdl_config_ltmain.sh
+        )
+md5sums=('2ec8997e0c07249eb4cbd072417d70fe'
+         '1e6ba57420c82c663c85e745d11c7eed'
+         '876903a91469634627e2aa7c549998f4'
+         'c0cce952eb6daaf1ede2465e46487046')
 
 build() {
-     cd "$portsdir/$category/$pkgname"
-     make clean
-     make
-     make deinstall
-     make package PACKAGES="$srcdir"
+  cd ${srcdir}/${pkgbase}-${pkgver}
+
+  patch -p0 -i ${srcdir}/patch-libltdl-Makefile.in
+  patch -p0 -i ${srcdir}/patch-libltdl_config_ltmain.sh
+
+# ports does this
+  sed -i "" -e 's|sed gsed|sed|g' \
+		 -e 's|CC=cc|CC=${CC}|g' \
+      configure libltdl/configure
+
+  ./configure --prefix=/usr/local --sysconfdir=/usr/local/etc \
+              --mandir=/usr/local/man \
+              --infodir=/usr/local/info
+
+# ports does this too
+  find . -type f | xargs touch -f
+
+  make
 }
 
-package() {
-     cd "$pkgdir"
-     tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
-     rm -rf +MANIFEST +MTREE_DIRS
+check() {
+  cd ${srcdir}/${pkgbase}-${pkgver}
+  make check
 }
 
+package_libtool() {
+  depends=("libltdl=$pkgver")
+# Arch has this silly dependency...
+# 'gcc=4.7.2'
+# does it have to be that strict for clang? --Blub
+  groups=('base-devel')
+  install=libtool.install
+
+  cd ${srcdir}/${pkgbase}-${pkgver}
+
+  make DESTDIR=${pkgdir} install-binSCRIPTS install-man install-info \
+                         install-data-local
+  rm -rf ${pkgdir}/usr/local/share/libtool/libltdl/
+}
+
+package_libltdl() {
+  pkgdesc="A system independent dlopen wrapper for GNU libtool"
+
+  cd ${srcdir}/${pkgbase}-${pkgver}
+  make DESTDIR=${pkgdir} install-libLTLIBRARIES install-includeHEADERS \
+                         install-ltdlincludeHEADERS install-data-local
+  rm -rf ${pkgdir}/usr/local/share/{aclocal,libtool/config}
+}
