@@ -37,8 +37,7 @@ package() {
   cd "${srcdir}"/${pkgname}-${pkgver}
   gmake DESTDIR="${pkgdir}/" install
 
-# Ports "ltverhack"
-  mv "${pkgdir}/usr/local/lib/libgpg-error.so."{8,0}
-  sed -i '' -e 's/libgpg-error.so.8/libgpg-error.so.0/g' "${pkgdir}/usr/local/lib/libgpg-error.la"
-  ln -sf libgpg-error.so.0 "${pkgdir}/usr/local/lib/libgpg-error.so"
+# Ports "ltverhack" - I'll go the other way round since I can't get it to work properly
+# FIXME:
+  ln -sf libgpg-error.so.8 "${pkgdir}/usr/local/lib/libgpg-error.so.0"
 }
