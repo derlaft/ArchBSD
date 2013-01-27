@@ -3,19 +3,18 @@
 # Contributor: Pierre Schmitz <pierre@archlinux.de>
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
-pkgname=cmake
+pkgbase=cmake
 pkgver=2.8.9
 pkgrel=1
-pkgdesc="A cross-platform open-source make system"
+pkgname=("${pkgbase}" "${pkgbase}-modules")
 arch=('i686' 'x86_64')
 url="http://www.cmake.org/"
 license=('custom')
 depends=('curl' 'libarchive' 'shared-mime-info' 'cmake-modules')
 ## makedepends=('qt')
 optdepends=('qt: cmake-gui')
-install="${pkgname}.install"
 options=('!docs')
-source=("http://www.cmake.org/files/v2.8/${pkgname}-${pkgver}.tar.gz"
+source=("http://www.cmake.org/files/v2.8/${pkgbase}-${pkgver}.tar.gz"
         patch-CMakeLists.txt
         patch-Modules_FindDCMTK.cmake
         patch-Modules_FindJava.cmake
@@ -24,9 +23,17 @@ source=("http://www.cmake.org/files/v2.8/${pkgname}-${pkgver}.tar.gz"
         patch-Modules_FindwxWidgets.cmake
         patch-Modules_FindwxWindows.cmake
         )
+md5sums=('801f4c87f8b604f727df5bf1f05a59e7'
+         '464365b9a4f9dd111a420bdf2fe86221'
+         'a58b1e1abe2c3cf9b81a225928725e01'
+         'f5efcae8c3d35575b93172cec7d6af59'
+         '715efdbe373b9c40249dde17fc2a998b'
+         'df0075e161f0e710b34d98bdd6a6eda2'
+         'c717a03d877f6e248a09c3592ef5d098'
+         '3d54a7a68af89b8d9a8c51c6579c1461')
 
 build() {
-  cd "${srcdir}/${pkgname}-${pkgver}"
+  cd "${srcdir}/${pkgbase}-${pkgver}"
 
 # Ports patches
   patch -p0 -i "${srcdir}/patch-CMakeLists.txt"
@@ -53,19 +60,23 @@ build() {
 # Disabled for now
 #    --qt-gui \
 
-  make
+  gmake
 }
 
 # I assume Arch doesn't have this here because it takes really long...
 # 1 test failed for me though - yet again... so I'll leave this here for later
 # check() {
-#   cd "${srcdir}/${pkgname}-${pkgver}"
+#   cd "${srcdir}/${pkgbase}-${pkgver}"
 #   make test
 # }
 
-package() {
+package_cmake() {
+  pkgname="cmake"
+  pkgdesc="A cross-platform open-source make system"
+  install="${pkgname}.install"
+
   cd "${srcdir}/${pkgname}-${pkgver}"
-  make DESTDIR="${pkgdir}" install
+  gmake DESTDIR="${pkgdir}" install
 
   vimpath="${pkgdir}/usr/local/share/vim/vimfiles"
   install -dm755 "${vimpath}"/indent
@@ -75,6 +86,21 @@ package() {
 
 # install -Dm644 Docs/cmake-mode.el "${pkgdir}"/usr/share/emacs/site-lisp/cmake-mode.el
 # emacs -batch -f batch-byte-compile "${pkgdir}"/usr/share/emacs/site-lisp/cmake-mode.el
+
+  install -dm755 "${pkgdir}"/usr/local/share/licenses/${pkgname}-${pkgver}
+  install -m644 Copyright.txt "${pkgdir}"/usr/local/share/licenses/${pkgname}-${pkgver}/LICENSE
+}
+
+package_cmake-modules() {
+  pkgname="cmake-modules"
+  pkgdesc="Modules and Templates for CMake"
+
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  install -dm755 "${pkgdir}/usr/local/share/cmake/Modules
+  install -dm755 "${pkgdir}/usr/local/share/cmake/Templates
+  cp -R Modules/* "${pkgdir}/usr/local/share/cmake/Modules/"
+  cp -R Templates/* "${pkgdir}/usr/local/share/cmake/Templates/"
 
   install -dm755 "${pkgdir}"/usr/local/share/licenses/${pkgname}-${pkgver}
   install -m644 Copyright.txt "${pkgdir}"/usr/local/share/licenses/${pkgname}-${pkgver}/LICENSE
