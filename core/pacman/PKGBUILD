@@ -69,9 +69,10 @@ package() {
   esac
   install -m644 $srcdir/makepkg.conf $pkgdir/usr/local/etc/
   # set things correctly in the default conf file
-  gsed -i $pkgdir/usr/local/etc/makepkg.conf \
-    -e "s|@CARCH[@]|$mycarch|g" \
-    -e "s|@CHOST[@]|$mychost|g" \
-    -e "s|@CARCHFLAGS[@]|$myflags|g"
-
+  sed -i -e "s|@CARCH[@]|$mycarch|g" \
+      $pkgdir/usr/local/etc/makepkg.conf
+  sed -i -e "s|@CHOST[@]|$mychost|g" \
+      $pkgdir/usr/local/etc/makepkg.conf
+  sed -i -e "s|@CARCHFLAGS[@]|$myflags|g" \
+      $pkgdir/usr/local/etc/makepkg.conf
 }

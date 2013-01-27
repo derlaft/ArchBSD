@@ -1,11 +1,11 @@
 # Written by: Amzo
-pkgbase="freebsd"
-pkgname="${pkgbase}-kernel"
+pkgname="freebsd-kernel"
 pkgver=9.1
-pkgrel=4
-groups=(base)
+pkgrel=1
+pkgdesc="FreeBSD 9.1 kernel package"
 arch=('i686' 'x86_64')
 url="http://freebsd.org"
+groups=(base)
 license=('BSD')
 source=('ARCHBSD_i686'
 	'ARCHBSD_x86_64'
@@ -19,8 +19,6 @@ md5sums=('1da3141782687c8d455b63ae747d6c32'
 
 makedepends=("freebsd-source")
 options=('docs')
-
-#unset MAKE M4 CC
 
 # Disable --as-needed
 LDFLAGS="${LDFLAGS//-Wl,--as-needed}"
@@ -46,18 +44,13 @@ else
 fi
 }
 
-# Package kernel
-
-package_freebsd-kernel() {
-
-pkgdesc="FreeBSD 9.1 kernel package"
-options=('!strip')
+package() {
 cd /usr/src
 
 	if [[ "$CARCH" == "x86_64" ]]; then
-                make installkernel TARGET=amd64 KERNCONF=ARCHBSD_x86_64 || (echo installkernel failed... && return 1)
+                make TARGET=amd64 KERNCONF=ARCHBSD_x86_64 DESTDIR=${pkgdir} installkernel || (echo installkernel failed... && return 1)
 	else
-                make installkernel TARGET=i386 KERNCONF=ARCHBSD_i686 || (echo buildkernel failed... && return 1)
+                make TARGET=i386 KERNCONF=ARCHBSD_i686 DESTDIR=${pkgdir} installkernel | (echo buildkernel failed... && return 1)
  
 	fi
 

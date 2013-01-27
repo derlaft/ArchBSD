@@ -74,3 +74,8 @@ _resetbackups() {
     done
 }
 
+post_upgrade
+post_install
+_check_pubring
+_warnupgrade
+_resetbackups
