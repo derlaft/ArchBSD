@@ -10,7 +10,7 @@ arch=('i686' 'x86_64')
 url="http://fuse4bsd.creo.hu/"
 license=('BSD')
 makedepnds=('fusefs-libs>=2.4.1' 'freebsd-headers' 'deplate')
-groups=('fuse')
+groups=('fuse' 'fuse-all')
 install=fusefs-kmod.install
 source=(ftp://ftp.FreeBSD.org/pub/FreeBSD/ports/distfiles/fuse4bsd/${HG_SHORTREV}.tar.gz
         extra-patch-fuse_module__fuse_vnops.c
