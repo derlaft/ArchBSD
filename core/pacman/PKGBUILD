@@ -1,6 +1,6 @@
 pkgname=pacman
 pkgver=4.0.3
-pkgrel=5
+pkgrel=6
 pkgdesc="A library-based package manager with dependency support"
 arch=('i686' 'x86_64')
 url="http://www.archlinux.org/pacman/"
@@ -19,16 +19,15 @@ source=(ftp://ftp.archlinux.org/other/pacman/$pkgname-$pkgver.tar.gz
         pacman.conf
         pacman.conf.x86_64
         makepkg.conf
-	Makefile.patch
-	makepkg.patch)
-
+        Makefile.patch
+        makepkg.patch)
 md5sums=('387965c7125e60e5f0b9ff3b427fe0f9'
          'e0c7c9026dfbb5a042a6cb05c3810fd6'
          '02db451be806335ce189ffadb5cf84b9'
          '9926eb703225b8e34d54e222685d63d8'
          'cf1c19a9c10154103825fc68d480e9f0'
          'c2f603b062e90b617603770d0f844f32'
-         '2ed194458e349f70c4b5dd493b1714fb'
+         'a1a006554c9d339a903f5e05daa5e851'
          'b328b118c7971884df88748ee8a29512'
          'dd866f0673baed2b0794f23a5c66693d')
 

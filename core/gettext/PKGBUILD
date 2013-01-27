@@ -1,29 +1,89 @@
+# $Id: PKGBUILD 174268 2013-01-03 13:58:09Z allan $
+# Maintainer:
+# Contributor Wolfgang Bumiller <blub@speed.at>
+
 pkgname=gettext
-pkgver=0.18.1.1
+pkgver=0.18.1
 pkgrel=1
-category=devel
 pkgdesc="GNU internationalization library"
 arch=('i686' 'x86_64')
 url="http://www.gnu.org/software/gettext/"
 license=('GPL')
-groups=('base')
-source=('gettext.install')
-md5sums=('69b7d47cd996749862138e8b6ec29d80')
-install=gettext.install
+groups=('base' 'base-devel')
 depends=('libiconv' 'libtool')
-makedepends=('libiconv')
 optdepends=('cvs: for autopoint tool')
+options=(!docs)
+install=gettext.install
+source=(ftp://ftp.gnu.org/pub/gnu/gettext/${pkgname}-${pkgver}.tar.gz{,.sig}
+        patch-ad
+        patch-ak
+        patch-gettext-runtime_configure
+        patch-gettext-runtime_man_Makefile.in
+        patch-gettext-tools_Makefile.in
+        patch-gettext-tools_config.h.in
+        patch-gettext-tools_configure
+        patch-gettext-tools_libgettextpo_Makefile.in
+        patch-gettext-tools_man_Makefile.in
+        patch-gettext-tools_src_Makefile.in
+        patch-gettext-tools_src_msginit.c
+        patch-gettext-tools_src_x-glade.c
+        )
+md5sums=('2ae04f960d5fa03774636ddef19ebdbf'
+         '0367a32ae6c1c5f7b203a9b6b4344280'
+         '0c5b2727be692452be283ce8cf046a9e'
+         'ef8163558d76b3b979965f1f93bca18a'
+         '60f4034f0b5ac99aa5903b649e9c8299'
+         '3302d174aaed3d31f32b8b5e217c100c'
+         '11f2818446801e54d899101ff6a201ef'
+         'd5a6dbbc658709f76647e60945c629a7'
+         '65f2a1ef8c217c5670afb72535d6d76c'
+         '510efcc2b3b9696492c3604dde6b5e7b'
+         'e842e748154167f9a5e0e4a917547bb6'
+         '996b2667fd16c1c52fb1ba20187dfdac'
+         '33388ccb0cb1d0dd33f7cb2ba0fdebc8'
+         '934b1cff5d2a01c6e48a77f1b147f75e')
 
 build() {
-     cd "$portsdir/$category/$pkgname"
-     make clean
-     make
-     make deinstall
-     make package PACKAGES="$srcdir"
+  cd "${srcdir}/${pkgname}-${pkgver}"
+# Ports patches
+  # patch -p0 -i extra-patch-nodocs
+  patch -p0 -i ${srcdir}/patch-ad
+  patch -p0 -i ${srcdir}/patch-ak
+  patch -p0 -i ${srcdir}/patch-gettext-runtime_configure
+  patch -p0 -i ${srcdir}/patch-gettext-runtime_man_Makefile.in
+  patch -p0 -i ${srcdir}/patch-gettext-tools_Makefile.in
+  patch -p0 -i ${srcdir}/patch-gettext-tools_config.h.in
+  patch -p0 -i ${srcdir}/patch-gettext-tools_configure
+  patch -p0 -i ${srcdir}/patch-gettext-tools_libgettextpo_Makefile.in
+  patch -p0 -i ${srcdir}/patch-gettext-tools_man_Makefile.in
+  patch -p0 -i ${srcdir}/patch-gettext-tools_src_Makefile.in
+  patch -p0 -i ${srcdir}/patch-gettext-tools_src_msginit.c
+  patch -p0 -i ${srcdir}/patch-gettext-tools_src_x-glade.c
+
+  export CPPFLAGS="-I/usr/local/include"
+  export LDFLAGS="-L/usr/local/lib"
+
+# ports does this
+  find . -name configure -print | xargs sed -i -e 's|mkdir gmkdir|mkdir|'
+# from ports: EMACS line
+  EMACS="no" \
+  ./configure --prefix=/usr/local \
+              --sysconfdir=/usr/local/etc \
+              --mandir=/usr/local/man \
+              --infodir=/usr/local/info \
+              --disable-csharp --disable-threads --disable-openmp \
+           	  --with-included-gettext --with-included-glib \
+           	  --with-included-libcroco --with-included-libxml \
+           	  --without-git
+  gmake
+}
+
+check() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake check
 }
 
 package() {
-     cd "$pkgdir"
-     tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
 }
-

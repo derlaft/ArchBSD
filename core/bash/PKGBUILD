@@ -46,6 +46,9 @@ build() {
   LDFLAGS="${LDFLAGS} -L/usr/local/lib "  
 
   ./configure --prefix=/usr/local --without-bash-malloc \
+              --sysconfdir=/usr/local/etc \
+              --mandir=/usr/local/man \
+              --infodir=/usr/local/info \
               --disable-rpath \
               --enable-disabled-builtins
   make
@@ -59,6 +62,9 @@ check() {
 package() {
   cd ${srcdir}/${pkgname}-$_basever
   make DESTDIR=${pkgdir} install
+
+  # Don't know why it does that...
+  rm -f ${pkgdir}/usr/local/info/dir
 
   install -dm755 ${pkgdir}/usr/local/etc/skel/
   
