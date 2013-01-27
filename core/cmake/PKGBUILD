@@ -10,7 +10,6 @@ pkgname=("${pkgbase}" "${pkgbase}-modules")
 arch=('i686' 'x86_64')
 url="http://www.cmake.org/"
 license=('custom')
-depends=('curl' 'libarchive' 'shared-mime-info' 'cmake-modules')
 ## makedepends=('qt')
 optdepends=('qt: cmake-gui')
 options=('!docs')
@@ -74,8 +73,9 @@ package_cmake() {
   pkgname="cmake"
   pkgdesc="A cross-platform open-source make system"
   install="${pkgname}.install"
+  depends=('curl' 'libarchive' 'shared-mime-info' 'cmake-modules')
 
-  cd "${srcdir}/${pkgname}-${pkgver}"
+  cd "${srcdir}/${pkgbase}-${pkgver}"
   gmake DESTDIR="${pkgdir}" install
 
   vimpath="${pkgdir}/usr/local/share/vim/vimfiles"
@@ -95,13 +95,27 @@ package_cmake-modules() {
   pkgname="cmake-modules"
   pkgdesc="Modules and Templates for CMake"
 
-  cd "${srcdir}/${pkgname}-${pkgver}"
+  cd "${srcdir}/${pkgbase}-${pkgver}"
 
-  install -dm755 "${pkgdir}/usr/local/share/cmake/Modules
-  install -dm755 "${pkgdir}/usr/local/share/cmake/Templates
+  install -dm755 "${pkgdir}/usr/local/share/cmake/Modules"
+  install -dm755 "${pkgdir}/usr/local/share/cmake/Templates"
   cp -R Modules/* "${pkgdir}/usr/local/share/cmake/Modules/"
+  find "${pkgdir}/usr/local/share/cmake/Modules" -type d -exec chmod 755 '{}' ';'
+  find "${pkgdir}/usr/local/share/cmake/Modules" -type f -exec chmod 644 '{}' ';'
   cp -R Templates/* "${pkgdir}/usr/local/share/cmake/Templates/"
+  find "${pkgdir}/usr/local/share/cmake/Templates" -type d -exec chmod 755 '{}' ';'
+  find "${pkgdir}/usr/local/share/cmake/Templates" -type f -exec chmod 644 '{}' ';'
 
-  install -dm755 "${pkgdir}"/usr/local/share/licenses/${pkgname}-${pkgver}
-  install -m644 Copyright.txt "${pkgdir}"/usr/local/share/licenses/${pkgname}-${pkgver}/LICENSE
+# clean up
+  msg "Cleaning up Modules"
+  # This is just really taking its time... why???
+  find "${pkgdir}/usr/local/share/cmake/Modules" -name '*-e' -delete
+  ## find "${pkgdir}/usr/local/share/cmake/Modules" -type d -exec sh -c 'rm -v {}/*-e' ';'
+  msg "Cleaning up Templates"
+  find "${pkgdir}/usr/local/share/cmake/Templates" -name '*-e' -delete
+  ## find "${pkgdir}/usr/local/share/cmake/Templates" -type d -exec sh -c 'rm -v {}/*-e' ';'
+
+
+  install -dm755 "${pkgdir}/usr/local/share/licenses/${pkgname}-${pkgver}"
+  install -m644 Copyright.txt "${pkgdir}/usr/local/share/licenses/${pkgname}-${pkgver}/LICENSE"
 }
