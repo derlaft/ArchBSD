@@ -1,24 +1,81 @@
+# $Id: PKGBUILD 172096 2012-11-28 07:27:35Z andrea $
+# Maintainer: Andrea Scarpino <andrea@archlinux.org>
+# Contributor: Pierre Schmitz <pierre@archlinux.de>
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
 pkgname=cmake
 pkgver=2.8.9
 pkgrel=1
-category=devel
-pkgdesc="A cross-platform Makefile generator"
+pkgdesc="A cross-platform open-source make system"
 arch=('i686' 'x86_64')
-url="http://www.cmake.com"
-license=('BSD')
-depends=('cmake-modules')
+url="http://www.cmake.org/"
+license=('custom')
+depends=('curl' 'libarchive' 'shared-mime-info' 'cmake-modules')
+## makedepends=('qt')
+optdepends=('qt: cmake-gui')
+install="${pkgname}.install"
+options=('!docs')
+source=("http://www.cmake.org/files/v2.8/${pkgname}-${pkgver}.tar.gz"
+        patch-CMakeLists.txt
+        patch-Modules_FindDCMTK.cmake
+        patch-Modules_FindJava.cmake
+        patch-Modules_FindQt4.cmake
+        patch-Modules_FindSDL.cmake
+        patch-Modules_FindwxWidgets.cmake
+        patch-Modules_FindwxWindows.cmake
+        )
 
 build() {
-     cd "$portsdir/$category/$pkgname"
-     make clean
-     make
-     make deinstall
-     make package PACKAGES="$srcdir"
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+# Ports patches
+  patch -p0 -i "${srcdir}/patch-CMakeLists.txt"
+  patch -p0 -i "${srcdir}/patch-Modules_FindDCMTK.cmake"
+  patch -p0 -i "${srcdir}/patch-Modules_FindJava.cmake"
+  patch -p0 -i "${srcdir}/patch-Modules_FindQt4.cmake"
+  patch -p0 -i "${srcdir}/patch-Modules_FindSDL.cmake"
+  patch -p0 -i "${srcdir}/patch-Modules_FindwxWidgets.cmake"
+  patch -p0 -i "${srcdir}/patch-Modules_FindwxWindows.cmake"
+
+# From ports:
+  (find Modules -name "*.cmake" -print0; \
+   find Tests -name "CMakeLists.txt" -print0 \
+  ) | xargs -0 -n 100 sed -i -e 's,/usr/X11R6,/usr/local,g'
+  sed -i -e 's,/opt/kde4,/usr/local/kde4,g' Modules/FindKDE4.cmake
+  sed -i -e 's,/usr/include,/usr/local/include,' Modules/FindDCMTK.cmake
+  find . -name "*.bak" -delete -o -name "*.orig" -delete
+
+  ./bootstrap --prefix=/usr/local \
+    --mandir=/man \
+    --docdir=/doc/cmake \
+    --system-libs
+
+# Disabled for now
+#    --qt-gui \
+
+  make
 }
+
+# I assume Arch doesn't have this here because it takes really long...
+# 1 test failed for me though - yet again... so I'll leave this here for later
+# check() {
+#   cd "${srcdir}/${pkgname}-${pkgver}"
+#   make test
+# }
 
 package() {
-     cd "$pkgdir"
-     tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
-     rm -rf +MANIFEST +MTREE_DIRS
-}
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
 
+  vimpath="${pkgdir}/usr/local/share/vim/vimfiles"
+  install -dm755 "${vimpath}"/indent
+  install -m644 Docs/cmake-indent.vim "${vimpath}"/indent/cmake-indent.vim
+  install -dm755 "${vimpath}"/syntax
+  install -m644 Docs/cmake-syntax.vim "${vimpath}"/syntax/cmake-syntax.vim
+
+# install -Dm644 Docs/cmake-mode.el "${pkgdir}"/usr/share/emacs/site-lisp/cmake-mode.el
+# emacs -batch -f batch-byte-compile "${pkgdir}"/usr/share/emacs/site-lisp/cmake-mode.el
+
+  install -dm755 "${pkgdir}"/usr/local/share/licenses/${pkgname}-${pkgver}
+  install -m644 Copyright.txt "${pkgdir}"/usr/local/share/licenses/${pkgname}-${pkgver}/LICENSE
+}
