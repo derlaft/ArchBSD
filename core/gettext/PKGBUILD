@@ -88,4 +88,5 @@ check() {
 package() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   gmake DESTDIR="${pkgdir}" install
+  rm -f "${pkgdir}/usr/local/info/dir"
 }
