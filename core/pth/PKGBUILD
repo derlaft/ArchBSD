@@ -1,25 +1,61 @@
+# $Id: PKGBUILD 146737 2012-01-16 22:52:42Z dreisner $
+# Maintainer: damir <damir@archlinux.org>
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
 pkgname=pth
 pkgver=2.0.7
-pkgrel=1
-category=devel
-pkgdesc="GNU Portable Threads"
+pkgrel=4
+pkgdesc="GNU Portable Threads."
 arch=('i686' 'x86_64')
 url="http://www.gnu.org/software/pth/"
-source=('pth.install')
-md5sums=('5678eb232af42ef4a82d221ee3623d50')
+license=('LGPL')
+options=('!libtool' '!makeflags')
 install=pth.install
-license=('GPL')
+source=(ftp://ftp.gnu.org/gnu/pth/$pkgname-$pkgver.tar.gz{,.sig}
+        patch-ltmain.sh
+        patch-pth_p.h.in
+        )
+md5sums=('9cb4a25331a4c4db866a31cbe507c793'
+         '2371608ef1866b310393ef262800609c'
+         '4d8a4292cfeb84144ea44e56f171718c'
+         '278b91f55f2fe30707c1271c04142681')
 
 build() {
-     cd "$portsdir/$category/$pkgname"
-     make
-     make deinstall
-     make package PACKAGES="$srcdir"
+  cd "$srcdir/$pkgname-$pkgver"
+
+# ports patch set
+  patch -p0 -i "${srcdir}/patch-ltmain.sh"
+  patch -p0 -i "${srcdir}/patch-pth_p.h.in"
+
+  ./configure --prefix=/usr/local \
+              --sysconfdir=/usr/local/etc \
+              --mandir=/usr/local/man \
+              --infodir=/usr/local/info \
+              --enable-optimize \
+              --enable-batch \
+              --includedir=/usr/local/include/pth \
+              --libdir=/usr/local/lib/pth \
+              --enable-syscall-soft --enable-pthread \
+              --localstatedir=/var \
+              --with-pic
+
+# Arch does this but we don't seem to require it
+  ## sed -i "s|awk=''|awk=/bin/awk|g" shtool # "Cannot find a reasonable Awk"
+
+  make -j1
+}
+
+check() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  make -j1 check
 }
 
 package() {
-     cd "$pkgdir"
-     tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
-     rm -rf +MANIFEST +MTREE_DIRS
-}
+  cd "$srcdir/$pkgname-$pkgver"
 
+  make -j1 DESTDIR=${pkgdir} install
+
+  install -dm755 "${pkgdir}/usr/local/libdata/ldconfig"
+  echo "/usr/local/lib/pth" >> "${pkgdir}/usr/local/libdata/ldconfig/pth"
+}
