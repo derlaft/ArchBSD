@@ -1,14 +1,14 @@
 post_install() {
 	/bin/mkdir -p /usr/local/lib/gettext
 	/sbin/ldconfig -m /usr/local/lib
-	install-info --quiet /usr/local/info/autosprintf.info /usr/local/info/dir
-	install-info --quiet /usr/local/info/gettext.info /usr/local/info/dir
+	install-info --quiet /usr/local/info/autosprintf.info.gz /usr/local/info/dir
+	install-info --quiet /usr/local/info/gettext.info.gz /usr/local/info/dir
 }
 
 pre_remove() {
 	/sbin/ldconfig -R
-	install-info --quiet --delete /usr/local/info/autosprintf.info /usr/local/info/dir
-	install-info --quiet --delete /usr/local/info/gettext.info /usr/local/info/dir
+	install-info --quiet --delete /usr/local/info/autosprintf.info.gz /usr/local/info/dir
+	install-info --quiet --delete /usr/local/info/gettext.info.gz /usr/local/info/dir
 }
 
 post_remove() {
@@ -20,4 +20,3 @@ post_remove() {
 		fi; 
 	fi
 }
-
