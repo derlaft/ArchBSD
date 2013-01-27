@@ -66,8 +66,8 @@ package() {
 
     install -dm755 "${pkgdir}/usr/local/modules"
     install -dm755 "${pkgdir}/usr/local/man/man8"
-	install -dm755 "${pkgdir}/usr/sbin"
-	install -dm755 "${pkgdir}/usr/local/sbin"
+    install -dm755 "${pkgdir}/usr/sbin"
+    install -dm755 "${pkgdir}/usr/local/sbin"
 
     make DESTDIR="${pkgdir}" \
         BINDIR="/usr/local/sbin" MANDIR="/usr/local/man/man" \
@@ -75,6 +75,6 @@ package() {
         install
 
     # Don't overwrite linker.hints
-	rm -f "${pkgdir}/usr/local/modules/linker.hints"
+    rm -f "${pkgdir}/usr/local/modules/linker.hints"
     ln -sf /usr/local/sbin/mount_fusefs "${pkgdir}/usr/sbin"
 }
