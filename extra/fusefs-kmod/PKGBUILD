@@ -24,6 +24,16 @@ source=(ftp://ftp.FreeBSD.org/pub/FreeBSD/ports/distfiles/fuse4bsd/${HG_SHORTREV
         patch-fuse_module__fuse_vnops.c
         patch-mount_fusefs__mount_fusefs.c
         )
+md5sums=('fe90644d6bd7d05b76748422b09efc1e'
+         '465f54aa59b1454ec375e6352c0a8647'
+         '749f11dea13f1598381abda140d6d153'
+         'aa5832d51f0bb29abb8c13829b4da0d2'
+         '8d9df909c2e875bedee13125b05af0b5'
+         '77353313de620c661573c3dfa1810d6d'
+         '95ddf3013365b3d5061528c1889d3c4b'
+         '0de19d5b3a73099df436ed4c4aa8f3ad'
+         'b77ea83ea17b8cdc923a90de99633764'
+         '6c30e4b697c27115b5237a5d30215e31')
 
 build() {
     cd "${srcdir}/fuse4bsd-${HG_SHORTREV}"
