@@ -1,0 +1,70 @@
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
+HG_SHORTREV=498acaef33b0
+
+pkgname=fusefs-kmod
+pkgver=0.3.9
+pkgrel=1
+pkgdesc="Kernel module for fusefs based filesystems"
+arch=('i686' 'x86_64')
+url="http://fuse4bsd.creo.hu/"
+license=('BSD')
+makedepnds=('fusefs-libs>=2.4.1' 'freebsd-headers' 'deplate')
+groups=('fuse')
+install=fusefs-kmod.install
+source=(ftp://ftp.FreeBSD.org/pub/FreeBSD/ports/distfiles/fuse4bsd/${HG_SHORTREV}.tar.gz
+        extra-patch-fuse_module__fuse_vnops.c
+#        extrapatch-fuse_module__fuse_vnops.c This one is for FreeBSD 10
+        patch-fuse_module__Makefile
+        patch-fuse_module__fuse.h
+        patch-fuse_module__fuse_dev.c
+        patch-fuse_module__fuse_io.c
+        patch-fuse_module__fuse_main.c
+        patch-fuse_module__fuse_vfsops.c
+        patch-fuse_module__fuse_vnops.c
+        patch-mount_fusefs__mount_fusefs.c
+        )
+
+build() {
+    cd "${srcdir}/fuse4bsd-${HG_SHORTREV}"
+    patch -p0 -i ${srcdir}/extra-patch-fuse_module__fuse_vnops.c
+    patch -p0 -i ${srcdir}/patch-fuse_module__Makefile
+    patch -p0 -i ${srcdir}/patch-fuse_module__fuse.h
+    patch -p0 -i ${srcdir}/patch-fuse_module__fuse_dev.c
+    patch -p0 -i ${srcdir}/patch-fuse_module__fuse_io.c
+    patch -p0 -i ${srcdir}/patch-fuse_module__fuse_main.c
+    patch -p0 -i ${srcdir}/patch-fuse_module__fuse_vfsops.c
+    patch -p0 -i ${srcdir}/patch-fuse_module__fuse_vnops.c
+    patch -p0 -i ${srcdir}/patch-mount_fusefs__mount_fusefs.c
+
+    sed -i-e 's/deplate.rb/deplate/g' doc/Makefile
+    sed -i -e 's|-I../inc|-I/usr/src/sys -I../inc|g' mount_fusefs/Makefile
+    cat /usr/local/include/fuse/fuse_kernel.h > fuse_module/fuse_kernel.h
+
+    # the default LDFLAGS don't work in this build system for some reason
+    unset CFLAGS
+    unset CPPFLAGS
+    unset CXXFLAGS
+    unset LDFLAGS
+    make -j1 \
+        SYSDIR="/usr/src/sys" \
+        MOUNT="/usr/src/sbin/mount"
+}
+
+package() {
+    cd "${srcdir}/fuse4bsd-${HG_SHORTREV}"
+
+    install -dm755 "${pkgdir}/usr/local/modules"
+    install -dm755 "${pkgdir}/usr/local/man/man8"
+	install -dm755 "${pkgdir}/usr/sbin"
+	install -dm755 "${pkgdir}/usr/local/sbin"
+
+    make DESTDIR="${pkgdir}" \
+        BINDIR="/usr/local/sbin" MANDIR="/usr/local/man/man" \
+        KMODDIR="/usr/local/modules" \
+        install
+
+    # Don't overwrite linker.hints
+	rm -f "${pkgdir}/usr/local/modules/linker.hints"
+    ln -sf /usr/local/sbin/mount_fusefs "${pkgdir}/usr/sbin"
+}
