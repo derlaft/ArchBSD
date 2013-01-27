@@ -30,7 +30,6 @@ source=(ftp://ftp.gnu.org/pub/gnu/gettext/${pkgname}-${pkgver}.tar.gz{,.sig}
         )
 md5sums=('2ae04f960d5fa03774636ddef19ebdbf'
          '0367a32ae6c1c5f7b203a9b6b4344280'
-         '7a19398f0f60a603cc17ce006ebd0414'
          '0c5b2727be692452be283ce8cf046a9e'
          'ef8163558d76b3b979965f1f93bca18a'
          '60f4034f0b5ac99aa5903b649e9c8299'
