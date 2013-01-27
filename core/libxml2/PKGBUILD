@@ -19,7 +19,7 @@ md5sums=('c62106f02ee00b6437f0fb9d370c1093'
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  sed -i -e 's|/usr/local/bin/python -u|/usr/bin/python2 -u|g' python/tests/*.py
+  sed -i '' -e 's|/usr/local/bin/python -u|/usr/bin/python2 -u|g' python/tests/*.py
   ./configure --prefix=/usr --with-threads --with-history \
      --with-python=/usr/bin/python2
   make

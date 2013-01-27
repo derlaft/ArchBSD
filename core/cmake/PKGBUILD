@@ -46,9 +46,9 @@ build() {
 # From ports:
   (find Modules -name "*.cmake" -print0; \
    find Tests -name "CMakeLists.txt" -print0 \
-  ) | xargs -0 -n 100 sed -i -e 's,/usr/X11R6,/usr/local,g'
-  sed -i -e 's,/opt/kde4,/usr/local/kde4,g' Modules/FindKDE4.cmake
-  sed -i -e 's,/usr/include,/usr/local/include,' Modules/FindDCMTK.cmake
+  ) | xargs -0 -n 100 sed -i '' -e 's,/usr/X11R6,/usr/local,g'
+  sed -i '' -e 's,/opt/kde4,/usr/local/kde4,g' Modules/FindKDE4.cmake
+  sed -i '' -e 's,/usr/include,/usr/local/include,' Modules/FindDCMTK.cmake
   find . -name "*.bak" -delete -o -name "*.orig" -delete
 
   ./bootstrap --prefix=/usr/local \
