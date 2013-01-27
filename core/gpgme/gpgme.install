@@ -1,11 +1,11 @@
 post_install() {
 	/sbin/ldconfig -m /usr/local/lib
-	install-info --quiet /usr/local/info/gpgme.info /usr/local/info/dir
+	install-info --quiet /usr/local/info/gpgme.info.gz /usr/local/info/dir
 }
 
 pre_remove() {
 	/sbin/ldconfig -R
-	install-info --quiet --delete /usr/local/info/gpgme.info /usr/local/info/dir
+	install-info --quiet --delete /usr/local/info/gpgme.info.gz /usr/local/info/dir
 	if [ -f /usr/local/info/dir ]; 
 	then 
 		if sed -e '1,/Menu:/d' /usr/local/info/dir | grep -q '^[*] '; 
