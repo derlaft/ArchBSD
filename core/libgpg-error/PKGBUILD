@@ -1,27 +1,36 @@
+# $Id: PKGBUILD 156350 2012-04-17 15:57:56Z andyrtr $
+# Maintainer: judd <jvinet@zeroflux.org>
+
 pkgname=libgpg-error
 pkgver=1.10
-pkgrel=1
-category=security
-pkgdesc="Common error values for all GnuPG components"
-arch=('i686' 'x86_64')
+pkgrel=2
+pkgdesc="Support library for libgcrypt"
+arch=(i686 x86_64)
 url="http://www.gnupg.org"
-source=('libgpg-error.install')
-md5sums=('28fb1ba2a01803bfa86dbef080f3fc01')
-install=libgpg-error.install
-license=('LGPG')
-makedepends=('gettext' 'libiconv' 'libtool')
+license=('LGPL')
+makedepends=('libtool')
 depends=('gettext' 'libiconv')
+options=(!libtool)
+install=libgpg-error.install
+source=(ftp://ftp.gnupg.org/gcrypt/libgpg-error/${pkgname}-${pkgver}.tar.bz2)
+	#ftp://ftp.franken.de/pub/crypt/mirror/ftp.gnupg.org/gcrypt/libgpg-error/${pkgname}-${pkgver}.tar.bz2)
+md5sums=('736a03daa9dc5873047d4eb4a9c22a16')
+
+
 build() {
-  cd "$portsdir/$category/$pkgname"
-  make clean
+  cd "${srcdir}"/${pkgname}-${pkgver}
+  ./configure --prefix=/usr/local \
+              --with-libiconv-prefix=/usr/local \
+              --with-libintl-prefix=/usr/local
   make
-  make deinstall  
-  make package PACKAGES="$srcdir"
+}
+
+check() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+  make check
 }
 
 package() {
-  cd $pkgdir
-  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
-  rm -rf +MANIFEST +MTREE_DIRS
+  cd "${srcdir}"/${pkgname}-${pkgver}
+  make DESTDIR="${pkgdir}/" install
 }
-
