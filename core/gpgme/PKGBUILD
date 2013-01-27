@@ -41,7 +41,8 @@ build() {
               --with-g13=no \
               --with-gpg=/usr/local/bin/gpg2 \
               --with-gpgconf=/usr/local/bin/gpgconf \
-              --enable-fd-passing
+              --enable-fd-passing \
+              --without-gpgsm
 # --with-gpgsm=/usr/local/bin/gpgsm \
 #
   gmake
