@@ -40,4 +40,5 @@ package() {
 # Ports "ltverhack"
   mv "${pkgdir}/usr/local/lib/libgpg-error.so."{8,0}
   sed -i '' -e 's/libgpg-error.so.8/libgpg-error.so.0/g' "${pkgdir}/usr/local/lib/libgpg-error.la"
+  ln -sf libgpg-error.so.0 "${pkgdir}/usr/local/lib/libgpg-error.so"
 }
