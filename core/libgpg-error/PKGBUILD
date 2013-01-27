@@ -23,7 +23,8 @@ build() {
   cd "${srcdir}"/${pkgname}-${pkgver}
   ./configure --prefix=/usr/local \
               --with-libiconv-prefix=/usr/local \
-              --with-libintl-prefix=/usr/local
+              --with-libintl-prefix=/usr/local \
+              --enable-static --enable-shared
   gmake
 }
 
