@@ -12,10 +12,9 @@ license=('GPL')
 groups=('base' 'base-devel')
 depends=('libiconv' 'libtool')
 optdepends=('cvs: for autopoint tool')
-options=(!libtool !docs)
+options=(!docs)
 install=gettext.install
 source=(ftp://ftp.gnu.org/pub/gnu/gettext/${pkgname}-${pkgver}.tar.gz{,.sig}
-        extra-patch-nodocs
         patch-ad
         patch-ak
         patch-gettext-runtime_configure
