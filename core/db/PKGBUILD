@@ -16,6 +16,9 @@ source=(http://download.oracle.com/berkeley-db/db-${pkgver}.tar.gz
         patch-dist_configure
         patch-src_dbinc_atomic.h
         )
+md5sums=('3fda0b004acdaa6fa350bfc41a3b95ca'
+         '8a4dfc2f91f546b1e9e3235fc7e2c7d9'
+         '6ba34cfb07eab5efd9d55caff0375e29')
 
 build() {
   cd "${srcdir}"/$pkgname-${pkgver}/build_unix
