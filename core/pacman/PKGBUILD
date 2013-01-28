@@ -18,8 +18,7 @@ source=(ftp://ftp.archlinux.org/other/pacman/$pkgname-$pkgver.tar.gz
         pacman.conf
         pacman.conf.x86_64
         makepkg.conf
-        Makefile.patch
-        makepkg.patch)
+        Makefile.patch)
 md5sums=('387965c7125e60e5f0b9ff3b427fe0f9'
          'e0c7c9026dfbb5a042a6cb05c3810fd6'
          '02db451be806335ce189ffadb5cf84b9'
@@ -27,8 +26,7 @@ md5sums=('387965c7125e60e5f0b9ff3b427fe0f9'
          'cf1c19a9c10154103825fc68d480e9f0'
          'c2f603b062e90b617603770d0f844f32'
          'a1a006554c9d339a903f5e05daa5e851'
-         'b328b118c7971884df88748ee8a29512'
-         'dd866f0673baed2b0794f23a5c66693d')
+         'b328b118c7971884df88748ee8a29512')
 
 build() {
   cd $srcdir/$pkgname-$pkgver
@@ -36,7 +34,7 @@ build() {
   patch -p1 -i $srcdir/0001-Add-conflict-for-replacing-owned-empty-directory.patch
   patch -p1 -i $srcdir/0002-Check-empty-subdirectory-ownership.patch
   patch -p1 -i $srcdir/0003-Ensure-pre_upgrade-scriptlet-gets-old-package-version.patch
-  patch -p1 -i $srcdir/makepkg.patch
+ 
 
   ./configure --prefix=/usr/local --sysconfdir=/usr/local/etc \
     --localstatedir=/var --disable-doc LDFLAGS="-L/usr/local/lib" \
