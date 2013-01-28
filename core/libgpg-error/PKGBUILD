@@ -10,7 +10,6 @@ url="http://www.gnupg.org"
 license=('LGPL')
 makedepends=('libtool')
 depends=('gettext' 'libiconv')
-options=(!libtool)
 install=libgpg-error.install
 source=(
     ftp://ftp.gnupg.org/gcrypt/libgpg-error/${pkgname}-${pkgver}.tar.bz2)

@@ -12,8 +12,6 @@ url="ftp://ftp.gnupg.org/gcrypt/alpha/libksba"
 depends=('gettext' 'libiconv' 'libgpg-error')
 source=(ftp://ftp.gnupg.org/gcrypt/$pkgname/$pkgname-$pkgver.tar.bz2)
 md5sums=('cd86fad9c9d360b2cf80449f8a4a4075')
-# ports doesn't do this
-## options=(!libtool)
 install=libksba.install
 
 build() {

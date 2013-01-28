@@ -14,7 +14,6 @@ arch=('i686' 'x86_64')
 url="http://curl.haxx.se"
 license=('MIT')
 depends=('ca_root_nss')
-#options=('!libtool')
 source=("http://curl.haxx.se/download/$pkgname-$pkgver.tar.gz"{,.asc}
 	    patch-configure
 	    patch-lib__url.c

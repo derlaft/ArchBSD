@@ -9,7 +9,7 @@ pkgdesc="GNU Portable Threads."
 arch=('i686' 'x86_64')
 url="http://www.gnu.org/software/pth/"
 license=('LGPL')
-options=('!libtool' '!makeflags')
+options=('!makeflags')
 install=pth.install
 source=(ftp://ftp.gnu.org/gnu/pth/$pkgname-$pkgver.tar.gz{,.sig}
         patch-ltmain.sh
