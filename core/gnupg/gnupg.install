@@ -1,6 +1,6 @@
 post_install() {
 	/sbin/ldconfig -m /usr/local/lib
-	install-info --quiet /usr/local/info/gnupg.info /usr/local/info/dir
+	install-info --quiet /usr/local/info/gnupg.info.gz /usr/local/info/dir
 
 	if [ -r ${PKG_PREFIX}/bin/gpg ] || [ -L ${PKG_PREFIX}/bin/gpg ]; then
 		# Skip.
@@ -13,7 +13,7 @@ post_install() {
 pre_remove() {
 	[ -L /usr/local/bin/gpg ] && rm -f /usr/local/bin/gpg || true
 	/sbin/ldconfig -R
-	install-info --quiet --delete /usr/local/info/gnupg.info /usr/local/info/dir
+	install-info --quiet --delete /usr/local/info/gnupg.info.gz /usr/local/info/dir
 }
 
 post_deinstall() {

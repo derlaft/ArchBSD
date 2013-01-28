@@ -1,25 +1,35 @@
+# $Id: PKGBUILD 149815 2012-02-11 07:14:25Z tpowa $
+# Maintainer: damir <damir@archlinux.org>
+# Contributor: Damir Perisa <damir.perisa@bluewin.ch>
+
 pkgname=libksba
 pkgver=1.3.0
 pkgrel=1
-category=security
-pkgdesc="KSBA is an X.509 Library"
+pkgdesc="A CMS and X.509 access library"
 arch=('i686' 'x86_64')
-url="http://www.gnupg.org"
-source=('libksba.install')
-md5sums=('88e09b531a1d1b6a90f707552262b3ec')
-install=libksba.install
-license=('LGPG')
-makedepends=('gettext' 'libiconv' 'libgpg-error' 'perl')
+license=('GPL')
+url="ftp://ftp.gnupg.org/gcrypt/alpha/libksba"
 depends=('gettext' 'libiconv' 'libgpg-error')
+source=(ftp://ftp.gnupg.org/gcrypt/$pkgname/$pkgname-$pkgver.tar.bz2)
+md5sums=('cd86fad9c9d360b2cf80449f8a4a4075')
+# ports doesn't do this
+## options=(!libtool)
+install=libksba.install
+
 build() {
-  cd "$portsdir/$category/$pkgname"
+  cd $srcdir/$pkgname-$pkgver
+  ./configure --prefix=/usr/local \
+              --infodir=/usr/local/info \
+              --enable-static
   make
-  make deinstall  
-  make package PACKAGES="$srcdir"
+}
+
+check() {
+   cd $srcdir/$pkgname-$pkgver
+   make check
 }
 
 package() {
-  cd $pkgdir
-  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+  cd $srcdir/$pkgname-$pkgver
+  make DESTDIR=$pkgdir install
 }
-

@@ -1,27 +1,62 @@
+# $Id: PKGBUILD 156348 2012-04-17 15:57:54Z andyrtr $
+# Maintainer: Andreas Radke <andyrtr@archlinux.org>
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
 pkgname=libgcrypt
 pkgver=1.5.0
-pkgrel=1
-category=security
-pkgdesc="General purpose crypto library based on code used in GnuPG"
-arch=('i686' 'x86_64')
+pkgrel=3
+pkgdesc="a general purpose crypto library based on the code used"
+arch=(i686 x86_64)
 url="http://www.gnupg.org"
-source=('libgcrypt.install')
-md5sums=('29b6d8e687f066e99cd7bff30c83a0d7')
-install=libgcrypt.install
-license=('GPL')
-makedepends=('gettext' 'libiconv' 'libtool' 'libgpg-error')
+license=('LGPL')
+depends=('libgpg-error>=1.10-2')
+options=('!libtool' '!emptydirs')
+install=$pkgname.install
+makedepends=('libtool' 'libgpg-error')
 depends=('gettext' 'libiconv' 'libgpg-error')
+source=(ftp://ftp.gnupg.org/gcrypt/${pkgname}/${pkgname}-${pkgver}.tar.bz2
+	    #ftp://ftp.franken.de/pub/crypt/mirror/ftp.gnupg.org/gcrypt/libgcrypt/${pkgname}-${pkgver}.tar.bz2
+        patch-cipher-rijndael.c
+        patch-ltmain.sh
+        patch-mpi-longlong.h
+        patch-src__gcrypt.h.in
+)
+md5sums=('693f9c64d50c908bc4d6e01da3ff76d8'
+         '3e77065dbb002d6efb150b0e67d9a987'
+         'a2f2573b556bc79c2d19a30b2fcd71db'
+         'e7032d4cd109c03dcb76bed756ae7cdd'
+         '2b2dd02412e2a25277889922127f00e4')
+
 build() {
-  cd "$portsdir/$category/$pkgname"
-  make clean
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+# ports patches
+  patch -p0 -i "${srcdir}/patch-cipher-rijndael.c"
+  patch -p0 -i "${srcdir}/patch-ltmain.sh"
+  patch -p0 -i "${srcdir}/patch-mpi-longlong.h"
+  patch -p0 -i "${srcdir}/patch-src__gcrypt.h.in"
+
+# from ports
+  sed -i '' -e "s|%%PTHREAD_LIBS%%|-pthread|" ltmain.sh
+  rm -f doc/gcrypt.info*
+
+  ./configure --prefix=/usr/local \
+    --mandir=/usr/local/man \
+    --infodir=/usr/local/info \
+	--disable-padlock-support \
+	--enable-shared --enable-static
   make
-  make deinstall  
-  make package PACKAGES="$srcdir"
+}
+
+check() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+  make check
 }
 
 package() {
-  cd $pkgdir
-  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_$pkgrel.txz"
-  rm -rf +MANIFEST +MTREE_DIRS
-}
+  cd ${srcdir}/${pkgname}-${pkgver}
+  make DESTDIR=${pkgdir} install
 
+  install -dm755 "${pkgdir}/usr/local/share/licenses/${pkgname}-${pkgver}"
+  install -m644 COPYING "${pkgdir}/usr/local/share/licenses/${pkgname}-${pkgver}/LICENSE"
+}

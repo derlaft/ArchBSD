@@ -1,24 +1,121 @@
-pkgname=cmake
+# $Id: PKGBUILD 172096 2012-11-28 07:27:35Z andrea $
+# Maintainer: Andrea Scarpino <andrea@archlinux.org>
+# Contributor: Pierre Schmitz <pierre@archlinux.de>
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
+pkgbase=cmake
 pkgver=2.8.9
 pkgrel=1
-category=devel
-pkgdesc="A cross-platform Makefile generator"
+pkgname=("${pkgbase}" "${pkgbase}-modules")
 arch=('i686' 'x86_64')
-url="http://www.cmake.com"
-license=('BSD')
-depends=('cmake-modules')
+url="http://www.cmake.org/"
+license=('custom')
+## makedepends=('qt')
+optdepends=('qt: cmake-gui')
+options=('!docs')
+source=("http://www.cmake.org/files/v2.8/${pkgbase}-${pkgver}.tar.gz"
+        patch-CMakeLists.txt
+        patch-Modules_FindDCMTK.cmake
+        patch-Modules_FindJava.cmake
+        patch-Modules_FindQt4.cmake
+        patch-Modules_FindSDL.cmake
+        patch-Modules_FindwxWidgets.cmake
+        patch-Modules_FindwxWindows.cmake
+        )
+md5sums=('801f4c87f8b604f727df5bf1f05a59e7'
+         '464365b9a4f9dd111a420bdf2fe86221'
+         'a58b1e1abe2c3cf9b81a225928725e01'
+         'f5efcae8c3d35575b93172cec7d6af59'
+         '715efdbe373b9c40249dde17fc2a998b'
+         'df0075e161f0e710b34d98bdd6a6eda2'
+         'c717a03d877f6e248a09c3592ef5d098'
+         '3d54a7a68af89b8d9a8c51c6579c1461')
 
 build() {
-     cd "$portsdir/$category/$pkgname"
-     make clean
-     make
-     make deinstall
-     make package PACKAGES="$srcdir"
+  cd "${srcdir}/${pkgbase}-${pkgver}"
+
+# Ports patches
+  patch -p0 -i "${srcdir}/patch-CMakeLists.txt"
+  patch -p0 -i "${srcdir}/patch-Modules_FindDCMTK.cmake"
+  patch -p0 -i "${srcdir}/patch-Modules_FindJava.cmake"
+  patch -p0 -i "${srcdir}/patch-Modules_FindQt4.cmake"
+  patch -p0 -i "${srcdir}/patch-Modules_FindSDL.cmake"
+  patch -p0 -i "${srcdir}/patch-Modules_FindwxWidgets.cmake"
+  patch -p0 -i "${srcdir}/patch-Modules_FindwxWindows.cmake"
+
+# From ports:
+  (find Modules -name "*.cmake" -print0; \
+   find Tests -name "CMakeLists.txt" -print0 \
+  ) | xargs -0 -n 100 sed -i '' -e 's,/usr/X11R6,/usr/local,g'
+  sed -i '' -e 's,/opt/kde4,/usr/local/kde4,g' Modules/FindKDE4.cmake
+  sed -i '' -e 's,/usr/include,/usr/local/include,' Modules/FindDCMTK.cmake
+  find . -name "*.bak" -delete -o -name "*.orig" -delete
+
+  ./bootstrap --prefix=/usr/local \
+    --mandir=/man \
+    --docdir=/doc/cmake \
+    --system-libs
+
+# Disabled for now
+#    --qt-gui \
+
+  gmake
 }
 
-package() {
-     cd "$pkgdir"
-     tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
-     rm -rf +MANIFEST +MTREE_DIRS
+# I assume Arch doesn't have this here because it takes really long...
+# 1 test failed for me though - yet again... so I'll leave this here for later
+# check() {
+#   cd "${srcdir}/${pkgbase}-${pkgver}"
+#   make test
+# }
+
+package_cmake() {
+  pkgname="cmake"
+  pkgdesc="A cross-platform open-source make system"
+  install="${pkgname}.install"
+  depends=('curl' 'libarchive' 'shared-mime-info' 'cmake-modules')
+
+  cd "${srcdir}/${pkgbase}-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
+
+  vimpath="${pkgdir}/usr/local/share/vim/vimfiles"
+  install -dm755 "${vimpath}"/indent
+  install -m644 Docs/cmake-indent.vim "${vimpath}"/indent/cmake-indent.vim
+  install -dm755 "${vimpath}"/syntax
+  install -m644 Docs/cmake-syntax.vim "${vimpath}"/syntax/cmake-syntax.vim
+
+# install -Dm644 Docs/cmake-mode.el "${pkgdir}"/usr/share/emacs/site-lisp/cmake-mode.el
+# emacs -batch -f batch-byte-compile "${pkgdir}"/usr/share/emacs/site-lisp/cmake-mode.el
+
+  install -dm755 "${pkgdir}"/usr/local/share/licenses/${pkgname}-${pkgver}
+  install -m644 Copyright.txt "${pkgdir}"/usr/local/share/licenses/${pkgname}-${pkgver}/LICENSE
 }
 
+package_cmake-modules() {
+  pkgname="cmake-modules"
+  pkgdesc="Modules and Templates for CMake"
+
+  cd "${srcdir}/${pkgbase}-${pkgver}"
+
+  install -dm755 "${pkgdir}/usr/local/share/cmake/Modules"
+  install -dm755 "${pkgdir}/usr/local/share/cmake/Templates"
+  cp -R Modules/* "${pkgdir}/usr/local/share/cmake/Modules/"
+  find "${pkgdir}/usr/local/share/cmake/Modules" -type d -exec chmod 755 '{}' ';'
+  find "${pkgdir}/usr/local/share/cmake/Modules" -type f -exec chmod 644 '{}' ';'
+  cp -R Templates/* "${pkgdir}/usr/local/share/cmake/Templates/"
+  find "${pkgdir}/usr/local/share/cmake/Templates" -type d -exec chmod 755 '{}' ';'
+  find "${pkgdir}/usr/local/share/cmake/Templates" -type f -exec chmod 644 '{}' ';'
+
+# clean up
+  msg "Cleaning up Modules"
+  # This is just really taking its time... why???
+  find "${pkgdir}/usr/local/share/cmake/Modules" -name '*-e' -delete
+  ## find "${pkgdir}/usr/local/share/cmake/Modules" -type d -exec sh -c 'rm -v {}/*-e' ';'
+  msg "Cleaning up Templates"
+  find "${pkgdir}/usr/local/share/cmake/Templates" -name '*-e' -delete
+  ## find "${pkgdir}/usr/local/share/cmake/Templates" -type d -exec sh -c 'rm -v {}/*-e' ';'
+
+
+  install -dm755 "${pkgdir}/usr/local/share/licenses/${pkgname}-${pkgver}"
+  install -m644 Copyright.txt "${pkgdir}/usr/local/share/licenses/${pkgname}-${pkgver}/LICENSE"
+}
