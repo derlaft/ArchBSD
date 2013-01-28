@@ -14,7 +14,7 @@ arch=('i686' 'x86_64')
 url="http://curl.haxx.se"
 license=('MIT')
 depends=('ca_root_nss')
-options=('!libtool')
+#options=('!libtool')
 source=("http://curl.haxx.se/download/$pkgname-$pkgver.tar.gz"{,.asc}
 	    patch-configure
 	    patch-lib__url.c
@@ -35,7 +35,7 @@ build() {
 
 # ports are odd at times
 # sed -i '' -e '/^SUBDIRS = / s|$$| docs|; /^DIST_SUBDIRS = / s| docs||; /cd docs &&/d' Makefile.in
-  sed -i '' e '/require "valgrind.pm";/d' tests/runtests.pl
+  sed -i '' -e '/require "valgrind.pm";/d' tests/runtests.pl
 
 # difference between ports and Arch:
 # ports: --disable-threaded-resolver
