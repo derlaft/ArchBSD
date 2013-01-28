@@ -1,0 +1,42 @@
+# $Id: PKGBUILD 160636 2012-06-02 22:25:49Z allan $
+# Maintainer: Stéphane Gaudreault <stephane@archlinux.org>
+# Contributor: Allan McRae <allan@archlinux.org>
+# Contributor: Andreas Radke <andyrtr@archlinux.org>
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
+pkgname=db
+pkgver=5.3.21
+pkgrel=1
+pkgdesc="The Berkeley DB embedded database system"
+arch=('i686' 'x86_64')
+url="http://www.oracle.com/technology/software/products/berkeley-db/index.html"
+license=('custom')
+install=db.install
+source=(http://download.oracle.com/berkeley-db/db-${pkgver}.tar.gz
+        patch-dist_configure
+        patch-src_dbinc_atomic.h
+        )
+
+build() {
+  cd "${srcdir}"/$pkgname-${pkgver}/build_unix
+
+  patch -p0 -i "${srcdir}/patch-dist_configure"
+  patch -p0 -i "${srcdir}/patch-src_dbinc_atomic.h"
+
+  ../dist/configure --prefix=/usr/local --enable-compat185 \
+    --mandir=/usr/local/man --infodir=/usr/local/info \
+    --sysconfdir=/usr/local/etc \
+    --enable-shared --enable-static --enable-cxx --enable-dbm \
+    --enable-stl --disable-tcl
+
+  make LIBSO_LIBS=-lpthread
+}
+
+package() {
+  cd "${srcdir}"/$pkgname-${pkgver}/build_unix
+  sed -i '' -e '/^library_install:/s/install_docs//p' Makefile
+  make DESTDIR="${pkgdir}" install
+  install -dm755 "${pkgdir}"/usr/local/share/licenses/${pkgname}
+  install -m644 "${srcdir}"/${pkgname}-${pkgver}/LICENSE \
+    "${pkgdir}"/usr/local/share/licenses/${pkgname}/LICENSE
+}
