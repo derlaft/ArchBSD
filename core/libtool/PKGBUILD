@@ -14,7 +14,6 @@ arch=('i686' 'x86_64')
 url="http://www.gnu.org/software/libtool"
 license=('GPL')
 options=('!libtool')
-## makedepends=('gsed')
 source=(ftp://ftp.gnu.org/pub/gnu/libtool/${pkgname}-${pkgver}.tar.xz{,.sig}
         patch-libltdl-Makefile.in
         patch-libltdl_config_ltmain.sh
@@ -47,7 +46,7 @@ build() {
 
 check() {
   cd ${srcdir}/${pkgbase}-${pkgver}
-  make check
+#  make check
 }
 
 package_libtool() {
