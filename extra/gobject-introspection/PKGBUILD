@@ -20,7 +20,7 @@ source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver::4}/$pkgname-$p
         patch-configure
         patch-tests_Makefile.in
         )
-sha256sums=(
+sha256sums=('5b1387ff37f03db880a2b1cbd6c6b6dfb923a29468d4d8367c458abf7704c61e'
             '3e5447dd211aaccb172949f6e2cdf6b92b583e40c08786b0283752f2fdcfcf05'
             'ea98438320cb92134c3cba636bf298abe1702e99df31cca8a35aa5046b839b5d'
             'c538801f104d18d185e0712083cee1614dfe839142ec15183f7c3a7cb1b06a4b')
