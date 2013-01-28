@@ -1,22 +1,38 @@
 pkgname=pkgconf
 pkgver=0.8.9
 pkgrel=1
-category=devel
 pkgdesc="Utility to help to configure compiler and linker flags"
+conflicts=('pkg-config')
+provides=('pkg-config')
 arch=('i686' 'x86_64')
 url="https://github.com/pkgconf/pkgconf"
 license=('BSD')
+source=(http://tortois.es/~nenolod/distfiles/pkgconf-0.8.9.tar.bz2)
 
 build() {
-     cd "$portsdir/$category/$pkgname"
-     make clean
-     make
-     make deinstall
-     make package PACKAGES="$srcdir"
+    cd "${srcdir}/${pkgname}-${pkgver}"
+
+    ./configure --prefix=/usr/local \
+                --mandir=/usr/local/man \
+                --infodir=/usr/local/info \
+                --with-pkg-config-dir=/usr/local/libdata/pkgconfig \
+                --with-system-libdir=/usr/lib \
+                --with-system-includedir=/usr/include
+    make
+}
+
+check() {
+    cd "${srcdir}/${pkgname}-${pkgver}"
+    make check
 }
 
 package() {
-     cd "$pkgdir"
-     rm -rf +MANIFEST +MTREE_DIRS
-}
+    cd "${srcdir}/${pkgname}-${pkgver}"
+    make DESTDIR="${pkgdir}" install
 
+    install -dm755 "${pkgdir}/usr/local/share/licenses/${pkgname}-${pkgver}"
+    install -m644 COPYING "${pkgdir}/usr/local/share/licenses/${pkgname}-${pkgver}/LICENSE"
+
+    cd "${pkgdir}"
+    ln -sf /usr/local/bin/pkgconf usr/local/bin/pkg-config
+}

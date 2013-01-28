@@ -1,29 +1,69 @@
+# $Id: PKGBUILD 175919 2013-01-25 01:06:48Z bisson $
+# Maintainer: Gaetan Bisson <bisson@archlinux.org>
+# Contributor: Tobias Powalowski <tpowa@archlinux.org>
+# Contributor: Andreas Radke <andyrtr@archlinux.org>
+# Contributor: Judd Vinet <jvinet@zeroflux.org>
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
 pkgname=gnupg
 pkgver=2.0.19
-pkgrel=2
-category=security
-pkgdesc="The GNU Privacy Guard"
-arch=('i686' 'x86_64')
-url="http://www.gnupg.org"
+pkgrel=4
+pkgdesc='Complete and free implementation of the OpenPGP standard'
+url='http://www.gnupg.org/'
 license=('GPL')
-source=('gnupg.install')
-md5sums=('0c8858d10460e7b3f9d15e69826855e7')
-makedepends=('gettext' 'gmake' 'libassuan' 'libgcrypt' 'libgpg-error' 'libiconv' 'libksba' 'pth')
-depends=('gettext' 'libassuan' 'libgcrypt' 'libgpg-error' 'libiconv' 'libksba' 'pth')
-optdepends=('openldap-client' 'curl')
+arch=('i686' 'x86_64')
+optdepends=('curl: gpg2keys_curl'
+            'openldap-client: gpg2keys_ldap')
+makedepends=('gettext' 'libassuan' 'libgcrypt' 'libgpg-error' 'libiconv' 'libksba' 'pth')
+depends=('gettext' 'libassuan' 'libgcrypt' 'libgpg-error' 'libiconv' 'libksba' 'pth' 'pinentry')
 install=gnupg.install
+source=("ftp://ftp.gnupg.org/gcrypt/${pkgname}/${pkgname}-${pkgver}.tar.bz2"{,.sig}
+        'protect-tool-env.patch'
+        patch-doc-Makefile.in
+        )
+md5sums=('6a8589381ca1b0c1a921e9955f42b016'
+         '7d4763596ac3d3c9f573493a31e44b26'
+         '7e5167aa042dbe18ab79d8b0df3f3cab'
+         '0772b80f8e67cb38e1d36458570532dc')
+
+conflicts=('gnupg2')
+provides=("gnupg2=${pkgver}")
+replaces=('gnupg2')
 
 build() {
-  cd "$portsdir/$category/$pkgname"
-  make clean
-  make
-  make deinstall  
-  make package PACKAGES="$srcdir"
+	cd "${srcdir}/${pkgname}-${pkgver}"
+
+# ports patches
+    patch -p0 -i "${srcdir}/patch-doc-Makefile.in"
+# from ports
+	sed -i '' -e "s@-lpthread@-pthread@g" -e '/GPGKEYS_KDNS=/s/".*"/""/' \
+		acinclude.m4 aclocal.m4 configure
+	sed -i '' -e "/#include <utmp.h>/d" \
+		tools/symcryptrun.c
+
+	patch -p1 -i ../protect-tool-env.patch # FS#31900
+
+	./configure --prefix=/usr/local \
+	            --mandir=/usr/local/man \
+	            --infodir=/usr/local/info \
+	            --enable-symcryptrun \
+	            --with-ldap=/usr/local \
+	            --enable-standard-socket \
+	            --enable-scdaemon \
+	            --with-libcurl=/usr/local
+	make
+}
+
+check() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+	make check
 }
 
 package() {
-  cd $pkgdir
-  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_$pkgrel.txz"
-  rm -rf +MANIFEST +MTREE_DIRS
+	cd "${srcdir}/${pkgname}-${pkgver}"
+	make DESTDIR="${pkgdir}" install
+	ln -s gpg2 "${pkgdir}"/usr/local/bin/gpg
+	ln -s gpgv2 "${pkgdir}"/usr//local/bin/gpgv
+	ln -s gpg2.1.gz "${pkgdir}"/usr/local/man/man1/gpg.1.gz
+	rm "${pkgdir}/usr/local/share/gnupg/com-certs.pem" # FS#33059
 }
-

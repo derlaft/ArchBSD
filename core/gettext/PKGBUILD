@@ -64,7 +64,7 @@ build() {
   export LDFLAGS="-L/usr/local/lib"
 
 # ports does this
-  find . -name configure -print | xargs sed -i -e 's|mkdir gmkdir|mkdir|'
+  find . -name configure -print | xargs sed -i '' -e 's|mkdir gmkdir|mkdir|'
 # from ports: EMACS line
   EMACS="no" \
   ./configure --prefix=/usr/local \

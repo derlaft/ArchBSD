@@ -27,7 +27,7 @@ build() {
 
   # ports comment on this:
 # work around for a autoconf assumption, to fix c++ linking with clang
-  sed -i -e 's|GREP "\\-L"|GREP "conftest\\."|g' configure
+  sed -i '' -e 's|GREP "\\-L"|GREP "conftest\\."|g' configure
 
   ./configure --prefix=/usr/local \
     --sysconfdir=/usr/local/etc \
@@ -42,7 +42,7 @@ build() {
 check() {
   cd "${srcdir}"/${pkgname}-${pkgver}
 # disable the stack test
-  sed -i -e 's/do2=yes/do2=no/' RunTest
+  sed -i '' -e 's/do2=yes/do2=no/' RunTest
   make check
 }
 

@@ -1,29 +1,59 @@
+# $Id: PKGBUILD 175920 2013-01-25 01:06:49Z bisson $
+# Maintainer: Tobias Powalowski <tpowa@archlinux.org>
+# Contributor: Roman Kyrylych <roman@archlinux.org>
+# Contributor: Sarah Hay <sarah@archlinux.org>
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
 pkgname=gpgme
 pkgver=1.3.2
-pkgrel=1
-category=security
-pkgdesc="A library to make access to GnuPG easier"
+pkgrel=5
+pkgdesc="A C wrapper library for GnuPG"
 arch=('i686' 'x86_64')
-url="http://www.gnupg.org"
-license=('lGPL')
-source=('gpgme.install')
-md5sums=('a1ed80888895ca0747a6a5b5c0726c47')
-makedepends=('gettext' 'gmake' 'libassuan' 'libgcrypt' 'libgpg-error' 'libiconv' 'libksba' 'pth' 'libtool')
-depends=('gnupg' 'openldap-client' 'pinentry' 'gettext' 'libassuan' 'libgcrypt' 'libgpg-error' 'libiconv' 'libksba' 'pth')
-optdepends=('openldap-client' 'curl')
-install=gpgme.install
+url="http://www.gnupg.org/related_software/gpgme/"
+license=('GPL')
+makedepends=('libiconv' 'libksba' 'pth' 'libtool')
+depends=('gnupg>=2' 'openldap-client' 'pinentry' 'gettext' 'libassuan' 'libgcrypt' 'libgpg-error' 'libiconv' 'libksba' 'pth')
+install=${pkgname}.install
+options=('!emptydirs')
+source=(ftp://ftp.gnupg.org/gcrypt/${pkgname}/${pkgname}-${pkgver}.tar.bz2{,.sig}
+        patch-src__engine-uiserver.c
+        )
+md5sums=('326fe97077141713f0930aa87949a287'
+         '4849bea218571c5ab6094d77049bd5d7'
+         '6c020038355dda8806c60fe8b3d2b15c')
 
 build() {
-  cd "$portsdir/$category/$pkgname"
-  make clean
-  make
-  make deinstall  
-  make package PACKAGES="$srcdir"
+  cd ${srcdir}/${pkgname}-${pkgver}
+# ports patches
+  patch -p0 -i "${srcdir}/patch-src__engine-uiserver.c"
+
+# from ports
+  sed -i '' -e 's|-lpthread|-pthread|g' \
+                configure \
+                src/Makefile.in \
+                src/gpgme-config.in \
+                tests/gpg/Makefile.in
+  sed -i '' -e 's|^clfilesdir.*|clfilesdir=$$\(libdir\)/common-lisp/gpgme|g' \
+                lang/cl/Makefile.in
+
+  ./configure --prefix=/usr/local --disable-static \
+              --includedir=/usr/local/include/gpgme \
+              --with-g13=no \
+              --with-gpg=/usr/local/bin/gpg2 \
+              --with-gpgconf=/usr/local/bin/gpgconf \
+              --enable-fd-passing \
+              --without-gpgsm
+# --with-gpgsm=/usr/local/bin/gpgsm \
+#
+  gmake
+}
+
+check() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+  gmake check
 }
 
 package() {
-  cd $pkgdir
-  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
-  rm -rf +MANIFEST +MTREE_DIRS
+  cd ${srcdir}/${pkgname}-${pkgver}
+  gmake DESTDIR=${pkgdir} install
 }
-

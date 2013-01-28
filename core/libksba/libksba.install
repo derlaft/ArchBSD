@@ -1,11 +1,11 @@
 post_install() {
 	/sbin/ldconfig -m /usr/local/lib
-	install-info --quiet /usr/local/info/ksba.info /usr/local/info/dir
+	install-info --quiet /usr/local/info/ksba.info.gz /usr/local/info/dir
 }
 
 pre_remove() {
 	/sbin/ldconfig -R
-	install-info --quiet --delete /usr/local/info/ksba.info /usr/local/info/dir
+	install-info --quiet --delete /usr/local/info/ksba.info.gz /usr/local/info/dir
 }
 
 post_remove() {
