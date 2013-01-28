@@ -22,7 +22,8 @@ build() {
 
   ./configure --prefix=/usr/local \
               --mandir=/usr/local/man \
-              --infodir=/usr/local/info
+              --infodir=/usr/local/info \
+              --enable-shared --enable-static
   make
 }
 
