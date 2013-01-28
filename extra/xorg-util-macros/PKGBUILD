@@ -22,7 +22,7 @@ package() {
   make DESTDIR="${pkgdir}" install
 
   install -m755 -d "${pkgdir}/usr/local/lib"
-  mv "${pkgdir}/usr/local/share/pkgconfig" "${pkgdir}/usr/local/lib/"
+  mv "${pkgdir}/usr/local/share/pkgconfig" "${pkgdir}/usr/local/libdata/"
   install -m755 -d "${pkgdir}/usr/local/share/licenses/${pkgname}"
   install -m644 COPYING "${pkgdir}/usr/local/share/licenses/${pkgname}/COPYING"
 }
