@@ -15,7 +15,7 @@ source=(mirrorlist)
 # * Build the package
 
 build() {
-  install -dm755 pkgdir/usr/local/etc/pacman.d/
+  install -dm755 $pkgdir/usr/local/etc/pacman.d/
   install -m644 $srcdir/mirrorlist $pkgdir/usr/local/etc/pacman.d/
 }
 
