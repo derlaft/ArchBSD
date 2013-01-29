@@ -50,21 +50,7 @@ build() {
   export LDFLAGS="$LDFLAGS -L/usr/local/lib"
   export CFLAGS="${CFLAGS} -I/usr/local/include"
   export CPPFLAGS="${CPPFLAGS} -I/usr/local/include"
-  cd "${srcdir}"/${pkgbase}-${pkgver}
-  patch -p0 -i "${srcdir}/patch-extra_CMakeLists.txt"
-  patch -p0 -i "${srcdir}/patch-include_myisam.h"
-  patch -p0 -i "${srcdir}/patch-support-files_CMakeLists.txt"
-  patch -p0 -i "${srcdir}/patch-extra_yassl_taocrypt_src_integer.cpp"
-  patch -p0 -i "${srcdir}/patch-man_CMakeLists.txt"
-  patch -p0 -i "${srcdir}/patch-CMakeLists.txt"
-  patch -p0 -i "${srcdir}/patch-include_CMakeLists.txt"
-  patch -p0 -i "${srcdir}/patch-mysys_default.c"
-  patch -p0 -i "${srcdir}/patch-client_CMakeLists.txt"
-  patch -p0 -i "${srcdir}/patch-include_my_compare.h"
-  patch -p0 -i "${srcdir}/patch-sql_sys_vars.cc"
-  patch -p0 -i "${srcdir}/patch-sql_CMakeLists.txt"
-  patch -p0 -i "${srcdir}/patch-scripts_mysqld_safe.sh"
-
+ 
   mkdir ${srcdir}/build
   cd ${srcdir}/build
 
@@ -91,7 +77,8 @@ build() {
     -DCMAKE_CXX_FLAGS="-fPIC ${CXXFLAGS} -fno-strict-aliasing -DBIG_JOINS=1 -felide-constructors -fno-rtti" \
     -DCMAKE_INSTALL_PREFIX:PATH="/usr/local/" \
     -DTHREADS_HAVE_PTHREAD_ARG:BOOL=YES
-    cd "${srcdir}"/${pkgbase}-${pkgver}
+  
+  cd "${srcdir}"/${pkgbase}-${pkgver}
   patch -p0 -i "${srcdir}/patch-extra_CMakeLists.txt"
   patch -p0 -i "${srcdir}/patch-include_myisam.h"
   patch -p0 -i "${srcdir}/patch-support-files_CMakeLists.txt"
@@ -105,7 +92,8 @@ build() {
   patch -p0 -i "${srcdir}/patch-sql_sys_vars.cc"
   patch -p0 -i "${srcdir}/patch-sql_CMakeLists.txt"
   patch -p0 -i "${srcdir}/patch-scripts_mysqld_safe.sh"
- cd ${srcdir}/build
+ 
+  cd ${srcdir}/build
   make
 }
 
