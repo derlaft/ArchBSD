@@ -18,23 +18,19 @@ options=('!libtool')
 source=("http://www.weechat.org/files/src/${pkgname}-${pkgver}.tar.bz2"
         patch-cmake-FindLua_cmake
         patch-cmake-FindPython_cmake
-        patch-cmake-FindRuby_cmake
-        patch-cmake-FindTCL_cmake
-        )
+        patch-cmake-FindRuby_cmake)
 md5sums=('b2e10ca1e3a72142fcc8d58c7c774b1b'
          '4da3ce21943edcdaee83e8ef8bdabee8'
          '76592f1e8d9aad6c28fdad58cdac7913'
-         'b92f21b005534d383f0329a27bb4cf62'
-         '32ba15b877c74dd3a897bd40e75d8d62')
+         'b92f21b005534d383f0329a27bb4cf62')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
 
 # ports patches
-  patch -p0 -i "${srcdir}/patch-cmake-FindLua_cmake"
-  patch -p0 -i "${srcdir}/patch-cmake-FindPython_cmake"
-  patch -p0 -i "${srcdir}/patch-cmake-FindRuby_cmake"
-  patch -p0 -i "${srcdir}/patch-cmake-FindTCL_cmake"
+#  patch -p0 -i "${srcdir}/patch-cmake-FindLua_cmake"
+#  patch -p0 -i "${srcdir}/patch-cmake-FindPython_cmake"
+#  patch -p0 -i "${srcdir}/patch-cmake-FindRuby_cmake"
 
   sed -i '' -e 's|$${LIBDIR}/../pkgconfig|$${CMAKE_INSTALL_PREFIX}/libdata/pkgconfig|' CMakeLists.txt
   sed -i '' -e 's|INSTALL|#INSTALL|' doc/CMakeLists.txt
