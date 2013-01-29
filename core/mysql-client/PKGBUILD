@@ -55,29 +55,43 @@ build() {
   cd ${srcdir}/build
 
   cmake ../${pkgbase}-${pkgver} \
-    -DINSTALL_DOCDIR="share/doc/mysql" \
-    -DINSTALL_DOCREADMEDIR="share/doc/mysql" \
-    -DINSTALL_INCLUDEDIR="include/mysql" \
-    -DINSTALL_INFODIR="info" \
-    -DINSTALL_LIBDIR="lib/mysql" \
-    -DINSTALL_MANDIR="man" \
-    -DINSTALL_MYSQLDATADIR="/var/db/mysql" \
-    -DINSTALL_MYSQLSHAREDIR="share/mysql" \
-    -DINSTALL_MYSQLTESTDIR="share/mysql/tests" \
-    -DINSTALL_PLUGINDIR="lib/mysql/plugin" \
-    -DINSTALL_SBINDIR="libexec" \
-    -DINSTALL_SCRIPTDIR="bin" \
-    -DINSTALL_SHAREDIR="share" \
-    -DINSTALL_SQLBENCHDIR="share/mysql" \
-    -DINSTALL_SUPPORTFILESDIR="share/mysql" \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=/usr/local/ \
+    -DSYSCONFDIR=/usr/local/etc/mysql \
+    -DMYSQL_DATADIR=/var/lib/mysql \
+    -DMYSQL_UNIX_ADDR=/run/mysqld/mysqld.sock \
+    -DDEFAULT_CHARSET=utf8 \
+    -DDEFAULT_COLLATION=utf8_general_ci \
+    -DENABLED_LOCAL_INFILE=ON \
+    -DINSTALL_INFODIR=share/mysql/docs \
+    -DINSTALL_MANDIR=share/man \
+    -DINSTALL_PLUGINDIR=lib/mysql/plugin \
+    -DINSTALL_SCRIPTDIR=bin \
+    -DINSTALL_INCLUDEDIR=include/mysql \
+    -DINSTALL_DOCREADMEDIR=share/mysql \
+    -DINSTALL_SUPPORTFILESDIR=share/mysql \
+    -DINSTALL_MYSQLSHAREDIR=share/mysql \
+    -DINSTALL_DOCDIR=share/mysql/docs \
+    -DINSTALL_SHAREDIR=share/mysql \
+    -DWITH_READLINE=ON \
+    -DWITH_ZLIB=system \
+    -DWITH_SSL=bundled \
+    -DWITH_MYSQLD_LDFLAGS="${LDFLAGS}" \
+    -DWITH_EXTRA_CHARSETS=complex \
+    -DWITH_EMBEDDED_SERVER=ON \
+    -DWITH_INNOBASE_STORAGE_ENGINE=1 \
+    -DWITH_PARTITION_STORAGE_ENGINE=1 \
+    -DWITHOUT_EXAMPLE_STORAGE_ENGINE=1 \
+    -DWITHOUT_ARCHIVE_STORAGE_ENGINE=1 \
+    -DWITHOUT_BLACKHOLE_STORAGE_ENGINE=1 \
+    -DWITHOUT_FEDERATED_STORAGE_ENGINE=1 \
     -DWITH_LIBEDIT=0 \
     -DWITH_LIBWRAP=1 \
-    -DWITH_SSL=bundled \
     -DCMAKE_C_FLAGS="-fPIC ${CFLAGS} -fno-strict-aliasing -DBIG_JOINS=1 -fomit-frame-pointer" \
     -DCMAKE_CXX_FLAGS="-fPIC ${CXXFLAGS} -fno-strict-aliasing -DBIG_JOINS=1 -felide-constructors -fno-rtti" \
-    -DCMAKE_INSTALL_PREFIX:PATH="/usr/local/" \
+    -DWITH_MYSQLD_LDFLAGS="${LDFLAGS}" \
     -DTHREADS_HAVE_PTHREAD_ARG:BOOL=YES
-  
+      
   cd "${srcdir}"/${pkgbase}-${pkgver}
   patch -p0 -i "${srcdir}/patch-extra_CMakeLists.txt"
   patch -p0 -i "${srcdir}/patch-include_myisam.h"
