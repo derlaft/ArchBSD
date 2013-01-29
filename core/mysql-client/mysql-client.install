@@ -1,7 +1,0 @@
-post_install() {
-	/sbin/ldconfig -m /usr/local/lib/mysql
-}
-
-pre_remove() {
-	/sbin/ldconfig -R
-}
