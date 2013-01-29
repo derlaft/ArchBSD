@@ -1,24 +1,28 @@
+# $Id: PKGBUILD 141646 2011-11-01 09:52:46Z pierre $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Contributor: Alexander Baldeck <alexander@archlinux.org>
+
 pkgname=xf86dgaproto
 pkgver=2.1
-pkgrel=1
-category=x11
+pkgrel=2
 pkgdesc="X11 Direct Graphics Access extension wire protocol"
 arch=('any')
 url="http://xorg.freedesktop.org/"
 license=('custom')
+source=("${url}/releases/individual/proto/${pkgname}-${pkgver}.tar.bz2")
+md5sums=('a036dc2fcbf052ec10621fd48b68dbb1')
 
 build() {
-
-  cd "$portsdir/$category/$pkgname"
-  make clean
-  make 
-  make deinstall
-  make package PACKAGES="$srcdir"
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  ./configure --prefix=/usr/local
+  make
 }
 
 package() {
-  cd $pkgdir
-  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  mv "${pkgdir}/usr/local/lib" "${pkgdir}/usr/local/libdata"
+
+  install -dm755 "${pkgdir}/usr/local/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/local/share/licenses/${pkgname}/COPYING"
 }
-
-

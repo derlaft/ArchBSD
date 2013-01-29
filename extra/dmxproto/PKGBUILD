@@ -1,24 +1,28 @@
+# $Id: PKGBUILD 151184 2012-02-25 07:03:52Z pierre $
+#Maintainer: Jan de Groot <jgc@archlinux.org>
+
 pkgname=dmxproto
 pkgver=2.3.1
-pkgrel=1
-category=x11
+pkgrel=2
 pkgdesc="X11 Distributed Multihead X extension wire protocol"
 arch=('any')
+makedepends=('xorg-util-macros')
 url="http://xorg.freedesktop.org/"
 license=('custom')
+source=("${url}/releases/individual/proto/${pkgname}-${pkgver}.tar.bz2")
+sha1sums=('3b8b273b8ef3d8dbab998df9ec1dddf99edf4d91')
 
 build() {
-
-  cd "$portsdir/$category/$pkgname"
-  make clean
-  make 
-  make deinstall
-  make package PACKAGES="$srcdir"
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  ./configure --prefix=/usr/local
+  make
 }
 
 package() {
-  cd $pkgdir
-  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  mv "${pkgdir}/usr/local/lib" "${pkgdir}/usr/local/libdata"
+
+  install -m755 -d "${pkgdir}/usr/local/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/local/share/licenses/${pkgname}/"
 }
-
-

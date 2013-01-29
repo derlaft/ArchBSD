@@ -1,23 +1,29 @@
+# $Id: PKGBUILD 151181 2012-02-25 07:02:08Z pierre $
+#Maintainer: Jan de Groot <jgc@archlinux.org>
+
 pkgname=damageproto
 pkgver=1.2.1
-pkgrel=1
-category=x11
+pkgrel=2
 pkgdesc="X11 Damage extension wire protocol"
 arch=(any)
-url="http://xorg.freedesktop.org"
+url="http://xorg.freedesktop.org/"
 license=('custom')
+depends=('xproto' 'fixesproto')
+makedepends=('xorg-util-macros')
+source=("${url}/releases/individual/proto/${pkgname}-${pkgver}.tar.bz2")
+sha1sums=('bd0f0f4dc8f37eaabd9279d10fe2889710507358')
 
 build() {
-  cd "$portsdir/$category/$pkgname"
-  make clean
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  ./configure --prefix=/usr/local
   make
-  make deinstall
-  make package PACKAGES="$srcdir"
 }
 
 package() {
-  cd $pkgdir
-  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  mv "${pkgdir}/usr/local/lib" "${pkgdir}/usr/local/libdata"
+
+  install -m755 -d "${pkgdir}/usr/local/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/local/share/licenses/${pkgname}/"
 }
-
-

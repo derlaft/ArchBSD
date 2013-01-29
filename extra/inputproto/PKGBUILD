@@ -1,24 +1,29 @@
+# $Id: PKGBUILD 153286 2012-03-12 20:52:13Z andyrtr $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
 pkgname=inputproto
-pkgver=2.0.2
+pkgver=2.2
 pkgrel=1
-category=x11
-pkgdesc="X11 input extension wire protocol"
-arch=('any')
-url="http://xorg.freedesktop.org/"
+pkgdesc="X11 Input extension wire protocol"
+arch=(any)
 license=('custom')
+url="http://xorg.freedesktop.org/"
+makedepends=('xorg-util-macros' 'asciidoc')
+source=(${url}/releases/individual/proto/${pkgname}-${pkgver}.tar.bz2)
+sha1sums=('500e0a6dac3523887c0b82753fe5e9d4bb982137')
 
 build() {
-
-  cd "$portsdir/$category/$pkgname"
-  make clean
-  make 
-  make deinstall
-  make package PACKAGES="$srcdir"
+  cd "${srcdir}/${pkgname}-${pkgver}"
+# with asciidoc I get a: Don't know how to make XI2proto.html
+  ./configure --prefix=/usr/local --without-asciidoc
+  make
 }
 
 package() {
-  cd $pkgdir
-  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  mv "${pkgdir}/usr/local/lib" "${pkgdir}/usr/local/libdata"
+
+  install -m755 -d "${pkgdir}/usr/local/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/local/share/licenses/${pkgname}/"
 }
-
-
