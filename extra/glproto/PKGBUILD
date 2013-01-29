@@ -1,23 +1,27 @@
+# $Id: PKGBUILD 163853 2012-07-21 11:21:24Z andyrtr $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Contributor: Alexander Baldeck <alexander@archlinux.org>
+
 pkgname=glproto
-pkgver=1.4.15
+pkgver=1.4.16
 pkgrel=1
-category=x11
-pkgdesc="GLX extension headers"
+pkgdesc="X11 OpenGL extension wire protocol"
 arch=(any)
-url="http://xorg.freedesktop.org"
+url="http://xorg.freedesktop.org/"
 license=('custom')
+source=(http://xorg.freedesktop.org/releases/individual/proto/${pkgname}-${pkgver}.tar.bz2)
+sha256sums=('54dd663a7f5ed702f2ff035b79edf770c2f850867ac0d55742f696bfc8b2598d')
 
 build() {
-  cd "$portsdir/$category/$pkgname"
-  make clean
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  ./configure --prefix=/usr/local
   make
-  make deinstall
-  make package PACKAGES="$srcdir"
 }
 
 package() {
-  cd $pkgdir
-  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  mv "${pkgdir}/usr/local/lib" "${pkgdir}/usr/local/libdata"
+  install -m755 -d "${pkgdir}/usr/local/share/licenses/${pkgname}"
+  install -m644 "COPYING" "${pkgdir}/usr/local/share/licenses/${pkgname}/"
 }
-
-

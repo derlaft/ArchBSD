@@ -1,25 +1,27 @@
+# $Id: PKGBUILD 154140 2012-03-23 17:21:30Z andyrtr $
+#Maintainer: Jan de Groot <jgc@archlinux.org>
+
 pkgname=scrnsaverproto
-pkgver=1.2.1
+pkgver=1.2.2
 pkgrel=1
-category=x11
 pkgdesc="X11 Screen Saver extension wire protocol"
 arch=('any')
-url="http://xorg.freedesktop.org/"
 license=('custom')
 makedepends=('xorg-util-macros')
+url="http://xorg.freedesktop.org/"
+source=(${url}/releases/individual/proto/${pkgname}-${pkgver}.tar.bz2)
+sha1sums=('640a2cbef5893aacda74799e6fa4d973e629b753')
 
 build() {
-
-  cd "$portsdir/$category/$pkgname"
-  make clean
-  make 
-  make deinstall
-  make package PACKAGES="$srcdir"
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  ./configure --prefix=/usr/local
+  make
 }
 
 package() {
-  cd $pkgdir
-  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  mv "${pkgdir}/usr/local/lib" "${pkgdir}/usr/local/libdata"
+  install -dm755 "${pkgdir}/usr/local/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/local/share/licenses/${pkgname}/COPYING"
 }
-
-

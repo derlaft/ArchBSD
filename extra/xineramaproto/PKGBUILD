@@ -1,24 +1,27 @@
+# $Id: PKGBUILD 151186 2012-02-25 07:05:52Z allan $
+#Maintainer: Jan de Groot <jgc@archlinux.org>
+
 pkgname=xineramaproto
 pkgver=1.2.1
-pkgrel=1
-category=x11
+pkgrel=2
 pkgdesc="X11 Xinerama extension wire protocol"
 arch=('any')
 url="http://xorg.freedesktop.org/"
 license=('custom')
+makedepends=('xorg-util-macros')
+source=(${url}/releases/individual/proto/${pkgname}-${pkgver}.tar.bz2)
+sha1sums=('818bffc16139d6e3de4344c83f00c495d3536753')
 
 build() {
-
-  cd "$portsdir/$category/$pkgname"
-  make clean
-  make 
-  make deinstall
-  make package PACKAGES="$srcdir"
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  ./configure --prefix=/usr/local
+  make
 }
 
 package() {
-  cd $pkgdir
-  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  mv "${pkgdir}/usr/local/lib" "${pkgdir}/usr/local/libdata"
+  install -dm755 "${pkgdir}/usr/local/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/local/share/licenses/${pkgname}/COPYING"
 }
-
-
