@@ -1,23 +1,26 @@
+# $Id: PKGBUILD 154136 2012-03-23 17:18:19Z andyrtr $
+#Maintainer: Jan de Groot <jgc@archlinux.org>
+
 pkgname=kbproto
-pkgver=1.0.5
+pkgver=1.0.6
 pkgrel=1
-category=x11
-pkgdesc="KB extension headers"
-arch=(any)
-url="http://xorg.freedesktop.org"
+pkgdesc="X11 XKB extension wire protocol"
+arch=('any')
+url="http://xorg.freedesktop.org/"
 license=('custom')
+source=(${url}/releases/individual/proto/${pkgname}-${pkgver}.tar.bz2)
+sha1sums=('a2cc82357c22a1f4d6243017982c32703c95575c')
 
 build() {
-  cd "$portsdir/$category/$pkgname"
-  make clean
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  ./configure --prefix=/usr/local
   make
-  make deinstall
-  make package PACKAGES="$srcdir"
 }
 
 package() {
-  cd $pkgdir
-  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  mv "${pkgdir}/usr/local/lib" "${pkgdir}/usr/local/libdata"
+  install -dm755 "${pkgdir}/usr/local/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/local/share/licenses/${pkgname}/COPYING"
 }
-
-

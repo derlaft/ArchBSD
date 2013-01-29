@@ -1,25 +1,29 @@
+# $Id: PKGBUILD 168377 2012-10-09 16:18:36Z andyrtr $
+# Maintainer: Alexander Baldeck <alexander@archlinux.org>
+# Contributor: Jan de Groot <jgc@archlinux.org>
+
 pkgname=xcb-proto
-pkgver=1.7.1
+pkgver=1.8
 pkgrel=1
-category=x11
-pkgdesc="The X protocol C-language Binding (XCB) protocol"
+pkgdesc="XML-XCB protocol descriptions"
 arch=(any)
-url="http://xorg.freedesktop.org"
+url="http://xcb.freedesktop.org/"
 license=('custom')
-depends=('python2')
-makedepends=('gmake' 'libxml2')
+makedepends=('python2' 'libxml2')
+source=($url/dist/$pkgname-$pkgver.tar.bz2)
+sha1sums=('a8e71b9a09066870ff12049f45e8bccaaf83fc31')
 
 build() {
-  cd "$portsdir/$category/$pkgname"
-  make clean
+  cd "$srcdir/$pkgname-$pkgver"
+  PYTHON=/usr/local/bin/python2 ./configure --prefix=/usr/local
   make
-  make deinstall
-  make package PACKAGES="$srcdir"
 }
 
 package() {
-  cd $pkgdir
-  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+  cd "$srcdir/$pkgname-$pkgver"
+  make DESTDIR="$pkgdir" install
+  install -dm755 "${pkgdir}/usr/local/libdata"
+  mv "${pkgdir}/usr/local/lib/pkgconfig" "${pkgdir}/usr/local/libdata/pkgconfig"
+  install -m755 -d "$pkgdir/usr/local/share/licenses/$pkgname"
+  install -m644 COPYING "$pkgdir/usr/local/share/licenses/$pkgname"
 }
-
-

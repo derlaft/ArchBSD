@@ -1,29 +1,27 @@
 pkgname=libxdmcp
-_pkgname=libXdmcp
-pkgver=1.1.0
+pkgver=1.1.1
 pkgrel=1
-category=x11
 pkgdesc="X11 Display Manager Control Protocol library"
 arch=('i686' 'x86_64')
-url="http://xorg.freedesktop.org"
+url="http://xorg.freedesktop.org/"
 license=('custom')
 depends=('xproto')
+makedepends=('xorg-util-macros')
 options=('!libtool')
+source=("${url}/releases/individual/lib/libXdmcp-${pkgver}.tar.bz2")
+sha1sums=('3b63e8fc1600c51d9897d017da190fc6c16245b6')
 
 build() {
-
-  CONFIGURE_ARGS="--disable-docs --without-xmlto --disable-static"
-
-  cd "$portsdir/$category/$_pkgname"
-  make clean
-  make CONFIGURE_ARGS+="${CONFIGURE_ARGS}"
-  make deinstall
-  make package PACKAGES="$srcdir"
+  cd "${srcdir}/libXdmcp-${pkgver}"
+  ./configure --prefix=/usr/local --sysconfdir=/usr/local/etc --disable-static
+  make
 }
 
 package() {
-  cd $pkgdir
-  tar xpf "${srcdir}/${category}/${_pkgname}-${pkgver}.txz"
-}
+  cd "${srcdir}/libXdmcp-${pkgver}"
+  make DESTDIR="${pkgdir}" install
 
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/"
+}
 

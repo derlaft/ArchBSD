@@ -1,24 +1,29 @@
+# $Id: PKGBUILD 154132 2012-03-23 17:15:14Z andyrtr $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
 pkgname=bigreqsproto
-pkgver=1.1.1
+pkgver=1.1.2
 pkgrel=1
-category=x11
 pkgdesc="X11 Big Requests extension wire protocol"
-arch=('any')
+arch=(any)
 url="http://xorg.freedesktop.org/"
 license=('custom')
+makedepends=('xorg-util-macros' 'xmlto' 'docbook-xml')
+source=(http://xorg.freedesktop.org/releases/individual/proto/${pkgname}-${pkgver}.tar.bz2)
+sha1sums=('ef1765eeb5e9e38d080225fe6a64ed7cd2984b46')
 
 build() {
-
-  cd "$portsdir/$category/$pkgname"
-  make clean
-  make 
-  make deinstall
-  make package PACKAGES="$srcdir"
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  ./configure --prefix=/usr/local
+  make
 }
 
 package() {
-  cd $pkgdir
-  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
-}
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  mv "${pkgdir}/usr/local/lib" "${pkgdir}/usr/local/libdata"
 
+  install -m755 -d "${pkgdir}/usr/local/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/local/share/licenses/${pkgname}/"
+}
 

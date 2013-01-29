@@ -1,24 +1,28 @@
+# $Id: PKGBUILD 151336 2012-02-25 14:40:00Z pierre $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
 pkgname=resourceproto
 pkgver=1.2.0
-pkgrel=1
-category=x11
+pkgrel=2
 pkgdesc="X11 Resource extension wire protocol"
 arch=('any')
 url="http://xorg.freedesktop.org/"
 license=('custom')
+makedepends=('xorg-util-macros')
+source=("${url}/releases/individual/proto/${pkgname}-${pkgver}.tar.bz2")
+sha1sums=('9ff9bb9243b0474330959dc3853973523c9dd9ce')
 
 build() {
-
-  cd "$portsdir/$category/$pkgname"
-  make clean
-  make 
-  make deinstall
-  make package PACKAGES="$srcdir"
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  ./configure --prefix=/usr/local
+  make
 }
 
 package() {
-  cd $pkgdir
-  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  mv "${pkgdir}/usr/local/lib" "${pkgdir}/usr/local/libdata"
+
+  install -m755 -d "${pkgdir}/usr/local/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/local/share/licenses/${pkgname}/"
 }
-
-
