@@ -28,9 +28,16 @@ build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
 
 # ports patches
+<<<<<<< HEAD
 #  patch -p0 -i "${srcdir}/patch-cmake-FindLua_cmake"
 #  patch -p0 -i "${srcdir}/patch-cmake-FindPython_cmake"
 #  patch -p0 -i "${srcdir}/patch-cmake-FindRuby_cmake"
+=======
+  patch -p0 -i "${srcdir}/patch-cmake-FindLua_cmake"
+  patch -p0 -i "${srcdir}/patch-cmake-FindPython_cmake"
+  patch -p0 -i "${srcdir}/patch-cmake-FindRuby_cmake"
+# patch -p0 -i "${srcdir}/patch-cmake-FindTCL_cmake"
+>>>>>>> 3992d4acc723a77b7917f49f05757bfaed612547
 
   sed -i '' -e 's|$${LIBDIR}/../pkgconfig|$${CMAKE_INSTALL_PREFIX}/libdata/pkgconfig|' CMakeLists.txt
   sed -i '' -e 's|INSTALL|#INSTALL|' doc/CMakeLists.txt
@@ -39,8 +46,12 @@ build() {
   cd build
   cmake .. -DPREFIX=/usr/local \
         -DPYTHON_EXECUTABLE=/usr/local/bin/python2 \
+<<<<<<< HEAD
         -DPYTHON_LIBRARY=/usr/local/lib/libpython2.7.so \
         -DENABLE_TCL=yes
+=======
+        -DPYTHON_LIBRARY=/usr/local/lib/libpython2.7.so
+>>>>>>> 3992d4acc723a77b7917f49f05757bfaed612547
 }
 
 package() {
