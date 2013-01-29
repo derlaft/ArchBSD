@@ -20,10 +20,9 @@ source=(ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/${pkgbase}-${pkgver
         patch-libraries__libldap__tls_o.c
         patch-servers__slapd__Makefile.in
         patch-shlib-version
-        patch-smbk5pwd-Makefile
-        )
+        patch-smbk5pwd-Makefile)
 md5sums=('5adae44897647c15ce5abbff313bc85a'
-         '1cf3a7ee542817a05661811cfc789ccd'
+         '45bed248696619c1264c49ad38b6cb1b'
          '95b229974560ba834355feb218e0cb50'
          '60bcedc409be38a7c89d193ce15d2188'
          'cf3c4f921c130530f2ee424b79d5d9a5'
