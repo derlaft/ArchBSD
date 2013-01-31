@@ -25,7 +25,7 @@ export PATH=/usr/local/bin:$PATH
 build() {
   cd ${pkgname}-${pkgver}
   patch -Np0 -i ${srcdir}/lib-netsocket.patch
-  ./configure --prefix=/usr/local/ --with-distributor="Arch BSD" PATH=/usr/local/bin:$PATH CC=clang CXX=clang++ --with-backend=qt
+  ./configure --prefix=/usr/local/ --with-distributor="Arch BSD" --with-backend=qt
   sed -i '' -e 's/\/bin\/bash/\/usr\/local\/bin\/bash/g' build_tools/autorevision
   gmake
 }
