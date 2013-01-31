@@ -25,7 +25,7 @@ build() {
   #Apply the patches from FreeBSD ports
   patch -p0 -i ${srcdir}/patch-doc.diff
   patch -p0 -i ${srcdir}/patch-scripts-Makefile.in
-  ./configure --prefix=/usr/local --libdir=/usr/local/lib/libfakeroot \
+  ./configure --prefix=/usr/local --libdir=/usr/local/lib \
               --disable-static --with-ipc=sysv
   gmake
 }
@@ -33,9 +33,6 @@ build() {
 package() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   gmake DESTDIR=${pkgdir} install
-
-  install -dm755 ${pkgdir}/usr/local/etc/ld.so.conf.d/
-  echo '/usr/local/lib/libfakeroot' > ${pkgdir}/usr/local/etc/ld.so.conf.d/fakeroot.conf
 
   # install README for sysv/tcp usage
   install -dm755 $pkgdir/usr/local/share/doc/$pkgname
