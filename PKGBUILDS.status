@@ -1,13 +1,13 @@
-Status as of: Tue Jan 29 22:37:24 CET 2013
+Status as of: Thu Jan 31 19:28:56 CET 2013
 
 There are:
 1 [core]  Ports-Packages out of 32 total
                  Done:  97%
-104 [extra] Ports-Packages out of 151 total
-                 Done:  32%
-That's a total of 105 Ports-PKGBUILDs which need to be converted on this branch.
-There are a total of 183 packages.
-The total conversion progress is: 43%
+98 [extra] Ports-Packages out of 152 total
+                 Done:  36%
+That's a total of 99 Ports-PKGBUILDs which need to be converted on this branch.
+There are a total of 184 packages.
+The total conversion progress is: 47%
 
 Here's the TODO:
     core/cyrus-sasl
@@ -16,7 +16,6 @@ Here's the TODO:
     extra/dbus-glib
     extra/dbus
     extra/dwm
-    extra/expat
     extra/fontconfig
     extra/freetype2
     extra/gdk-pixbuff2
@@ -27,7 +26,6 @@ Here's the TODO:
     extra/hal
     extra/icu
     extra/imlib2
-    extra/intltool
     extra/irssi
     extra/lib3dtag
     extra/libdmx
@@ -74,7 +72,6 @@ Here's the TODO:
     extra/lxpanel
     extra/lxsession
     extra/lxterminal
-    extra/m4
     extra/makedepends
     extra/menu-cache
     extra/mesa
@@ -83,13 +80,10 @@ Here's the TODO:
     extra/openbox
     extra/pango
     extra/pciids
-    extra/perl-xml-parser
-    extra/perl
     extra/pixman
     extra/polkit
     extra/python27
     extra/rxvt-unicode
-    extra/shared-mime-info
     extra/slim
     extra/startup-notification
     extra/vte
