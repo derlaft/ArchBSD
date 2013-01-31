@@ -45,7 +45,9 @@ fi
 build() {
   cd ${srcdir}/${pkgname}-${pkgver}
 
-  sed -i '' -e 's/%%PTHREAD_\(CFLAGS\|LIBS\)%%/-pthread/g' "${srcdir}/patch-freebsd.sh"
+  sed -i '' -e 's/%%PTHREAD_CFLAGS%%/-pthread/g' \
+            -e 's/%%PTHREAD_LIBS%%/-pthread/g' \
+      "${srcdir}/patch-freebsd.sh"
 
   patch -p0 -i "${srcdir}/patch-Configure"
   patch -p0 -i "${srcdir}/patch-INST_PREFIX.t"
