@@ -29,9 +29,13 @@ install=perl.install
 options=('makeflags' '!purge')
 md5sums=('2818ab01672f005a4e552a713aa27b08'
          '0486659c9eefe682364a3e364d814296'
-         '5ed2542fdb9a60682f215bd33701e61a'
-         '1f0cbbee783e8a6d32f01be5118e0d5e'
-         '999c3eea6464860704abbb055a0f0896')
+         '44e9ac1f0951826bf7af45006519daf7'
+         'c272455c8c8872894b3bf1cc4d583dfe'
+         '999c3eea6464860704abbb055a0f0896'
+         'b74407a6fd79b451427b5e930b477c69'
+         '6ae17b4f8aa33bd00f837a947a740a43'
+         '9263d3ff7d753aaa61257570026ba668'
+         'a5a36af206b4b9609fba0fca2faed046')
 
 # workaround to let the integrity check find the correct provides array
 if [[ ${0##*/} = "parse_pkgbuilds.sh" ]]; then
