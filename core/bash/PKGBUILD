@@ -40,9 +40,9 @@ build() {
                -DSTANDARD_UTILS_PATH=\'\"/usr/bin:/bin:/usr/sbin:/sbin\"\'
                -DSYS_BASHRC=\'\"/usr/local/etc/bash.bashrc\"\'
                -DSYS_BASH_LOGOUT=\'\"/usr/local/etc/bash.bash_logout\"\')
-  CFLAGS="${CFLAGS} ${_bashconfig} -I/usr/local/include"
-  CPPFLAGS="${CFLAGS} -I/usr/local/include"
-  LDFLAGS="${LDFLAGS} -L/usr/local/lib "  
+  export CFLAGS="${CFLAGS} ${_bashconfig[@]} -I/usr/local/include"
+  export CPPFLAGS="${CFLAGS} -I/usr/local/include"
+  export LDFLAGS="${LDFLAGS} -L/usr/local/lib "  
 
   ./configure --prefix=/usr/local --without-bash-malloc \
               --sysconfdir=/usr/local/etc \
