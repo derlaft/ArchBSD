@@ -20,7 +20,14 @@ source=(http://ftp.gnu.org/gnu/bash/bash-$_basever.tar.gz{,.sig}
         dot.bash_logout
         system.bashrc
         system.bash_logout
-        bash_interrupted_syscall_work-around.patch)
+        bash_interrupted_syscall_work-around.patch
+	bashref.texi
+	realine_display.c
+	bash.1
+	Makefile.in
+	xpatch-colonbreakswords
+	xpatch-implicitcd
+	patch-config-top.h)
 if [ $_patchlevel -gt 000 ]; then
     for (( p=1; p<=$((10#${_patchlevel})); p++ )); do
         source=(${source[@]} http://ftp.gnu.org/gnu/bash/bash-$_basever-patches/bash${_basever//./}-$(printf "%03d" $p){,.sig})
@@ -35,6 +42,13 @@ build() {
   done
     
     patch -Np0 -i $srcdir/bash_interrupted_syscall_work-around.patch
+    patch -Np0 -i $srcdir/bashref.texi
+    patch -Np0 -i $srcdir/realine_display.c
+    patch -Np0 -i $srcdir/bash.1
+    patch -Np0 -i $srcdir/Makefile.in
+    patch -Np0 -i $srcdir/xpatch-colonbreakswords
+    patch -Np0 -i $srcdir/xpatch-implicitcd
+    patch -Np0 -i $srcdir/patch-config-top.h
 
   _bashconfig=(-DDEFAULT_PATH_VALUE=\'\"/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin\"\'
                -DSTANDARD_UTILS_PATH=\'\"/usr/bin:/bin:/usr/sbin:/sbin\"\'
@@ -85,6 +99,13 @@ md5sums=('3fb927c7c33022f1c327f14a81c0d4b0'
          'f912667d978b51042f5dd5fb4d0c9535'
          '472f536d7c9e8250dc4568ec4cfaf294'
          '7328dc5af5e71d819f484e8b9ea85af7'
+         '02ab66578049deda01e4e13cf86141e1'
+         '5f1d9e1eee213712eb47c3c18b816a64'
+         '29fc5e95dab71ce75d33f0f23206de1d'
+         '34b93c3013dba6593d6f8ddbe0ae73e6'
+         'c6b8a722d966e4bfa7819b6ab84a9113'
+         'f9d55b8439329289fba26c152693b981'
+         '95b5135d885369f3f6c98dee732a47d9'
          '1100bc1dda2cdc06ac44d7e5d17864a3'
          'a7184b76eb4a079f10174a0a8f574819'
          '30e7948079921d3261efcc6a40722135'
