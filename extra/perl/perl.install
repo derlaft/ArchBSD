@@ -29,9 +29,6 @@ post_remove(){
 	if [ "${osreldate}" -lt 900022 ]; then
 		need_cleanup_manpath=yes
 	fi
-else
-	exit 0;
-fi
 }
 
 special_link_list="

@@ -1,25 +1,32 @@
+# $Id: PKGBUILD 156201 2012-04-16 03:41:12Z allan $
+# Maintainer: Allan McRae <allan@archlinux.org>
+# Committer: Judd Vinet <jvinet@zeroflux.org>
+
 pkgname=expat
-_pkgname=expat2
-pkgver=2.0.1
-pkgrel=2
-category=textproc
+pkgver=2.1.0
+pkgrel=1
 pkgdesc="An XML parser library"
 arch=('i686' 'x86_64')
 url="http://expat.sourceforge.net/"
 license=('custom')
 options=('!libtool')
+source=(http://downloads.sourceforge.net/sourceforge/expat/${pkgname}-${pkgver}.tar.gz)
+md5sums=('dd7dab7a5fea97d2a6a43f511449b7cd')
 
 build() {
-  cd "$portsdir/$category/$_pkgname"
-  make clean
+  cd ${srcdir}/${pkgname}-${pkgver}
+  ./configure --prefix=/usr/local --mandir=/usr/local/man
   make
-  make deinstall
-  make package PACKAGES="$srcdir"
+}
+
+check() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+  make check
 }
 
 package() {
-  cd $pkgdir
-  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_${pkgrel}.txz"
+  cd ${srcdir}/${pkgname}-${pkgver}
+  make DESTDIR=${pkgdir} install
+  install -dm755 ${pkgdir}/usr/local/share/licenses/${pkgname}
+  install -m644 COPYING ${pkgdir}/usr/local/share/licenses/${pkgname}/COPYING
 }
-
-
