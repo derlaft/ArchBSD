@@ -1,48 +1,34 @@
-Status as of: Mon Jan 28 18:02:46 CET 2013
+Status as of: Tue Jan 29 22:37:24 CET 2013
 
 There are:
-       3 [core]  Ports-Packages out of       33 total
-                 Done:  91%
-     134 [extra] Ports-Packages out of      149 total
-                 Done:  11%
-That's a total of 137 Ports-PKGBUILDs which need to be converted on this branch.
-There are a total of 182 packages.
-The total conversion progress is: 25%
+1 [core]  Ports-Packages out of 32 total
+                 Done:  97%
+104 [extra] Ports-Packages out of 151 total
+                 Done:  32%
+That's a total of 105 Ports-PKGBUILDs which need to be converted on this branch.
+There are a total of 183 packages.
+The total conversion progress is: 43%
 
 Here's the TODO:
     core/cyrus-sasl
-    core/mysql-client
-    core/openldap-client
-    extra/alsa-lib
-    extra/atk
-    extra/bigreqsproto
     extra/cairo
-    extra/compositeproto
     extra/consolekit
-    extra/damageproto
     extra/dbus-glib
     extra/dbus
-    extra/dmxproto
-    extra/dri2proto
     extra/dwm
     extra/expat
-    extra/fixesproto
     extra/fontconfig
-    extra/fontsproto
     extra/freetype2
     extra/gdk-pixbuff2
     extra/giflib
     extra/glib2
-    extra/glproto
     extra/gtk-update-icon-cache
     extra/gtk2
     extra/hal
     extra/icu
     extra/imlib2
-    extra/inputproto
     extra/intltool
     extra/irssi
-    extra/kbproto
     extra/lib3dtag
     extra/libdmx
     extra/libdrm
@@ -59,13 +45,10 @@ Here's the TODO:
     extra/libtiff
     extra/libwnck
     extra/libx11
-    extra/libxau
     extra/libxaw
-    extra/libxcb
     extra/libxcomposite
     extra/libxcursor
     extra/libxdamage
-    extra/libxdmcp
     extra/libxext
     extra/libxfixes
     extra/libxfont
@@ -105,30 +88,16 @@ Here's the TODO:
     extra/pixman
     extra/polkit
     extra/python27
-    extra/randrproto
-    extra/recordproto
-    extra/renderproto
-    extra/resourceproto
     extra/rxvt-unicode
-    extra/scrnsaverproto
     extra/shared-mime-info
     extra/slim
     extra/startup-notification
-    extra/videoproto
     extra/vte
-    extra/weechat
-    extra/xcb-proto
     extra/xcb-utils
-    extra/xcmiscproto
-    extra/xextproto
     extra/xf86-input-keyboard
     extra/xf86-input-mouse
     extra/xf86-video-vesa
     extra/xf86-video-vmware
-    extra/xf86dgaproto
-    extra/xf86driproto
-    extra/xf86vidmodeproto
-    extra/xineramaproto
     extra/xkeyboard-config
     extra/xmlto
     extra/xorg-font-utils
@@ -142,7 +111,6 @@ Here's the TODO:
     extra/xorg-xauth
     extra/xorg-xinit
     extra/xorg-xkbcomp
-    extra/xproto
     extra/xrdb
     extra/xsetroot
     extra/xtrans

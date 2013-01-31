@@ -38,6 +38,6 @@ package() {
   echo '/usr/local/lib/libfakeroot' > ${pkgdir}/usr/local/etc/ld.so.conf.d/fakeroot.conf
 
   # install README for sysv/tcp usage
-  install -dm755 $pkgdir/usr/local/share/doc/$pkgname/README
+  install -dm755 $pkgdir/usr/local/share/doc/$pkgname
   install -m644 $srcdir/$pkgname-$pkgver/README $pkgdir/usr/local/share/doc/$pkgname/README
 }
