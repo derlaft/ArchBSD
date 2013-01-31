@@ -54,6 +54,7 @@ build() {
   ./bootstrap --prefix=/usr/local \
     --mandir=/man \
     --docdir=/doc/cmake \
+    --datadir=/usr/local/share \
     --system-libs
 
 # Disabled for now
