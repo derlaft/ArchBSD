@@ -8,6 +8,7 @@ arch=('i686' 'x86_64')
 url="https://github.com/pkgconf/pkgconf"
 license=('BSD')
 source=(http://tortois.es/~nenolod/distfiles/pkgconf-0.8.9.tar.bz2)
+md5sums=('2273d8f5186e56886bc83454002c84ed')
 
 build() {
     cd "${srcdir}/${pkgname}-${pkgver}"
