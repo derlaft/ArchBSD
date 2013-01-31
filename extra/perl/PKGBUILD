@@ -74,6 +74,12 @@ build() {
     -Dscriptdir=/usr/local/bin/core_perl \
     -Dsitescript=/usr/local/bin/site_perl \
     -Dvendorscript=/usr/local/bin/vendor_perl \
+    -Dman1dir=/usr/local/man/man1 \
+    -Dsiteman1dir=/usr/local/man/man1 \
+    -Dvendorman1dir=/usr/local/man/man1 \
+    -Dman3dir=/usr/local/man/man3 \
+    -Dsiteman3dir=/usr/local/man/man3 \
+    -Dvendorman3dir=/usr/local/man/man3 \
     -Dinc_version_list=none \
     -Dman1ext=1perl -Dman3ext=3perl ${arch_opts} \
     -Dlddlflags="-shared ${LDFLAGS}" -Dldflags="${LDFLAGS}"
