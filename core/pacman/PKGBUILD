@@ -52,13 +52,13 @@ package() {
       install -m644 $srcdir/pacman.conf $pkgdir/usr/local/etc/pacman.conf
       mycarch="i686"
       mychost="i686-archbsd-freebsd"
-      myflags="-march=i686 -mtune=generic -O2 -pipe"
+      myflags="-march=i686"
       ;;
     x86_64)
       install -m644 $srcdir/pacman.conf.x86_64 $pkgdir/usr/local/etc/pacman.conf
       mycarch="x86_64"
       mychost="x86_64-archbsd-freebsd"
-      myflags="-march=x86-64 -mtune=generic -O2 -pipe"
+      myflags="-march=x86-64"
       ;;
   esac
   install -m644 $srcdir/makepkg.conf $pkgdir/usr/local/etc/
