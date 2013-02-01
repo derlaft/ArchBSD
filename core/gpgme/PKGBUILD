@@ -33,6 +33,7 @@ build() {
                 src/Makefile.in \
                 src/gpgme-config.in \
                 tests/gpg/Makefile.in
+
   sed -i '' -e 's|^clfilesdir.*|clfilesdir=$$\(libdir\)/common-lisp/gpgme|g' \
                 lang/cl/Makefile.in
 
