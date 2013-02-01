@@ -1,6 +1,3 @@
-# $Id: PKGBUILD 1214 2009-08-14 01:36:33Z dgriffiths $
-# Maintainer: Eric B'elanger <eric@archlinux.org>
-
 pkgname=physfs
 pkgver=2.0.3
 pkgrel=1
