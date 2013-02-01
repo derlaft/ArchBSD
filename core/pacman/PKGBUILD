@@ -17,7 +17,6 @@ source=(ftp://ftp.archlinux.org/other/pacman/$pkgname-$pkgver.tar.gz
         0003-Ensure-pre_upgrade-scriptlet-gets-old-package-version.patch
         pacman.conf
         pacman.conf.x86_64
-        makepkg.conf
         Makefile.patch)
 md5sums=('387965c7125e60e5f0b9ff3b427fe0f9'
          'e0c7c9026dfbb5a042a6cb05c3810fd6'
@@ -25,7 +24,6 @@ md5sums=('387965c7125e60e5f0b9ff3b427fe0f9'
          '9926eb703225b8e34d54e222685d63d8'
          'cf1c19a9c10154103825fc68d480e9f0'
          'c2f603b062e90b617603770d0f844f32'
-         'a1a006554c9d339a903f5e05daa5e851'
          'b328b118c7971884df88748ee8a29512')
 
 build() {
@@ -54,13 +52,13 @@ package() {
       install -m644 $srcdir/pacman.conf $pkgdir/usr/local/etc/pacman.conf
       mycarch="i686"
       mychost="i686-archbsd-freebsd"
-      myflags="-march=i686"
+      myflags="-march=i686 -mtune=generic -O2 -pipe"
       ;;
     x86_64)
       install -m644 $srcdir/pacman.conf.x86_64 $pkgdir/usr/local/etc/pacman.conf
       mycarch="x86_64"
       mychost="x86_64-archbsd-freebsd"
-      myflags="-march=x86-64"
+      myflags="-march=x86-64 -mtune=generic -O2 -pipe"
       ;;
   esac
   install -m644 $srcdir/makepkg.conf $pkgdir/usr/local/etc/
