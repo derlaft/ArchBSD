@@ -1,24 +1,31 @@
+# $Id: PKGBUILD 155385 2012-04-03 01:23:12Z eric $
+# Maintainer: Eric Bélanger <eric@archlinux.org>
+
 pkgname=intltool
-pkgver=0.41.1
+pkgver=0.50.2
 pkgrel=1
-category=textproc
 pkgdesc="The internationalization tool collection"
 arch=('any')
 url="https://edge.launchpad.net/intltool"
 license=('GPL')
-depends=('libiconv' 'perl-xml-parser')
-makedepends=('gmake')
+depends=('perl-xml-parser')
+source=(http://edge.launchpad.net/intltool/trunk/${pkgver}/+download/${pkgname}-${pkgver}.tar.gz{,.asc})
+sha1sums=('7fddbd8e1bf94adbf1bc947cbf3b8ddc2453f8ad'
+          '85c71e9651df41fc330c5f171fdfe1bf11e44f65')
 
 build() {
-  cd "${portsdir}/${category}/${pkgname}"
-  make clean
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  ./configure --prefix=/usr/local --mandir=/usr/local/man
   make
-  make deinstall
-  make package PACKAGES="${srcdir}"
+}
+
+check() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make check
 }
 
 package() {
-  cd "${pkgdir}"
-  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  install -D -m644 doc/I18N-HOWTO "${pkgdir}/usr/share/doc/${pkgname}/I18N-HOWTO"
 }
-
