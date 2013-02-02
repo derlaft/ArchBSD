@@ -70,6 +70,10 @@ package() {
 
   make DESTDIR="$pkgdir" install
 
+  # pkgconfdir
+  install -dm755 "$pkgdir/usr/local/libdata"
+  mv "$pkgdir/usr/local/lib/pkgconfig" "$pkgdir/usr/local/libdata/pkgconfig"
+
   # license
   install -dm755 "$pkgdir/usr/local/share/licenses/$pkgname/COPYING"
   install -m644 COPYING "$pkgdir/usr/local/share/licenses/$pkgname/COPYING"
