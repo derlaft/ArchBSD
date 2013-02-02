@@ -13,45 +13,42 @@ makedepends=('python2')
 url="http://www.xmlsoft.org/"
 source=(ftp://ftp.xmlsoft.org/${pkgname}/${pkgname}-${pkgver}.tar.gz
         http://www.w3.org/XML/Test/xmlts20080205.tar.gz
-	patch-aa
-	patch-xml2Conf.sh.in 
-	patch-python-tests-Makefile.in
-	patch-python-Makefile.in 
-	patch-doc_devhelp_Makefile.in 
-	patch-configure 
-	patch-config.h.in 
-	patch-xpointer.c )
+    patch-aa
+    patch-config.h.in
+    patch-doc_devhelp_Makefile.in
+    patch-python__Makefile.in
+    patch-python__tests__Makefile.in
+    patch-xml2Conf.sh.in
+    )
 md5sums=('c62106f02ee00b6437f0fb9d370c1093'
          'b255be9a1c7f7021e52448e4ec8d7a0d'
-         '66fc6a6ccfe190ea479047e1f16aab57'
-         '286c16a4513b76d1fcafd51012315b7f'
-         '40c179289cff4b586aa6c7a85d96c03a'
-         '550a4d6f95b1d43b650ca1ab5f4c931b'
+         '37752819e3d4211c01e367e69abbaa19'
+         'f323d88a8beecf355f77ccb3d0afffb6'
          'c719e018f075cec722c5619837b90805'
-         '4a85959087e8ec8c06280d67f3a1e32c'
-         '3e2a5abea1a16e5a8c725e4ead192ec4'
-         'a28c5233d264ad9d4aa70f57127d0505')
+         '550a4d6f95b1d43b650ca1ab5f4c931b'
+         '40c179289cff4b586aa6c7a85d96c03a'
+         '92ef057cba6f53f0b6b2cb4c86fce684')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
 
   for d in . doc doc/devhelp doc/examples
 	do
-		sed -i -e '/^install-data-am:/ s|install-data-local||' \
+		sed -i '' -e '/^install-data-am:/ s|install-data-local||' \
 		${d}/Makefile.in
 	done
- 
+
    for f in catalog.c xmlcatalog.c xmllint.c doc/xmllint.1
 	do
-		sed -i -e \
+		sed -i '' -e \
 			's|/etc/xml/catalog|/usr/local/share/xml/catalog|g; s|/etc/sgml/catalog|/usr/local/share/sgml/catalog|g' ${f}
 	done
 
-   for i in patch-aa patch-xml2Conf.sh.in patch-python-tests-Makefile.in patch-python-Makefile.in patch-doc_devhelp_Makefile.in patch-configure patch-config.h.in patch-xpointer.c
+   for i in patch-aa patch-config.h.in patch-doc_devhelp_Makefile.in patch-python__Makefile.in patch-python__tests__Makefile.in patch-xml2Conf.sh.in
    do
 	patch -Np0 -i ${srcdir}/${i}
    done
-   
+
    ./configure  --prefix=/usr/local \
 	        --with-html-dir=/usr/local/share/doc \
 		--without-python
@@ -67,6 +64,10 @@ build() {
 package() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   gmake DESTDIR="${pkgdir}" install
+
+  install -dm755 "${pkgdir}/usr/local/libdata"
+  mv "${pkgdir}/usr/local/lib/pkgconfig" "${pkgdir}/usr/local/libdata/pkgconfig"
+
   install -dm755 "${pkgdir}/usr/local/share/licenses/${pkgname}/"
   install -m644  COPYING "${pkgdir}/usr/local/share/licenses/${pkgname}/"
 }

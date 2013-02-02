@@ -17,14 +17,18 @@ source=(ftp://ftp.archlinux.org/other/pacman/$pkgname-$pkgver.tar.gz
         0003-Ensure-pre_upgrade-scriptlet-gets-old-package-version.patch
         pacman.conf
         pacman.conf.x86_64
-        Makefile.patch)
+        Makefile.patch
+        makepkg.site
+        makepkg.conf)
 md5sums=('387965c7125e60e5f0b9ff3b427fe0f9'
          'e0c7c9026dfbb5a042a6cb05c3810fd6'
          '02db451be806335ce189ffadb5cf84b9'
          '9926eb703225b8e34d54e222685d63d8'
          'cf1c19a9c10154103825fc68d480e9f0'
          'c2f603b062e90b617603770d0f844f32'
-         'b328b118c7971884df88748ee8a29512')
+         'b328b118c7971884df88748ee8a29512'
+         '9745d5aa7573bf1088d93316fa6c34f5'
+         '7960dcc2e6fb02ada5c1769b7abf3d8c')
 
 build() {
   cd $srcdir/$pkgname-$pkgver
@@ -63,10 +67,13 @@ package() {
   esac
   install -m644 $srcdir/makepkg.conf $pkgdir/usr/local/etc/
   # set things correctly in the default conf file
-  sed -i -e "s|@CARCH[@]|$mycarch|g" \
+  sed -i '' -e "s|@CARCH[@]|$mycarch|g" \
       $pkgdir/usr/local/etc/makepkg.conf
-  sed -i -e "s|@CHOST[@]|$mychost|g" \
+  sed -i '' -e "s|@CHOST[@]|$mychost|g" \
       $pkgdir/usr/local/etc/makepkg.conf
-  sed -i -e "s|@CARCHFLAGS[@]|$myflags|g" \
+  sed -i '' -e "s|@CARCHFLAGS[@]|$myflags|g" \
       $pkgdir/usr/local/etc/makepkg.conf
+
+  install -dm755 "${pkgdir}/usr/local/share/pacman"
+  install -m644 "${srcdir}/makepkg.site" "${pkgdir}/usr/local/share/pacman/makepkg.site"
 }

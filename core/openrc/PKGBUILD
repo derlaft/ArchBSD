@@ -13,10 +13,14 @@ backup=(etc/inittab
         etc/conf.d/{killprocs,localmount,modules,netmount,network,staticroute}
         etc/conf.d/{tmpfiles,urandom})
 source=(http://dev.gentoo.org/~williamh/dist/$pkgname-$pkgver.tar.bz2
-	'openrc.patch')
-
+	'openrc.patch'
+	'conf.d-sshd'
+	'init.d-sshd'
+)
 md5sums=('d896371d533a22de4cf57c7371c4d6e8'
-         'd51475e6a11cd393c31f4c37adba09b3')
+         '2ea45acde0757636ca4f0265121174d6'
+         'b35e9f3829f4cfca07168fcba98749c7'
+         '29f5aaefd9fc245a61535a19bab75b30')
 
 
 _makeargs=(BRANDING='Arch BSD')
@@ -33,6 +37,11 @@ build() {
 package() {
     cd "$srcdir/$pkgname-$pkgver"
     gmake DESTDIR="$pkgdir" "${_makeargs[@]}" install
-    rm -rfi ${pkgdir}/usr/share/man/man8/rc.8
+    rm -rf ${pkgdir}/usr/share/man/man8/rc.8
+
+    install -dm755 "${pkgdir}/etc/init.d"
+    install -dm755 "${pkgdir}/etc/conf.d"
+    install -m755 "${srcdir}/init.d-sshd" "${pkgdir}/etc/init.d/sshd"
+    install -m644 "${srcdir}/conf.d-sshd" "${pkgdir}/etc/conf.d/sshd"
 }
 

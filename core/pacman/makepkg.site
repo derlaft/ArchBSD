@@ -1,0 +1,31 @@
+# ArchBSD Port config.site
+
+if test "$prefix" != "/usr/local"; then
+  test "$prefix" = NONE && prefix="/usr/local"
+fi
+if test "$infodir" != "${prefix}/info"; then
+  test "$infodir" = '${datarootdir}/info' && infodir="${prefix}/info"
+fi
+if test "$mandir" != "${prefix}/man"; then
+  test "$mandir" = '${datarootdir}/man' && mandir="${prefix}/man"
+fi
+
+# The rest are default values
+# test "$exec_prefix" = NONE    && exec_prefix="${prefix}"
+# test "$bindir" = '${exec_prefix}/bin'       && bindir="${exec_prefix}/bin"
+# test "$sbindir" = '${exec_prefix}/sbin'     && sbindir="${exec_prefix}/sbin"
+# test "$libexecdir" = '${exec_prefix}/libexec' && libexecdir="${exec_prefix}/libexec"
+# test "$datarootdir" = '${prefix}/share'     && datarootdir="${prefix}/share"
+# test "$datadir" = '${datarootdir}'          && datadir="${datarootdir}"
+# test "$sysconfdir" = '${prefix}/etc'        && sysconfdir="${prefix}/etc"
+# test "$sharedstatedir" = '${prefix}/com'    && sharedstatedir="${prefix}/com"
+# test "$localstatedir" = '${prefix}/var'     && localstatedir="${prefix}/var"
+# test "$includedir" = '${prefix}/include'    && includedir="${prefix}/include"
+# test "$oldincludedir" = '/usr/include'      && oldincludedir="/usr/include"
+# test "$docdir" = '${datarootdir}/doc/${PACKAGE_TARNAME}' && docdir="${datarootdir}/doc/${PACKAGE_TARNAME}"
+# test "$htmldir" = '${docdir}'               && htmldir="${docdir}"
+# test "$dvidir" = '${docdir}'                && dvidir="${docdir}"
+# test "$pdfdir" = '${docdir}'                && pdfdir="${docdir}"
+# test "$psdir" = '${docdir}'                 && psdir="${docdir}"
+# test "$libdir" = '${exec_prefix}/lib'       && libdir="${exec_prefix}/lib"
+# test "$localedir" = '${datarootdir}/locale' && localedir="${datarootdir}/locale"
