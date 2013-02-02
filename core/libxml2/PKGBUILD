@@ -37,13 +37,13 @@ build() {
 
   for d in . doc doc/devhelp doc/examples
 	do
-		sed -i -e '/^install-data-am:/ s|install-data-local||' \
+		sed -i '' -e '/^install-data-am:/ s|install-data-local||' \
 		${d}/Makefile.in
 	done
  
    for f in catalog.c xmlcatalog.c xmllint.c doc/xmllint.1
 	do
-		sed -i -e \
+		sed -i '' -e \
 			's|/etc/xml/catalog|/usr/local/share/xml/catalog|g; s|/etc/sgml/catalog|/usr/local/share/sgml/catalog|g' ${f}
 	done
 
