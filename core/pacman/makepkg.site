@@ -1,8 +1,14 @@
 # ArchBSD Port config.site
 
-test "$prefix" = NONE && prefix=/usr/local
-test "$infodir" = '${datarootdir}/info'     && infodir="${prefix}/info"
-test "$mandir" = '${datarootdir}/man'       && mandir="${prefix}/man"
+if test "$prefix" != "/usr/local"; then
+  test "$prefix" = NONE && prefix="/usr/local"
+fi
+if test "$infodir" != "${prefix}/info"; then
+  test "$infodir" = '${datarootdir}/info' && infodir="${prefix}/info"
+fi
+if test "$mandir" != "${prefix}/man"; then
+  test "$mandir" = '${datarootdir}/man' && mandir="${prefix}/man"
+fi
 
 # The rest are default values
 # test "$exec_prefix" = NONE    && exec_prefix="${prefix}"
