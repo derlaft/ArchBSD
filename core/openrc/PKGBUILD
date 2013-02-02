@@ -37,7 +37,7 @@ build() {
 package() {
     cd "$srcdir/$pkgname-$pkgver"
     gmake DESTDIR="$pkgdir" "${_makeargs[@]}" install
-    rm -rfi ${pkgdir}/usr/share/man/man8/rc.8
+    rm -rf ${pkgdir}/usr/share/man/man8/rc.8
 
     install -dm755 "${pkgdir}/etc/init.d"
     install -dm755 "${pkgdir}/etc/conf.d"
