@@ -1,5 +1,6 @@
 # $Id: PKGBUILD 168631 2012-10-13 16:37:23Z thomas $
 # Maintainer: Jan de Groot <jgc@archlinux.org>
+# Contributor: Wolfgang Bumiller <blub@speed.at>
 
 # This package spans multiple repositories. 
 # Always build from cyrus-sasl/trunk and merge changes to libsasl/trunk.
@@ -14,7 +15,7 @@ arch=('i686' 'x86_64')
 url="http://cyrusimap.web.cmu.edu/"
 license=('custom')
 options=('!makeflags')
-makedepends=('libmysqlclient' 'libldap')
+makedepends=('libmysqlclient' 'libldap' 'db')
 # FIXME: conf.d/saslauthd init.d/saslauthd
 source=(ftp://ftp.cyrusimap.org/cyrus-sasl/cyrus-sasl-${pkgver}.tar.gz
         patch-Makefile.in
@@ -26,6 +27,15 @@ source=(ftp://ftp.cyrusimap.org/cyrus-sasl/cyrus-sasl-${pkgver}.tar.gz
         patch-saslauthd__configure
         patch-saslauthd__saslcache.c
 )
+md5sums=('a7f4e5e559a0e37b3ffc438c9456e425'
+         '3abc193f270d40d161b62dd7f119a979'
+         'ac577b3126b4311c2aaa2a698ca98e7f'
+         'cad6692411d15f57ac248543e33ea9d1'
+         '5a52c3be3affeb9fb1b79e3861b10d60'
+         'f8e0c5fb578f1ad45646cf9a467bb4af'
+         'b0d10569abda1a8f96989518b4cf81b1'
+         '7cb4b0eae7fda2c0ea691ffb00b79db4'
+         'd77fcea8493e1662b4b44beefed1a592')
 
 build() {
   cd "${srcdir}/cyrus-sasl-${pkgver}"
@@ -35,48 +45,51 @@ build() {
     patch -p0 -i "$srcdir/$i"
   done
 
-# Arch does this
-# rm -f config/config.guess config/config.sub
-# rm -f config/ltconfig config/ltmain.sh config/libtool.m4
-# rm -fr autom4te.cache
-# libtoolize -c
-# aclocal -I config -I cmulocal
-# automake -a -c
-# autoheader
-# autoconf
-#
-# pushd saslauthd
-# rm -f config/config.guess config/config.sub
-# rm -f config/ltconfig config/ltmain.sh config/libtool.m4
-# rm -fr autom4te.cache
-# libtoolize -c
-# aclocal -I config -I ../cmulocal -I ../config
-# automake -a -c
-# autoheader
-# autoconf
-# popd
+  sed -i '' -e \
+    "/^ltmain=/!s|\$ac_aux_dir/ltmain.sh| /usr/local/share/libtool/config/ltmain.sh|g; \
+    /^LIBTOOL=/s|\$(top_builddir)/libtool|/usr/local/bin/libtool|g" \
+    configure saslauthd/configure
 
-  export CFLAGS="${CFLAGS} -fPIC"
-  export LDFLAGS="${LDFLAGS} -fPIC"
+# CONFIG_GUESS_DIRS=$(find . -name config.sub -o -name config.guess | xargs -n 1 dirname)
+# for _D in ${CONFIG_GUESS_DIRS}; do
+#   cp -f /usr/ports/Templates/config.sub ${_D}/config.sub
+#   chmod a+rx ${_D}/config.sub
+#   cp -f /usr/ports/Templates/config.sub ${_D}/config.guess
+#   chmod a+rx ${_D}/config.guess
+# done
+
+# We need to fix up a wrong library name
+  find . ! -type d -exec sed -i '' -e 's/libsasldb\.al/libsasldb.a/g' '{}' ';'
+
+# These flags are required, LDFLAGS from makepkg.conf *cannot* be used reliably!
+  unset CC
+  unset CPP
+  unset CFLAGS
+  unset LDFLAGS
   ./configure --prefix=/usr/local \
+      --sysconfdir=/usr/local/etc \
       --mandir=/usr/local/man \
       --infodir=/usr/local/info \
-      --sysconfdir=/usr/local/etc \
       --with-configdir=/usr/local/etc/sasl2:/usr/local/lib/sasl2 \
-      --with-plugindir=/usr/local/etc/sasl2 \
-      --with-dbpath=/usr/local/sasldb2 \
+      --with-plugindir=/usr/local/lib/sasl2 \
+      --with-dbpath=/usr/local/etc/sasldb2 \
       --with-lib-subdir=lib \
       --with-pkgconfigdir=/usr/local/libdata/pkgconfig \
       --includedir=/usr/local/include \
       --enable-static \
       --enable-auth-sasldb \
-      --with-rc4=openssl \
+      --with-rc=openssl \
+      --with-saslauthd=/var/run/saslauthd \
+      --disable-krb4 \
+      --with-dblib=berkeley \
+      --with-bdb=db-5 \
+      --with-authdaemond=/var/run/authdaemond/socket \
+      --enable-login \
+      --enable-ntlm \
       --with-openssl=yes \
+      --enable-gssapi \
       --enable-ldapdb \
       --with-ldap=/usr/local \
-      --with-saslauthd=/var/run/saslauthd \
-      --enable-gssapi=/usr --with-gss_impl=mit \
-      --disable-krb4 \
       --enable-alwaystrue \
       --enable-checkapop \
       --enable-cram \
@@ -86,14 +99,16 @@ build() {
       --disable-srp-setpass \
       --enable-plain \
       --enable-anon \
-      --enable-login \
-      --enable-ntlm \
       --disable-passdss \
       --enable-sql \
       --disable-macos-framework \
       --with-pam \
-      --with-devrandom=/dev/urandom
-  make
+      --build=amd64-portbld-freebsd9.1 \
+      CFLAGS="-O2 -pipe -fno-strict-aliasing" \
+      LDFLAGS="-Wl,-rpath,/usr/lib:/usr/local/lib" \
+      CPPFLAGS="-fPIC"
+#--enable-gssapi=/usr --with-gss_impl=mit
+  gmake
 }
 
 package_libsasl() {
@@ -103,7 +118,7 @@ package_libsasl() {
   cd "${srcdir}/cyrus-sasl-${pkgver}"
   for dir in include lib sasldb plugins utils; do
     pushd ${dir}
-    make DESTDIR="${pkgdir}" install
+    gmake DESTDIR="${pkgdir}" install
     popd
   done
   rm -f "${pkgdir}"/usr/local/lib/sasl2/libsql.so*
@@ -119,7 +134,7 @@ package_cyrus-sasl() {
   backup=('usr/local/etc/conf.d/saslauthd')
 
   cd "${srcdir}/cyrus-sasl-${pkgver}/saslauthd"
-  make DESTDIR="${pkgdir}" install
+  gmake DESTDIR="${pkgdir}" install
 
   install -m755 -d "${pkgdir}/usr/local/share/licenses/cyrus-sasl"
   ln -sf ../libsasl/COPYING "${pkgdir}/usr/local/share/licenses/cyrus-sasl/"
