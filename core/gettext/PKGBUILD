@@ -86,4 +86,5 @@ check() {
 package() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   gmake DESTDIR="${pkgdir}" install
+  rm -f "${pkgdir}/usr/local/lib/charset.alias"
 }
