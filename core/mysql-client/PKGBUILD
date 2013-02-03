@@ -143,7 +143,7 @@ package_mysql(){
   install -m755 "${srcdir}"/mysqld-post.sh "${pkgdir}"/usr/local/bin/mysqld-post
 
   install -dm755 "${pkgdir}/usr/local/etc/init.d"
-  install -m755 "${srcdir}/init.d-mysql" "${pkgdir}/usr/local/etc/init.d/mysqld"
+  install -m755 "${srcdir}/init.d-mysqld" "${pkgdir}/usr/local/etc/init.d/mysqld"
 
   # provided by libmysqlclient
   rm "${pkgdir}"/usr/local/bin/{mysql_config,mysql_client_test_embedded,mysqltest_embedded}
