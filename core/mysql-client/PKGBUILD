@@ -7,7 +7,7 @@ license=('GPL')
 url="https://www.mysql.com/products/community/"
 makedepends=('cmake')
 source=("http://ftp.gwdg.de/pub/misc/mysql/Downloads/MySQL-5.5/${pkgbase}-${pkgver}.tar.gz"
-        'my.cnf' 'mysqld-post.sh' 'mysqld-tmpfile.conf'
+        'my.cnf' 'mysqld-post.sh' 'init.d-mysqld'
         'patch-cmake_plugin.cmake'
         'patch-extra_yassl_taocrypt_src_integer.cpp'
         'patch-include_CMakeLists.txt'
@@ -137,11 +137,13 @@ package_mysql(){
   cd ${srcdir}/build
 
   make DESTDIR="${pkgdir}" install
-  install -dm644 "${pkgdir}"/usr/local/etc/mysql/
-  install -dm644 "${pkgdir}"/usr/local/bin/mysqld-post
+  install -dm755 "${pkgdir}"/usr/local/etc/mysql/
+  install -dm755 "${pkgdir}"/usr/local/bin/mysqld-post
   install -m755 "${srcdir}"/my.cnf "${pkgdir}"/usr/local/etc/mysql/
   install -m755 "${srcdir}"/mysqld-post.sh "${pkgdir}"/usr/local/bin/mysqld-post
-  install -m644 "${srcdir}"/mysqld-tmpfile.conf "${pkgdir}"/usr/local/lib/tmpfiles.d/mysqld.conf
+
+  install -dm755 "${pkgdir}/usr/local/etc/init.d"
+  install -m755 "${srcdir}/init.d-mysql" "${pkgdir}/usr/local/etc/init.d/mysqld"
 
   # provided by libmysqlclient
   rm "${pkgdir}"/usr/local/bin/{mysql_config,mysql_client_test_embedded,mysqltest_embedded}
