@@ -146,7 +146,7 @@ package_mysql(){
 
   # provided by libmysqlclient
   rm "${pkgdir}"/usr/local/bin/{mysql_config,mysql_client_test_embedded,mysqltest_embedded}
-  rm "${pkgdir}"/usr/local/lib/libmysql*
+  rm "${pkgdir}"/usr/local/lib/mysql/libmysql*
   rm -r "${pkgdir}"/usr/local/include/
   rm "${pkgdir}"/usr/local/man/man1/{mysql_config,mysql_client_test_embedded,mysqltest_embedded}.1
   # provided by mysql-clients
