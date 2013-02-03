@@ -58,7 +58,9 @@ build() {
   find . ! -type d -exec sed -i '' -e 's/libsasldb\.al/libsasldb.a/g' '{}' ';'
 
 # These flags are required, LDFLAGS from makepkg.conf *cannot* be used reliably!
+  unset CFLAGS
   unset LDFLAGS
+  unset CPPFLAGS
 
   ./configure --prefix=/usr/local \
       --sysconfdir=/usr/local/etc \
@@ -98,6 +100,7 @@ build() {
       --disable-macos-framework \
       --with-pam \
       --build=amd64-portbld-freebsd9.1 \
+      CFLAGS="-O2 -pipe -fno-strict-aliasing" \
       LDFLAGS="-Wl,-rpath,/usr/lib:/usr/local/lib" \
       CPPFLAGS="-fPIC"
 
