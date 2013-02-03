@@ -81,6 +81,8 @@ package() {
   install -dm755 ${pkgdir}/usr/local/lib
   install -m755 lib/libncurses.so.${pkgver} ${pkgdir}/usr/local/lib/libncurses.so.${pkgver}
   ln -s libncurses.so.${pkgver} ${pkgdir}/usr/local/lib/libncurses.so.5
+  install -m755 lib/libtinfo.so.${pkgver} ${pkgdir}/usr/local/lib/libtinfo.so.${pkgver}
+  ln -s libtinfo.so.${pkgver} ${pkgdir}/usr/local/lib/libtinfo.so.5
 
   # install license, rip it from the readme
   cd ${srcdir}/${pkgname}-${pkgver}
