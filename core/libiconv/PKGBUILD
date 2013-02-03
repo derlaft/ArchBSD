@@ -34,9 +34,12 @@ build() {
     patch -p0 -i "${srcdir}/$i"
   done
 
+  export gl_cv_cc_visibility="no" am_cv_func_iconv="yes" am_cv_proto_iconv_arg1="const"
   ./configure   --prefix=/usr/local --enable-static \
                 --without-libintl-prefix \
-                --docdir=/usr/local/doc
+                --docdir=/usr/local/doc \
+                --enable-extra-encodings
+  unset gl_cv_cc_visibility am_cv_func_iconv am_cv_proto_iconv_arg1
   gmake
 }
 
