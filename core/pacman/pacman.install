@@ -67,7 +67,7 @@ _resetbackups() {
             # run a sed on the path to reset the line containing $file
             # NOTE: literal tab characters in sed expression after $file
             echo ">>> -> resetting sum of /$file..."
-            sed -i "s#$file [0-9a-fA-F]*#$file  $zeroes#" $path
+            sed -i '' -e "s#$file [0-9a-fA-F]*#$file  $zeroes#" $path
         else
             echo ">>> -> $file is unowned."
         fi
