@@ -119,7 +119,7 @@ package_openldap() {
 
   ln -s ../lib/slapd "${pkgdir}"/usr/local/sbin/slapd
 
-  chown root:ldap "${pkgdir}"/usr/local/etc/openldap/{slapd.conf,DB_CONFIG.example}
+#  chown root:ldap "${pkgdir}"/usr/local/etc/openldap/{slapd.conf,DB_CONFIG.example}
   chmod 640 "${pkgdir}"/usr/local/etc/openldap/{slapd.conf,DB_CONFIG.example}
 
 # FIXME: init scripts

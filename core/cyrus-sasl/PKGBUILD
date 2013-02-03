@@ -54,22 +54,12 @@ build() {
     /^LIBTOOL=/s|\$(top_builddir)/libtool|/usr/local/bin/libtool|g" \
     configure saslauthd/configure
 
-# CONFIG_GUESS_DIRS=$(find . -name config.sub -o -name config.guess | xargs -n 1 dirname)
-# for _D in ${CONFIG_GUESS_DIRS}; do
-#   cp -f /usr/ports/Templates/config.sub ${_D}/config.sub
-#   chmod a+rx ${_D}/config.sub
-#   cp -f /usr/ports/Templates/config.sub ${_D}/config.guess
-#   chmod a+rx ${_D}/config.guess
-# done
-
 # We need to fix up a wrong library name
   find . ! -type d -exec sed -i '' -e 's/libsasldb\.al/libsasldb.a/g' '{}' ';'
 
 # These flags are required, LDFLAGS from makepkg.conf *cannot* be used reliably!
-  unset CC
-  unset CPP
-  unset CFLAGS
   unset LDFLAGS
+
   ./configure --prefix=/usr/local \
       --sysconfdir=/usr/local/etc \
       --mandir=/usr/local/man \
@@ -108,10 +98,9 @@ build() {
       --disable-macos-framework \
       --with-pam \
       --build=amd64-portbld-freebsd9.1 \
-      CFLAGS="-O2 -pipe -fno-strict-aliasing" \
       LDFLAGS="-Wl,-rpath,/usr/lib:/usr/local/lib" \
       CPPFLAGS="-fPIC"
-#--enable-gssapi=/usr --with-gss_impl=mit
+
   gmake
 }
 
