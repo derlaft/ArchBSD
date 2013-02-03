@@ -1,7 +1,11 @@
 post_install() {
-	/sbin/ldconfig -m /usr/local/lib/mysql
+	grep -q mysql /etc/group || /usr/sbin/pw groupadd mysql
+	grep -q mysql /etc/passwd || /usr/sbin/pw useradd -g mysql -d /var/lib/mysql -s /bin/false mysql
+	usr/local/bin/mysql_install_db --user=mysql --basedir=/usr/local --datadir=/var/lib/mysql
+	chown -R mysql:mysql var/lib/mysql
 }
 
 pre_remove() {
-	/sbin/ldconfig -R
+	/usr/sbin/pw userdel mysql
+	/usr/sbin/pw groupdel mysql
 }
