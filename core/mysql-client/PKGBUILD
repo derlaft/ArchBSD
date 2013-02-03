@@ -152,7 +152,7 @@ package_mysql(){
   # provided by mysql-clients
   rm "${pkgdir}"/usr/local/bin/{mysql,mysqladmin,mysqlcheck,mysqldump,mysqlimport,mysqlshow,mysqlslap}
   rm "${pkgdir}"/usr/local/man/man1/{mysql,mysqladmin,mysqlcheck,mysqldump,mysqlimport,mysqlshow,mysqlslap}.1
-  rm -r "${pkgdir}"/usr/local/{data,mysql-test,sql-bench}
-  rm "${pkgdir}"/usr/local/man/man1/mysql-test-run.pl.1
+  rm -r "${pkgdir}"/usr/local/data
+  rm -r "${pkgdir}"/usr/local/share/mysql/sql-bench
   install -dm700 "${pkgdir}"/var/lib/mysql
 }
