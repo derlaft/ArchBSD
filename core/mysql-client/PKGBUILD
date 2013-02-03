@@ -20,7 +20,7 @@ source=("http://ftp.gwdg.de/pub/misc/mysql/Downloads/MySQL-5.5/${pkgbase}-${pkgv
 md5sums=('e6b9f9cb82e990bd8f0474df7462904e'
          '2716c6ec912d791abb369579a95ab527'
          '35d71489f58ae6c02f5d3281b2578c79'
-         '2fa6e456964d4ff5e6d4f9ff0126aed6'
+         '0f7c892c4037493361a929883daa0431'
          '52d27b3a1333dd4c63efff3a1431061f'
          '728e0a7521b330c3696ee8aac43dbc2e'
          '95617bf2c55e270b879a02f74cd6d03a'
