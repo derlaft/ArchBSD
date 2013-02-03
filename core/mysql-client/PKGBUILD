@@ -129,7 +129,7 @@ package_mysql-clients(){
 
 package_mysql(){
   pkgdesc="A fast SQL database server"
-  backup=('etc/mysql/my.cnf')
+  backup=('usr/local/etc/mysql/my.cnf')
   install=mysql.install
   depends=('mysql-clients')
   options=('emptydirs')
