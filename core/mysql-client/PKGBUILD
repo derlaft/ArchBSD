@@ -17,6 +17,18 @@ source=("http://ftp.gwdg.de/pub/misc/mysql/Downloads/MySQL-5.5/${pkgbase}-${pkgv
         'patch-scripts_mysqld_safe.sh'
         'patch-sql_sys_vars.cc'
 )
+md5sums=('e6b9f9cb82e990bd8f0474df7462904e'
+         '2716c6ec912d791abb369579a95ab527'
+         '35d71489f58ae6c02f5d3281b2578c79'
+         '2fa6e456964d4ff5e6d4f9ff0126aed6'
+         '52d27b3a1333dd4c63efff3a1431061f'
+         '728e0a7521b330c3696ee8aac43dbc2e'
+         '95617bf2c55e270b879a02f74cd6d03a'
+         '5587191c167ebd33b3ed9946032cd2f1'
+         'ccb4b565784d6d4f0493d56c16902c69'
+         'fcb52c109a11e9252ef6bd5c24018865'
+         '3b97497dc7e075bcd72460d24e2001a1'
+         '5aa461540f58e699c13ce03cbf3a9f3c')
 
 build() {
 
@@ -28,6 +40,10 @@ build() {
   do
     patch -p0 -i "${srcdir}/$i"
   done
+
+  sed -i '' -e '/ADD_SUBDIRECTORY(tests)/d' \
+            -e '/ADD_SUBDIRECTORY(mysql-test.*)/d' \
+            CMakeLists.txt
 
   mkdir ${srcdir}/build
   cd ${srcdir}/build
@@ -138,5 +154,4 @@ package_mysql(){
   rm -r "${pkgdir}"/usr/local/{data,mysql-test,sql-bench}
   rm "${pkgdir}"/usr/local/man/man1/mysql-test-run.pl.1
   install -dm700 "${pkgdir}"/var/lib/mysql
-
 }
