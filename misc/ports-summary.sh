@@ -19,6 +19,9 @@ extra=`grep portsdir extra/*/PKGBUILD | awk '{ print(substr($1,1,length($1)-10))
 cntcore=$(echo "$core" | wc -l)
 cntextra=$(echo "$extra" | wc -l)
 
+cntcore=$((cntcore - 1))
+cntextra=$((cntextra - 1))
+
 echo "There are:"
 echo "${cntcore} [core]  Ports-Packages out of ${maxcore} total"
 echo "                 Done: " $(echo "100 - ($cntcore * 100) / $maxcore" | bc)"%"
