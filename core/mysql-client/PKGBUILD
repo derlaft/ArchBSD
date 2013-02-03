@@ -92,7 +92,6 @@ build() {
 
 package_libmysqlclient(){
   pkgdesc="MySQL client libraries"
-  depends=('openssl')
   cd ${srcdir}/build
 
   for dir in include libmysql libmysqld libservices; do
