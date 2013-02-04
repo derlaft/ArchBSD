@@ -143,4 +143,9 @@ package() {
   done
   find $pkgdir/usr/local/lib -name *.pod -delete
   find $pkgdir -name .packlist -delete
+
+  # symlinks to /usr/bin
+  install -dm755 "$pkgdir"/usr/bin
+  ln -s /usr/local/bin/perl "$pkgdir"/usr/bin/perl
+  ln -s /usr/local/bin/perl${pkgver} "$pkgdir"/usr/bin/perl5
 }
