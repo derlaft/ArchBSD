@@ -75,6 +75,12 @@ build() {
     -Dvendorscript=/usr/local/bin/vendor_perl \
     -Dinc_version_list=none \
     -Dman1ext=1perl -Dman3ext=3perl ${arch_opts} \
+    -Dman1dir=/usr/local/man/man1 \
+    -Dsiteman1dir=/usr/local/man/man1 \
+    -Dvendorman1dir=/usr/local/man/man1 \
+    -Dman3dir=/usr/local/man/man3 \
+    -Dsiteman3dir=/usr/local/man/man3 \
+    -Dvendorman3dir=/usr/local/man/man3 \
     -Dlddlflags="-shared ${LDFLAGS}" -Dldflags="${LDFLAGS}"
   make
 }
