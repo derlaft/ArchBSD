@@ -14,5 +14,4 @@ post_remove() {
 			rm usr/local/info/dir; 
 		fi; 
 	fi
-
-
+}
