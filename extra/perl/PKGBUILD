@@ -125,7 +125,7 @@ package() {
   (cd ${pkgdir}/usr/local/bin; mv perl${pkgver} perl)
   (cd ${pkgdir}/usr/local/bin/core_perl;  ln -sf c2ph pstruct; ln -sf s2p psed)
   grep -Rl "${pkgdir}" ${pkgdir}/usr/local | \
-      xargs sed -i "s^${pkgdir}^^g"
+      xargs sed -i '' -e "s^${pkgdir}^^g"
 
   # Remove all pod files *except* those under /usr/share/perl5/core_perl/pod/
   # (FS#16488)
