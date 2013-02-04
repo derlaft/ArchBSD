@@ -1,9 +1,9 @@
 post_install() {
-    install-info --quiet usr/local/info/libffi.info usr/local/info/dir
+    install-info --quiet usr/local/info/libffi.info.gz usr/local/info/dir
 }
 
 pre_remove() {
-	install-info --quiet --delete usr/local/info/libffi.info usr/local/info/dir
+	install-info --quiet --delete usr/local/info/libffi.info.gz usr/local/info/dir
 }
 
 post_remove() {
@@ -14,5 +14,4 @@ post_remove() {
 			rm usr/local/info/dir; 
 		fi; 
 	fi
-
-
+}

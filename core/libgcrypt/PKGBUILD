@@ -38,13 +38,15 @@ build() {
 
 # from ports
   sed -i '' -e "s|%%PTHREAD_LIBS%%|-pthread|" ltmain.sh
+
   rm -f doc/gcrypt.info*
 
   ./configure --prefix=/usr/local \
     --mandir=/usr/local/man \
     --infodir=/usr/local/info \
-	--disable-padlock-support \
-	--enable-shared --enable-static
+    --disable-padlock-support \
+    --enable-shared --enable-static \
+    CFLAGS="${CFLAGS} -std=gnu89"
   make
 }
 

@@ -29,8 +29,8 @@ remove_shell() {
 post_install() {
   install-info --quiet /usr/local/info/bash.info.gz /usr/local/info/dir
 
-  grep -qs "^/$BASH\$"  '/etc/shells' || add_shell "$BASH"
-  grep -qs "^/$RBASH\$" '/etc/shells' || add_shell "$RBASH"
+  grep -qs "^/$BASH\$"  "$SHELLS" || add_shell "$BASH"
+  grep -qs "^/$RBASH\$" "$SHELLS" || add_shell "$RBASH"
 }
 
 pre_remove() {
@@ -38,8 +38,8 @@ pre_remove() {
 }
 
 post_remove() {
-  grep -qs "^/$BASH\$"  '/etc/shells' && remove_shell "$BASH"
-  grep -qs "^/$RBASH\$" '/etc/shells' && remove_shell "$RBASH"
+  grep -qs "^/$BASH\$"  "$SHELLS" && remove_shell "$BASH"
+  grep -qs "^/$RBASH\$" "$SHELLS" && remove_shell "$RBASH"
 
   if [ -f usr/local/info/dir ]; then
       if sed -e '1,/Menu:/d' usr/local/info/dir | grep -q '^[*] '; then

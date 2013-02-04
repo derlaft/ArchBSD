@@ -20,7 +20,7 @@ source=("http://ftp.gwdg.de/pub/misc/mysql/Downloads/MySQL-5.5/${pkgbase}-${pkgv
 md5sums=('e6b9f9cb82e990bd8f0474df7462904e'
          '2716c6ec912d791abb369579a95ab527'
          '35d71489f58ae6c02f5d3281b2578c79'
-         '2fa6e456964d4ff5e6d4f9ff0126aed6'
+         '0f7c892c4037493361a929883daa0431'
          '52d27b3a1333dd4c63efff3a1431061f'
          '728e0a7521b330c3696ee8aac43dbc2e'
          '95617bf2c55e270b879a02f74cd6d03a'
@@ -77,7 +77,6 @@ build() {
         -DCMAKE_INSTALL_PREFIX:PATH=/usr/local \
         -DCMAKE_BUILD_TYPE:STRING=Release \
         -DTHREADS_HAVE_PTHREAD_ARG:BOOL=YES \
-        -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON \
         -DWITH_INNOBASE_STORAGE_ENGINE=1 \
         -DWITH_PARTITION_STORAGE_ENGINE=1 \
         -DWITHOUT_EXAMPLE_STORAGE_ENGINE=1 \
@@ -93,7 +92,6 @@ build() {
 
 package_libmysqlclient(){
   pkgdesc="MySQL client libraries"
-  depends=('openssl')
   cd ${srcdir}/build
 
   for dir in include libmysql libmysqld libservices; do
@@ -130,7 +128,7 @@ package_mysql-clients(){
 
 package_mysql(){
   pkgdesc="A fast SQL database server"
-  backup=('etc/mysql/my.cnf')
+  backup=('usr/local/etc/mysql/my.cnf')
   install=mysql.install
   depends=('mysql-clients')
   options=('emptydirs')
@@ -147,13 +145,13 @@ package_mysql(){
 
   # provided by libmysqlclient
   rm "${pkgdir}"/usr/local/bin/{mysql_config,mysql_client_test_embedded,mysqltest_embedded}
-  rm "${pkgdir}"/usr/local/lib/libmysql*
+  rm "${pkgdir}"/usr/local/lib/mysql/libmysql*
   rm -r "${pkgdir}"/usr/local/include/
   rm "${pkgdir}"/usr/local/man/man1/{mysql_config,mysql_client_test_embedded,mysqltest_embedded}.1
   # provided by mysql-clients
   rm "${pkgdir}"/usr/local/bin/{mysql,mysqladmin,mysqlcheck,mysqldump,mysqlimport,mysqlshow,mysqlslap}
   rm "${pkgdir}"/usr/local/man/man1/{mysql,mysqladmin,mysqlcheck,mysqldump,mysqlimport,mysqlshow,mysqlslap}.1
-  rm -r "${pkgdir}"/usr/local/{data,mysql-test,sql-bench}
-  rm "${pkgdir}"/usr/local/man/man1/mysql-test-run.pl.1
+  rm -r "${pkgdir}"/usr/local/data
+  rm -r "${pkgdir}"/usr/local/share/mysql/sql-bench
   install -dm700 "${pkgdir}"/var/lib/mysql
 }

@@ -1,0 +1,148 @@
+# $Id: PKGBUILD 175132 2013-01-14 22:24:03Z dan $
+# Maintainer: Dan McGee <dan@archlinux.org>
+
+pkgname=git
+pkgver=1.8.1.1
+pkgrel=1
+pkgdesc="the fast distributed version control system"
+arch=(i686 x86_64)
+url="http://git-scm.com/"
+license=('GPL2')
+depends=('curl' 'expat>=2.0' 'perl>=5.14.0' 'pcre')
+makedepends=('python2') # 'emacs')
+optdepends=('tk: gitk and git gui'
+            'perl-libwww: git svn'
+            'perl-term-readkey: git svn'
+            'perl-mime-tools: git send-email'
+            'perl-net-smtp-ssl: git send-email TLS support'
+            'perl-authen-sasl: git send-email TLS support'
+            'python2: various helper scripts'
+            'subversion: git svn'
+            'cvsps: git cvsimport')
+replaces=('git-core')
+provides=('git-core')
+backup=('etc/conf.d/git-daemon.conf')
+install=git.install
+source=("http://git-core.googlecode.com/files/git-$pkgver.tar.gz"
+        "http://git-core.googlecode.com/files/git-manpages-$pkgver.tar.gz"
+        init.d-git-daemon
+        conf.d-git-daemon
+        patch-Documentation__Makefile
+        patch-Makefile
+        patch-wrapper.c
+        )
+
+build() {
+  export PYTHON_PATH='/usr/local/bin/python2'
+  cd "$srcdir/$pkgname-$pkgver"
+
+  for i in patch-Documentation__Makefile patch-Makefile patch-wrapper.c
+  do
+    patch -p0 -i "${srcdir}/$i"
+  done
+
+  sed -i '' -e 's|share/man/man3|man/man3|' perl/Makefile.PL
+
+# without CVS
+  sed -i '' -e '/git-cvsexportcommit.perl/d' \
+    -e '/git-cvsimport.perl/d' \
+    -e '/git-cvsserver.perl/d' \
+    -e '/documented,gitcvs-migration/d' \
+    -e 's/git-cvsserver//' \
+    Makefile
+# without SVN
+  sed -i '' -e '/git-svn.perl/d' Makefile
+# without gitweb for now
+  sed -i '' -e '/$$(MAKE) -C gitweb install/d' Makefile
+
+  ./configure --prefix=/usr/local --mandir=/usr/local/man --enable-pthreads=-pthread \
+              --with-python=/usr/local/bin/python2 \
+              --with-iconv=/usr/local \
+              --with-libpcre \
+              --with-openssl \
+              --with-curl \
+              --with-expat
+
+  gmake prefix=/usr/local gitexecdir=/usr/local/libexec/git-core \
+    CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS" \
+    USE_LIBPCRE=1 \
+    NO_CROSS_DIRECTORY_HARDLINKS=1 \
+    all
+
+# cd contrib/emacs
+# make prefix=/usr/local
+}
+
+check() {
+  export PYTHON_PATH='/usr/local/bin/python2'
+  cd "$srcdir/$pkgname-$pkgver"
+  local jobs
+  jobs=$(expr -- "$MAKEFLAGS" : '.*\(-j[0-9]*\).*' || true)
+  # We used to use this, but silly git regressions:
+  #GIT_TEST_OPTS="--root=/dev/shm/" \
+  # http://comments.gmane.org/gmane.comp.version-control.git/202020
+  rm -rf "$srcdir"/test
+  mkdir "$srcdir"/test
+  gmake prefix=/usr/local gitexecdir=/usr/local/libexec/git-core \
+    CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS" \
+    USE_LIBPCRE=1 \
+    NO_CROSS_DIRECTORY_HARDLINKS=1 \
+    NO_SVN_TESTS=y \
+    DEFAULT_TEST_TARGET=prove \
+    GIT_PROVE_OPTS="$jobs" \
+    GIT_TEST_OPTS="--root=$srcdir/test" \
+    test
+}
+
+package() {
+  export PYTHON_PATH='/usr/local/bin/python2'
+  cd "$srcdir/$pkgname-$pkgver"
+  gmake prefix=/usr/local gitexecdir=/usr/local/libexec/git-core \
+    CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS" \
+    USE_LIBPCRE=1 \
+    NO_CROSS_DIRECTORY_HARDLINKS=1 \
+    INSTALLDIRS=vendor DESTDIR="$pkgdir" install 
+
+  # bash completion
+  mkdir -p "$pkgdir"/usr/local/share/bash-completion/completions/
+  install -m644 ./contrib/completion/git-completion.bash "$pkgdir"/usr/local/share/bash-completion/completions/git 
+  # fancy git prompt
+  mkdir -p "$pkgdir"/usr/local/share/git/
+  install -m644 ./contrib/completion/git-prompt.sh "$pkgdir"/usr/local/share/git/git-prompt.sh
+  # more contrib stuff
+  cp -a ./contrib/* $pkgdir/usr/local/share/git/ 
+  # scripts are for python 2.x
+  sed -i '' -e 's|#![ ]*/usr/bin/env python|#!/usr/bin/env python2|' \
+    $(find "$pkgdir" -name '*.py') \
+    "$pkgdir"/usr/local/libexec/git-core/git-p4 \
+    "$pkgdir"/usr/local/share/git/gitview/gitview
+
+# # emacs interface
+# cd contrib/emacs
+# gmake prefix=/usr/local DESTDIR="$pkgdir" install
+
+  # how 'bout some manpages?
+  for mansect in man1 man5 man7; do
+    for manpage in "$srcdir"/$mansect/*; do
+      install -d -m755 "$pkgdir"/usr/local/man/$mansect
+      install    -m644 $manpage "$pkgdir"/usr/local/man/$mansect/$(basename $manpage)
+    done
+  done
+
+  # remove perllocal.pod, .packlist, and empty directories.
+  rm -rf "$pkgdir"/usr/local/lib/perl5
+
+  # git daemon script
+  install -dm755 "$pkgdir"/usr/local/etc/init.d
+  install -dm755 "$pkgdir"/usr/local/etc/conf.d
+  install -m755 "$srcdir"/init.d-git-daemon "$pkgdir"/usr/local/etc/init.d/git-daemon
+  install -m644 "$srcdir"/conf.d-git-daemon "$pkgdir"/usr/local/etc/conf.d/git-daemon
+}
+
+md5sums=('2bf7fd005ecf2e0a311b849e6add7994'
+         '4ac4ea5a72ec96ac24b7d6fba9ad1277'
+         'aa15ba8e51373c3ac96819f989b2a3ad'
+         '66fb74fb87bfe83b7023e1d82bbf7f24'
+         'acd7bd553afbba47a31f9f275f643c26'
+         '50a53f2c8621de5b2f942db6d095d69a'
+         'cc588f77d72ab658f06d24dcfc6cf4c4')
