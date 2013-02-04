@@ -1,25 +1,44 @@
+# $Id: PKGBUILD 157383 2012-04-28 09:25:57Z allan $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
 pkgname=libffi
-pkgver=3.0.9
+pkgver=3.0.11
 pkgrel=1
-category=devel
 pkgdesc="A portable, high level programming interface to various calling conventions"
 arch=('i686' 'x86_64')
 url="http://sourceware.org/libffi"
 license=('MIT')
-depends=('pkgconf')
-makedepends=('bison' 'm4' 'mingw32-gcc' 'perl')
+# if you don't have this use makepkg --nocheck
+checkdepends=('dejagnu')
 install=libffi.install
+source=(ftp://sourceware.org/pub/libffi/libffi-${pkgver}.tar.gz
+        patch-configure)
 
 build() {
-  cd "${portsdir}/${category}/${pkgname}"
-  make clean
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  patch -p0 -i "${srcdir}/patch-configure"
+  ./configure --prefix=/usr/local --mandir=/usr/local/man --infodir=/usr/local/info
   make
-  make deinstall
-  make package PACKAGES="${srcdir}"
+}
+
+check() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make check
 }
 
 package() {
-  cd "${pkgdir}"
-  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
-}
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
 
+  install -dm755 $"${pkgdir}/usr/local/libdata"
+  mv "${pkgdir}/usr/local/lib/pkgconfig" "${pkgdir}/usr/local/libdata/pkgconfig"
+
+  install -dm755 "$pkgdir"/usr/local/include
+  ln -sf ../lib/libffi-${pkgver}/include/ffi.h "$pkgdir"/usr/local/include/
+  ln -sf ../lib/libffi-${pkgver}/include/ffitarget.h "$pkgdir"/usr/local/include/
+
+  install -d -m755 "${pkgdir}/usr/local/share/licenses/${pkgname}"
+  install    -m644 LICENSE "${pkgdir}/usr/local/share/licenses/${pkgname}/LICENSE"
+}
+md5sums=('f69b9693227d976835b4857b1ba7d0e3'
+         'b54a39b42ac952323cc5b47ce64c2d47')
