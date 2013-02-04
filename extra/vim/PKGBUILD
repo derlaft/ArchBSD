@@ -59,12 +59,12 @@ build() {
   cp -a ${pkgname}-${pkgver} vim-build
 
   # define the place for the global (g)vimrc file (set to /etc/vimrc)
-  gsed -i -e 's|^.*\(#define SYS_.*VIMRC_FILE.*"\) .*$|\1|' \
+  sed -i '' -e 's|^.*\(#define SYS_.*VIMRC_FILE.*"\) .*$|\1|' \
     vim-build/src/feature.h
-  gsed -i -e 's|^.*\(#define VIMRC_FILE.*"\) .*$|\1|' \
+  sed -i '' -e 's|^.*\(#define VIMRC_FILE.*"\) .*$|\1|' \
     vim-build/src/feature.h
   # fix python name
-  gsed -i -e 's|vi_cv_path_python, python|vi_cv_path_python, python2|' \
+  sed -i '' -e 's|vi_cv_path_python, python|vi_cv_path_python, python2|' \
     vim-build/src/configure.in
   (cd vim-build/src && autoconf)
 
@@ -204,13 +204,13 @@ package_vim-runtime() {
     "${pkgdir}"/usr/local/share/vim/${_versiondir}/ftplugin/logtalk.dict
 
   # fix FS#17216
-  gsed -i -e 's|messages,/var|messages,/var/log/messages.log,/var|' \
+  sed -i '' -e 's|messages,/var|messages,/var/log/messages.log,/var|' \
     "${pkgdir}"/usr/local/share/vim/${_versiondir}/filetype.vim
 
   # patch filetype.vim for better handling of pacman related files
-  gsed -i -e "s/rpmsave/pacsave/;s/rpmnew/pacnew/;s/,\*\.ebuild/\0,PKGBUILD*,*.install/" \
+  sed -i '' -e "s/rpmsave/pacsave/;s/rpmnew/pacnew/;s/,\*\.ebuild/\0,PKGBUILD*,*.install/" \
     "${pkgdir}"/usr/local/share/vim/${_versiondir}/filetype.vim
-  gsed -i -e "/find the end/,+3{s/changelog_date_entry_search/changelog_date_end_entry_search/}" \
+  sed -i '' -e "/find the end/,+3{s/changelog_date_entry_search/changelog_date_end_entry_search/}" \
     "${pkgdir}"/usr/local/share/vim/${_versiondir}/ftplugin/changelog.vim
 
   # make Aaron happy
