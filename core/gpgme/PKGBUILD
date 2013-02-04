@@ -34,7 +34,7 @@ build() {
                 src/gpgme-config.in \
                 tests/gpg/Makefile.in
 
-  sed -i '' -e 's|^clfilesdir.*|clfilesdir=$$\(libdir\)/common-lisp/gpgme|g' \
+  sed -i '' -e 's|^clfilesdir.*|clfilesdir=$\(libdir\)/common-lisp/gpgme|g' \
                 lang/cl/Makefile.in
 
   ./configure --prefix=/usr/local --disable-static \
