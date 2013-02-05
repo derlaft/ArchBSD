@@ -18,10 +18,10 @@ options=(!makeflags)
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   ./configure --prefix=/usr/local --disable-update-mimedb
-  make
+  gmake
 }
 
 package() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  make DESTDIR="${pkgdir}" install
+  gmake DESTDIR="${pkgdir}" install
 }
