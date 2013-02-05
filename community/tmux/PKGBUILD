@@ -10,7 +10,7 @@ pkgdesc='A terminal multiplexer'
 url='http://tmux.sourceforge.net/'
 arch=('i686' 'x86_64')
 license=('BSD')
-depends=('ncurses')
+depends=('ncurses' 'libevent')
 source=(http://downloads.sourceforge.net/tmux/tmux-$pkgver.tar.gz
 		LICENSE)
 md5sums=('2c48fb9beb22eedba7a5de3b78dd0c03'
