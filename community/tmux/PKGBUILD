@@ -18,6 +18,7 @@ md5sums=('2c48fb9beb22eedba7a5de3b78dd0c03'
 
 build() {
 	cd "$srcdir/$pkgname-$pkgver"
+	unset LDFLAGS
 	./configure --prefix=/usr/local --mandir=/usr/local/man
 	make
 }
@@ -28,11 +29,13 @@ package() {
 	install -dm755 "$pkgdir/usr/local/share/licenses/tmux/"
 	install -m644 ../LICENSE "$pkgdir/usr/local/share/licenses/tmux/LICENSE"
 
-	install -dm755 "$pkgdir/usr/local/share/example/tmux/"
-	install -m644 examples/* "$pkgdir/usr/local/share/examples/tmux/"
+	install -dm755 "$pkgdir/usr/local/share/examples/tmux/"
+	cp -R examples/* "$pkgdir/usr/local/share/examples/tmux/"
+	find "$pkgdir/usr/local/share/examples/tmux/" -type d -exec chmod 755 '{}' ';'
+	find "$pkgdir/usr/local/share/examples/tmux/" -type f -exec chmod 644 '{}' ';'
 	install -dm755 "$pkgdir/usr/local/share/vim/vimfiles/syntax"
 	install -m644 examples/tmux.vim "$pkgdir/usr/local/share/vim/vimfiles/syntax/tmux.vim"
 
-	install -d $pkgdir/usr/local/etc/bash-completion.d/
-	mv $pkgdir/usr/local/share/tmux/bash_completion_tmux.sh $pkgdir/usr/local/etc/bash-completion.d/tmux
+	install -dm755 $pkgdir/usr/local/etc/bash-completion.d/
+	mv $pkgdir/usr/local/share/examples/tmux/bash_completion_tmux.sh $pkgdir/usr/local/etc/bash-completion.d/tmux
 }
