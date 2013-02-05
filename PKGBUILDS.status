@@ -1,16 +1,16 @@
-Status as of: Thu Jan 31 19:28:56 CET 2013
+Status as of: Tue Feb  5 11:18:00 GMT 2013
 
 There are:
-1 [core]  Ports-Packages out of 32 total
-                 Done:  97%
-98 [extra] Ports-Packages out of 152 total
-                 Done:  36%
-That's a total of 99 Ports-PKGBUILDs which need to be converted on this branch.
-There are a total of 184 packages.
-The total conversion progress is: 47%
+0 [core]  Ports-Packages out of       32 total
+                 Done:  100%
+94 [extra] Ports-Packages out of      156 total
+                 Done:  40%
+That's a total of 94 Ports-PKGBUILDs which need to be converted on this branch.
+There are a total of 188 packages.
+The total conversion progress is: 50%
 
 Here's the TODO:
-    core/cyrus-sasl
+    
     extra/cairo
     extra/consolekit
     extra/dbus-glib
@@ -30,7 +30,6 @@ Here's the TODO:
     extra/lib3dtag
     extra/libdmx
     extra/libdrm
-    extra/libffi
     extra/libfontenc
     extra/libgl
     extra/libice
@@ -76,8 +75,6 @@ Here's the TODO:
     extra/menu-cache
     extra/mesa
     extra/mkfontscale
-    extra/ncurses
-    extra/openbox
     extra/pango
     extra/pciids
     extra/pixman
