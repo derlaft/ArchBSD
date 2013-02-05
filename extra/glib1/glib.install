@@ -1,0 +1,28 @@
+infodir=usr/local/share/info
+filelist=(glib.info.gz)
+
+post_install() {
+  for file in ${filelist[@]}; do
+    install-info --quiet $infodir/$file $infodir/dir
+  done
+}
+
+post_upgrade() {
+  post_install $1
+}
+
+pre_remove() {
+  for file in ${filelist[@]}; do
+    install-info --quiet --delete $infodir/$file $infodir/dir
+  done
+}
+
+post_remove() {
+	if [ -f $infodir/dir ]; then 
+		if sed -e '1,/Menu:/d' $infodir/dir | grep -q '^[*] '; then 
+			true; 
+		else 
+			rm $infodir/dir;
+		fi; 
+	fi
+}

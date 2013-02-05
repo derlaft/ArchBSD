@@ -1,0 +1,51 @@
+# $Id: PKGBUILD 135061 2011-08-10 01:01:44Z eric $
+# Maintainer: Eric Bélanger <eric@archlinux.org>
+
+pkgname=glib
+pkgver=1.2.10
+pkgrel=9
+pkgdesc="Common C routines used by Gtk+ and other libs"
+arch=('i686' 'x86_64')
+url="http://www.gtk.org/"
+license=('LGPL')
+options=('!libtool')
+install=glib.install
+source=(ftp://ftp.gtk.org/pub/gtk/v1.2/${pkgname}-${pkgver}.tar.gz \
+        patch-ab
+        patch-ac
+        patch-ae
+        patch-af
+        patch-glib.m4
+        patch-glib.pc.in
+        patch-gmodule.pc.in
+        patch-gmodule__gmodule-dl.c
+        patch-gstrfuncs.c
+        patch-gthread.pc.in
+        patch-gutils.c
+        )
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  for i in patch-ab patch-ac patch-ae patch-af patch-glib.m4 patch-glib.pc.in patch-gmodule.pc.in patch-gmodule__gmodule-dl.c patch-gstrfuncs.c patch-gthread.pc.in patch-gutils.c
+  do
+  	patch -p0 -i "${srcdir}/$i"
+  done
+
+  find . -name "configure" | xargs sed -i '' -e \
+  	's|-lpthread|-pthread|g ; s|-lc_r|-pthread|g'
+
+  export CFLAGS="${CFLAGS} -std=gnu89"
+  ./configure --prefix=/usr/local --mandir=/usr/local/man \
+              --infodir=/usr/local/info \
+              --includedir=/usr/local/include/glib12 \
+              --host=$CHOST --target=$CHOST
+  make
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+
+  ln -sf "${pkgdir}/usr/local/bin/glib-config" "${pkgdir}/usr/local/bin/glib12-config"
+}
