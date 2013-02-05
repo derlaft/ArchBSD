@@ -94,9 +94,9 @@ build() {
 
 package() {
   cd glib-$pkgver
-  gmake completiondir=/usr/local/share/bash-completion/completions DESTDIR="$pkgdir" install
+  gmake completiondir=/usr/local/etc/bash-completion.d DESTDIR="$pkgdir" install
 
-  for _i in "$pkgdir/usr/local/share/bash-completion/completions/"*; do
+  for _i in "$pkgdir/usr/local/etc/bash-completion.d/"*; do
       chmod -x "$_i"
   done
 # our package doesn't create this
