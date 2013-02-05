@@ -29,9 +29,9 @@ md5sums=('00441b53cf14c03566c8e82643544ff9'
 build() {
   cd $srcdir/$pkgname-$pkgver
 
-  patch -Np1 -i $srcdir/openbox-3.5.0-Fix-crash-on-NET_WM_MOVERESIZE_CANCEL.patch # FS#29812
-  patch -Np1 -i $srcdir/openbox-3.5.0-title-matching.patch  # OB#5277
-  patch -Np1 -i $srcdir/openbox-3.5.0-which-2.20.patch # FS#11455
+  patch -p1 -i $srcdir/openbox-3.5.0-Fix-crash-on-NET_WM_MOVERESIZE_CANCEL.patch # FS#29812
+  patch -p1 -i $srcdir/openbox-3.5.0-title-matching.patch  # OB#5277
+  patch -p1 -i $srcdir/openbox-3.5.0-which-2.20.patch # FS#11455
 
   sed -e 's|/usr/bin/env python|/usr/bin/env python2|' \
       data/autostart/openbox-xdg-autostart
