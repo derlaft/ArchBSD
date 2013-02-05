@@ -45,6 +45,8 @@ build() {
 
   ./configure --prefix=/usr/local --with-python=/usr/local/bin/python2 \
               --with-html-dir=/usr/local/share/doc
+
+  sed -i '' -e 's|\(XSLTPROC = \).*$|\1../xsltproc/xsltproc|' doc/Makefile
   make
 }
 
@@ -56,6 +58,9 @@ check() {
 package() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   make DESTDIR="${pkgdir}" install
+
+  install -dm755 "${pkgdir}/usr/local/libdata"
+  mv "${pkgdir}/usr/local/lib/pkgconfig" "${pkgdir}/usr/local/libdata/pkgconfig"
 
   install -d "${pkgdir}/usr/local/share/licenses/${pkgname}"
   install -m644 COPYING "${pkgdir}/usr/local/share/licenses/${pkgname}/"
