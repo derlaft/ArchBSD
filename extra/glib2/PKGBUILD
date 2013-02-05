@@ -68,12 +68,12 @@ build() {
       PTHREAD_LIBS="-pthread" \
       CFLAGS="${CFLAGS} -I/usr/local/include" \
       CPPFLAGS="${CPPFLAGS} -I/usr/local/include"
-  make
+  gmake
 }
 
 package() {
   cd glib-$pkgver
-  make completiondir=/usr/share/bash-completion/completions DESTDIR="$pkgdir" install
+  gmake completiondir=/usr/share/bash-completion/completions DESTDIR="$pkgdir" install
 
   for _i in "$pkgdir/usr/share/bash-completion/completions/"*; do
       chmod -x "$_i"
