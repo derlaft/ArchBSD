@@ -1,10 +1,8 @@
-infodir=usr/local/share/info
-filelist=(glib.info.gz)
+infodir=usr/local/info
+infofile=glib.info.gz
 
 post_install() {
-  for file in ${filelist[@]}; do
-    install-info --quiet $infodir/$file $infodir/dir
-  done
+  install-info --quiet $infodir/$infofile $infodir/dir
 }
 
 post_upgrade() {
@@ -12,9 +10,7 @@ post_upgrade() {
 }
 
 pre_remove() {
-  for file in ${filelist[@]}; do
-    install-info --quiet --delete $infodir/$file $infodir/dir
-  done
+  install-info --quiet --delete $infodir/$infofile $infodir/dir
 }
 
 post_remove() {
