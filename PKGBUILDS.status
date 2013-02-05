@@ -1,13 +1,13 @@
-Status as of: Tue Feb  5 11:18:00 GMT 2013
+Status as of: Tue Feb  5 20:25:15 CET 2013
 
 There are:
 0 [core]  Ports-Packages out of       32 total
                  Done:  100%
-94 [extra] Ports-Packages out of      156 total
-                 Done:  40%
-That's a total of 94 Ports-PKGBUILDs which need to be converted on this branch.
+89 [extra] Ports-Packages out of      156 total
+                 Done:  43%
+That's a total of 89 Ports-PKGBUILDs which need to be converted on this branch.
 There are a total of 188 packages.
-The total conversion progress is: 50%
+The total conversion progress is: 53%
 
 Here's the TODO:
     
@@ -20,12 +20,10 @@ Here's the TODO:
     extra/freetype2
     extra/gdk-pixbuff2
     extra/giflib
-    extra/glib2
     extra/gtk-update-icon-cache
     extra/gtk2
     extra/hal
     extra/icu
-    extra/imlib2
     extra/irssi
     extra/lib3dtag
     extra/libdmx
@@ -57,7 +55,6 @@ Here's the TODO:
     extra/libxrandr
     extra/libxrender
     extra/libxres
-    extra/libxslt
     extra/libxt
     extra/libxtst
     extra/libxv
@@ -79,10 +76,8 @@ Here's the TODO:
     extra/pciids
     extra/pixman
     extra/polkit
-    extra/python27
     extra/rxvt-unicode
     extra/slim
-    extra/startup-notification
     extra/vte
     extra/xcb-utils
     extra/xf86-input-keyboard
