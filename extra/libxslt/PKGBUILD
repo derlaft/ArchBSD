@@ -20,8 +20,12 @@ source=(ftp://xmlsoft.org/libxslt/${pkgname}-${pkgver}.tar.gz
         patch-python__Makefile.in
         patch-python__tests__Makefile.in
        )
-md5sums=('e61d0364a30146aaa3001296f853b2b9'
-         'ce9744943575efaa6b5501668899b753')
+md5sums=('9667bf6f9310b957254fdcf6596600b7'
+         '7976ea0c62cd1e65a2a3251fc04528db'
+         '8d939abdc8c0d66db7a8f34ae3edac9b'
+         'c5efab6f0e502389aef4ae40de950b57'
+         'bced8181aee93682f5d6f8aaa182fd53'
+         'caef09cdd3107b75324b5e3ce58232b4')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
