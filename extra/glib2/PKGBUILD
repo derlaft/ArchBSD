@@ -94,11 +94,14 @@ build() {
 
 package() {
   cd glib-$pkgver
-  gmake completiondir=/usr/share/bash-completion/completions DESTDIR="$pkgdir" install
+  gmake completiondir=/usr/local/share/bash-completion/completions DESTDIR="$pkgdir" install
 
-  for _i in "$pkgdir/usr/share/bash-completion/completions/"*; do
+  for _i in "$pkgdir/usr/local/share/bash-completion/completions/"*; do
       chmod -x "$_i"
   done
 # our package doesn't create this
   # sed -i '' -e "s|#!/usr/bin/env python|#!/usr/bin/env python2|" "$pkgdir"/usr/local/bin/gdbus-codegen
+
+  install -dm755 "${pkgdir}/usr/local/libdata"
+  mv "${pkgdir}/usr/local/lib/pkgconfig" "${pkgdir}/usr/local/libdata/pkgconfig"
 }
