@@ -1,0 +1,143 @@
+# $Id: PKGBUILD 174760 2013-01-06 20:10:23Z jgc $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
+pkgname=nss
+pkgver=3.14.1.1.93
+_pkgver=3.14.1
+pkgrel=1
+pkgdesc="Mozilla Network Security Services"
+arch=(i686 x86_64)
+url="http://www.mozilla.org/projects/security/pki/nss/"
+license=('MPL' 'GPL')
+_nsprver=4.9.4
+depends=("nspr>=${_nsprver}" 'sqlite')
+# using bash in some scripts
+makedepends=('perl' 'bash')
+options=('!strip')
+#source=(ftp://ftp.mozilla.org/pub/security/nss/releases/NSS_${pkgver//./_}_RTM/src/${pkgname}-${pkgver}.tar.gz
+source=(ftp://ftp.mozilla.org/pub/security/nss/releases/NSS_3_14_1_WITH_CKBI_1_93_RTM/src/${pkgname}-3.14.1.with.ckbi.1.93.tar.gz
+        nss.pc.in
+        nss-config.in
+        patch-..__coreconf__FreeBSD.mk
+        patch-..__coreconf__UNIX.mk
+        patch-..__coreconf__command.mk
+        patch-..__coreconf__rules.mk
+        patch-..__coreconf__ruleset.mk
+        patch-.._coreconf_arch.mk
+        patch-Makefile
+        patch-bug301986
+        patch-const
+        patch-lib-freebl-Makefile
+        patch-lib_freebl_mpi_mpcpucache.c
+        patch-lib_softoken_manifest.mn
+        patch-lib_softoken_pkcs11c.c
+        patch-sysdb
+        patch-tests
+        )
+
+build() {
+  cd "${srcdir}/${pkgname}-${_pkgver}/mozilla/security/nss"
+  for i in patch-..__coreconf__FreeBSD.mk patch-..__coreconf__UNIX.mk patch-..__coreconf__command.mk patch-..__coreconf__rules.mk patch-..__coreconf__ruleset.mk patch-.._coreconf_arch.mk patch-Makefile patch-bug301986 patch-const patch-lib-freebl-Makefile patch-lib_freebl_mpi_mpcpucache.c patch-lib_softoken_manifest.mn patch-lib_softoken_pkcs11c.c patch-sysdb patch-tests
+  do
+  	patch -p0 -i "${srcdir}/$i"
+  done
+
+  sed -e 's|@exec_prefix@|/usr/local|' \
+      -e 's|@includedir@|/usr/local/include/nss|' \
+      -e 's|@libdir@|/usr/local/lib/nss|' \
+      -e 's|@prefix@|/usr/local|' \
+    "$srcdir"/nss-config.in > nss-config
+  sed -i '' -e '/NSS_DEFAULT_SYSTEM/s,/etc,/usr/local&,' \
+    lib/sysinit/nsssysinit.c
+
+  find . -name '*.c' -o -name '*.h' | xargs sed -i '' -e 's|"nspr.h"|<nspr.h>|'
+
+  find tests -name '*.sh' | xargs grep -l -F '/bin/bash' | \
+  	xargs sed -i '' -e 's|#! */bin/bash|#!/usr/local/bin/bash|'
+
+  cd "${srcdir}/${pkgname}-${_pkgver}/mozilla"
+  # Respect LDFLAGS
+# sed -i '' -e 's/\$(MKSHLIB) -o/\$(MKSHLIB) \$(LDFLAGS) -o/g' \
+#     security/coreconf/rules.mk
+
+  # see https://bugzilla.mozilla.org/show_bug.cgi?id=683266 - this step can be dropped now
+  # CaCert Wiki page should be updated to reflect these changes how to add the certificates
+  # for now the first patch should still do it
+  
+  # Generate certdata.c from certdata.txt
+  #  cd security/nss/lib/ckfw/builtins
+  #  make generate
+
+  find . -name '*.c' -o -name '*.h' | xargs sed -i '' -e 's@<sqlite3.h>@</usr/local/include/sqlite3.h>@'
+
+  cd "${srcdir}/${pkgname}-${_pkgver}"
+  unset CFLAGS CPPFLAGS
+  export BUILD_OPT=1
+  export PKG_CONFIG_ALLOW_SYSTEM_LIBS=1
+  export PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1
+  export NSS_USE_SYSTEM_SQLITE=1
+  export NSS_ENABLE_ECC=1
+  export NSPR_INCLUDE_DIR=`pkg-config --cflags-only-I nspr | sed 's/-I//'`
+  export NSPR_LIB_DIR=`pkg-config --libs-only-L nspr | sed 's/-L.//'`
+  export XCFLAGS="${CFLAGS}"
+  export NSS_USE_SYSTEM_SQLITE=1
+  export NSS_ENABLE_ECC=1
+  export CFLAGS="${CFLAGS} -L/usr/local/lib"
+  export BSD_LDOPTS="-pthread -L/usr/local/lib"
+
+  [ "$CARCH" = "x86_64" ] && export USE_64=1
+
+  gmake -j 1 -C mozilla/security/coreconf
+  gmake -j 1 -C mozilla/security/dbm
+  gmake -j 1 -C mozilla/security/nss
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${_pkgver}"
+  install -m755 -d "${pkgdir}/usr/local/lib/pkgconfig"
+  install -m755 -d "${pkgdir}/usr/local/bin"
+  install -m755 -d "${pkgdir}/usr/local/include/nss"
+
+  NSS_VMAJOR=`grep "#define.*NSS_VMAJOR" mozilla/security/nss/lib/nss/nss.h | awk '{print $3}'`
+  NSS_VMINOR=`grep "#define.*NSS_VMINOR" mozilla/security/nss/lib/nss/nss.h | awk '{print $3}'`
+  NSS_VPATCH=`grep "#define.*NSS_VPATCH" mozilla/security/nss/lib/nss/nss.h | awk '{print $3}'`
+
+msg "pkgconf files"
+  install -dm755 "${pkgdir}/usr/local/libdata"
+  mv "${pkgdir}/usr/local/lib/pkgconfig" "${pkgdir}/usr/local/libdata/pkgconfig"
+  sed -e "s,%libdir%,/usr/local/lib,g" \
+  	  -e "s,%prefix%,/usr/local,g" \
+	  -e "s,%exec_prefix%,/usr/local/bin,g" \
+	  -e "s,%includedir%,/usr/local/include/nss,g" \
+	  -e "s,%NSPR_VERSION%,${_pkgver},g" \
+	  -e "s,%NSS_VERSION%,${_pkgver},g" \
+	  "${srcdir}/nss.pc.in" > "${pkgdir}/usr/local/libdata/pkgconfig/nss.pc"
+  ln -sf nss.pc "${pkgdir}/usr/local/libdata/pkgconfig/mozilla-nss.pc"
+  chmod 644 ${pkgdir}/usr/local/libdata/pkgconfig/*.pc
+
+msg "nss-config"
+  sed -e "s,@libdir@,/usr/local/lib,g" \
+  	  -e "s,@prefix@,/usr/local/bin,g" \
+	  -e "s,@exec_prefix@,/usr/local/bin,g" \
+	  -e "s,@includedir@,/usr/local/include/nss,g" \
+	  -e "s,@MOD_MAJOR_VERSION@,${NSS_VMAJOR},g" \
+	  -e "s,@MOD_MINOR_VERSION@,${NSS_VMINOR},g" \
+	  -e "s,@MOD_PATCH_VERSION@,${NSS_VPATCH},g" \
+	  "${srcdir}/nss-config.in" > "${pkgdir}/usr/local/bin/nss-config"
+  chmod 755 "${pkgdir}/usr/local/bin/nss-config"
+
+  for file in libsoftokn3.so libfreebl3.so libnss3.so libnssutil3.so \
+              libssl3.so libsmime3.so libnssckbi.so libnssdbm3.so
+  do
+    install -m755 mozilla/dist/*.OBJ/lib/${file} "${pkgdir}/usr/local/lib/"
+  done
+
+  install -m644 mozilla/dist/*.OBJ/lib/libcrmf.a "${pkgdir}/usr/local/lib/"
+  install -m644 mozilla/dist/*.OBJ/lib/*.chk "${pkgdir}/usr/local/lib/"
+
+  for file in certutil cmsutil crlutil modutil pk12util shlibsign signtool signver ssltap; do
+    install -m755 mozilla/dist/*.OBJ/bin/${file} "${pkgdir}/usr/local/bin/"
+  done
+
+  install -m644 mozilla/dist/public/nss/*.h "${pkgdir}/usr/local/include/nss/"
+}
