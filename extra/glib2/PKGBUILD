@@ -1,26 +1,83 @@
+# $Id: PKGBUILD 172097 2012-11-28 10:31:12Z jgc $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
 pkgname=glib2
-_pkgname=glib20
 pkgver=2.28.8
 pkgrel=5
-category=devel
 pkgdesc="Common C routines used by GTK+ and other libs"
 url="http://www.gtk.org/"
 arch=(i686 x86_64)
 license=('LGPL')
-depends=('pcre' 'perl' 'pkgconf' 'python2')
-makedepends=('gmake')
+depends=('pcre' 'libffi' 'python2' 'pkgconf')
+makedepends=('pkg-config' 'python2' 'libxslt' 'docbook-xml')
 optdepends=('python2: for gdbus-codegen')
+options=('!libtool' '!docs' '!emptydirs')
 install=glib2.install
+source=(http://ftp.gnome.org/pub/GNOME/sources/glib/${pkgver%.*}/glib-$pkgver.tar.xz
+        patch-ae
+        patch-ag
+        patch-ah
+        patch-config.h.in
+        patch-gio_gdesktopappinfo.c
+        patch-gio_gunixcredentialsmessage.c
+        patch-gio_gunixmount.c
+        patch-gio_gunixmounts.c
+        patch-gio_gunixvolume.c
+        patch-gio_libasyncns_asyncns.c
+        patch-gio_tests_gdbus-peer.c
+        patch-gio_xdgmime_xdgmime.c
+        patch-gio_xdgmime_xdgmimecache.h
+        patch-glib-2.0.pc.in
+        patch-glib__libcharset__Makefile.in
+        patch-glib_Makefile.in
+        patch-glib_fix_hidden
+        patch-glib_gregex.c
+        patch-glib_gutils.c
+        patch-gmodule__gmodule-dl.c
+        patch-gobject_Makefile.in
+        patch-gthread_gthread-posix.c
+        )
+sha256sums=('855fcbf87cb93065b488358e351774d8a39177281023bae58c286f41612658a7'
+            '049240975cd2f1c88fbe7deb28af14d4ec7d2640495f7ca8980d873bb710cc97')
+
 build() {
-  cd "${portsdir}/${category}/${_pkgname}"
-  make clean
+  cd glib-$pkgver
+
+  for i in patch-ae patch-ag patch-ah patch-config.h.in patch-gio_gdesktopappinfo.c patch-gio_gunixcredentialsmessage.c patch-gio_gunixmount.c patch-gio_gunixmounts.c patch-gio_gunixvolume.c patch-gio_libasyncns_asyncns.c patch-gio_tests_gdbus-peer.c patch-gio_xdgmime_xdgmime.c patch-gio_xdgmime_xdgmimecache.h patch-glib-2.0.pc.in patch-glib_Makefile.in patch-glib__libcharset__Makefile.in patch-glib_fix_hidden patch-glib_gregex.c patch-glib_gutils.c patch-gmodule__gmodule-dl.c patch-gobject_Makefile.in patch-gthread_gthread-posix.c
+  do
+    patch -p0 -i "${srcdir}/$i"
+  done
+
+  sed -i '' -e 's|/usr/share/locale/locale|/usr/local/share/locale/locale|g' \
+        glib/gutils.c
+  sed -i '' -e 's|/lib/dbus/machine-id|/db/dbus/machine-id|g' \
+    gio/gdbusaddress.c gio/gdbusprivate.c \
+    po/*.po
+  sed -i '' -e 's|inotify_support=yes|inotify_support=no| ; s|#define HAVE_SYS_INOTIFY_H 1||' configure
+
+  PYTHON=/usr/local/bin/python2 ./configure --prefix=/usr/local --libdir=/usr/local/lib \
+      --sysconfdir=/usr/local/etc \
+      --enable-static --enable-shared --with-libiconv=gnu \
+      --disable-gtk-doc --with-html-dir=/usr/local/share/doc \
+      --disable-man --without-xml-catalog \
+      --disable-dtrace \
+      --with-pcre=system \
+      --disable-fam \
+      LDFLAGS="${LDFLAGS} -L/usr/local/lib -lintl" \
+      PTHREAD_CFLAGS="-pthread" \
+      PTHREAD_LIBS="-pthread" \
+      CFLAGS="${CFLAGS} -I/usr/local/include" \
+      CPPFLAGS="${CPPFLAGS} -I/usr/local/include"
   make
-  make deinstall
-  make package PACKAGES="${srcdir}"
 }
 
 package() {
-  cd "${pkgdir}"
-  tar xpf "${srcdir}/${category}/glib-${pkgver}_${pkgrel}.txz"
-}
+  cd glib-$pkgver
+  make completiondir=/usr/share/bash-completion/completions DESTDIR="$pkgdir" install
 
+  for _i in "$pkgdir/usr/share/bash-completion/completions/"*; do
+      chmod -x "$_i"
+  done
+# our package doesn't create this
+  # sed -i '' -e "s|#!/usr/bin/env python|#!/usr/bin/env python2|" "$pkgdir"/usr/local/bin/gdbus-codegen
+}
