@@ -23,6 +23,18 @@ source=(ftp://ftp.gtk.org/pub/gtk/v1.2/${pkgname}-${pkgver}.tar.gz \
         patch-gthread.pc.in
         patch-gutils.c
         )
+md5sums=('6fe30dad87c77b91b632def29dd69ef9'
+         '0241ba6343f18dd531f0de2148d0c27e'
+         '6f59d1b7ee9e891516fc0fdee9118c4e'
+         '8908fb1d358605b0cf48fe30fcbea988'
+         '7a005beca74f2febe586baf3021ef5bb'
+         '741f0dee70d69b4df5e17b335021ef51'
+         '5d84006e9e577e65852cdb11b2dd78ff'
+         '4b08f8a4855de72f7a037a5afd2a4885'
+         '21d36e69b7ef84ab1ba4e15465cf0bda'
+         'ee4a3df330ed981dbd0fecd48582c53a'
+         'e17d31e7c167d20ea91194c93b31317a'
+         'eb0da0899991aec45bede4b756529076')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
