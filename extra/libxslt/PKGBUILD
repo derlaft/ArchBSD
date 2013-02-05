@@ -1,29 +1,60 @@
+# $Id: PKGBUILD 149384 2012-02-07 12:34:45Z jgc $
+# Maintainer: Eric Belanger <eric@archlinux.org>
+# Contributor: John Proctor <jproctor@prium.net>
+
 pkgname=libxslt
 pkgver=1.1.28
 pkgrel=3
-category=textproc
-pkgdesc="The XSLT C library for GNOME"
+pkgdesc="XML stylesheet transformation library"
 arch=('i686' 'x86_64')
 url="http://xmlsoft.org/XSLT/"
-source=('libxslt.install')
-md5sums=('400b8cb3fb43d4f13a3a7d400569314e')
-install=libxslt.install
 license=('custom')
 depends=('libxml2' 'libgcrypt')
 makedepends=('python2')
+checkdepends=('docbook-xml')
 options=('!libtool')
+source=(ftp://xmlsoft.org/libxslt/${pkgname}-${pkgver}.tar.gz
+        patch-aa
+        patch-ab
+        patch-configure
+        patch-python__Makefile.in
+        patch-python__tests__Makefile.in
+       )
+md5sums=('e61d0364a30146aaa3001296f853b2b9'
+         'ce9744943575efaa6b5501668899b753')
 
 build() {
-  cd "$portsdir/$category/$pkgname"
-  make clean
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  sed -i '' -e 's|/usr/bin/python -u|/usr/local/bin/python2 -u|g' \
+            -e 's|/usr/bin/python$|/usr/local/bin/python2|g' \
+      python/tests/*.py
+
+  for i in patch-aa patch-ab patch-configure patch-python__Makefile.in patch-python__tests__Makefile.in
+  do
+    patch -p0 -i "${srcdir}/$i"
+  done
+
+  sed -i '' -e '/^install-data-am:/ s|install-data-local||' \
+      doc/Makefile.in
+  sed -i '' -e 's|[$](bindir)/xsltproc|../xsltproc/xsltproc|g ; s|[$](bindir)/xmllint|../xmllint/xmllint|g' \
+      doc/Makefile.in
+
+  ./configure --prefix=/usr/local --with-python=/usr/local/bin/python2 \
+              --with-html-dir=/usr/local/share/doc
   make
-  make deinstall
-  make package PACKAGES="$srcdir"
+}
+
+check() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make check
 }
 
 package() {
-  cd $pkgdir
-  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+
+  install -d "${pkgdir}/usr/local/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/local/share/licenses/${pkgname}/"
+
+  rm -f "${pkgdir}"/usr/local/lib/python*/site-packages/*.a
 }
-
-
