@@ -84,6 +84,7 @@ build() {
       --disable-dtrace \
       --with-pcre=system \
       --disable-fam \
+      --target=$CHOST \
       LDFLAGS="${LDFLAGS} -L/usr/local/lib -lintl" \
       PTHREAD_CFLAGS="-pthread" \
       PTHREAD_LIBS="-pthread" \
