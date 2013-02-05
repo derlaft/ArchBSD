@@ -34,6 +34,24 @@ source=(ftp://ftp.mozilla.org/pub/security/nss/releases/NSS_3_14_1_WITH_CKBI_1_9
         patch-sysdb
         patch-tests
         )
+md5sums=('49e6661758deb0c469f0b4edd4e727d5'
+         'd41d8cd98f00b204e9800998ecf8427e'
+         '0fbed93b39c9805bbc587aa2e11584f3'
+         'f22d3f8ab12732fafb6458847cf07779'
+         '02101298c41b06dbfe6a2d31a89f1261'
+         '777801e976190180ed6e67637f925d03'
+         'c98cfc6146737352018d12c03e06e348'
+         '3fc2c47e8fd619fb0ec504205babac43'
+         '69c4055a0b2126e6051f12057cada6e4'
+         '31490bda966995786e835fe76112303e'
+         '2334d612fa17f31ce23439a4ee70f89a'
+         'd5dd12dc30345129a2c029559ce2bb64'
+         'bb98ce126e09a0dd4e513c4c31c2f904'
+         'efb8a511089d1fb10eceba155df5a8c9'
+         '669316030ef4aa17d80cbf422d186bb0'
+         'a5daa2cdbe13f034f3aca2b945cd26f0'
+         '9748ab0daf9bb4efe881466d34ec04ca'
+         'f05ae9af421b8b04eae51b54071b5f08')
 
 build() {
   cd "${srcdir}/${pkgname}-${_pkgver}/mozilla/security/nss"
