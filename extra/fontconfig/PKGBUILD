@@ -29,6 +29,13 @@ build() {
   libtoolize -f
   autoreconf -fi
 
+# ltverhack:
+  for i in ltmain.sh libtool; do
+    sed -i '' -e '/freebsd-elf)/,/;;/ s|major="\.$current"|major=.1|' \
+              -e '/freebsd-elf)/,/;;/ s|versuffix="\.$current"|versuffix="$major"|' \
+        $i
+  done
+
   ./configure --prefix=/usr/local \
     --sysconfdir=/usr/local/etc \
     --with-templatedir=/usr/local/etc/fonts/conf.avail \
