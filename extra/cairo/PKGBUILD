@@ -1,24 +1,60 @@
+# $Id: PKGBUILD 175889 2013-01-23 11:37:31Z jgc $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Contributor: Brice Carpentier <brice@daknet.org>
+
 pkgname=cairo
-pkgver=1.10.2
-pkgrel=5
-category=graphics
+pkgver=1.12.10
+pkgrel=2
 pkgdesc="Cairo vector graphics library"
 arch=(i686 x86_64)
 license=('LGPL' 'MPL')
 url="http://cairographics.org/"
-depends=('fontconfig' 'gio-fam-backend' 'libXrender' 'pixman' 'png' 'xcb-util-renderutil' )
-makedepends=('bigreqsproto' 'cmake' 'cmake-modules' 'gio-fam-backend' 'inputproto' 'libcheck' 'libgcrypt' 'libgpg-error' 'libxml2' 'libxslt' 'xcb-proto' 'xcmiscproto' 'xextproto' 'xf86bigfontproto' 'xorg-macros' 'xtrans' )
+depends=('libpng' 'libxrender' 'libxext' 'fontconfig' 'pixman>=0.28.0' 'glib2')
+#makedepends=('librsvg' 'poppler-glib' 'libspectre' 'gtk-doc') # 'libdrm')
+makedepends=('librsvg' 'poppler-glib' 'libspectre' 'glproto') # 'libdrm')
+optdepends=('xcb-util: for XCB backend') # really needed?
+provides=('cairo-xcb')
+replaces=('cairo-xcb')
+#options=('!libtool')
+source=(http://cairographics.org/releases/$pkgname-$pkgver.tar.xz
+  	revert-xlib-map-to-image-requires-an-extents.patch
+  	revert-xlib-Simplify-source-creation-by-use-of-map-to-image.patch
+    patch-src_cairo-wideint-type-private.h
+    patch-src_cairo-xlib-display.c
+    patch-src_cairoint.h
+    )
+sha1sums=('be06d5aaa272bbbd08380f71ca710d5612881493'
+          '8bc096dd16a885ad041cb2137a64757f32d1cc88'
+          'fd8ffd9aba3679c344e4f25494f199a51b0ae62c')
 
 build() {
-  cd "${portsdir}/${category}/${pkgname}"
-  make clean
+  cd "$srcdir/$pkgname-$pkgver"
+  patch -Np1 -R -i ../revert-xlib-map-to-image-requires-an-extents.patch
+  patch -Np1 -R -i ../revert-xlib-Simplify-source-creation-by-use-of-map-to-image.patch
+  for i in patch-src_cairo-wideint-type-private.h patch-src_cairo-xlib-display.c patch-src_cairoint.h
+  do
+    patch -p0 -i "${srcdir}/$i"
+  done
+  ./configure --prefix=/usr/local \
+	--sysconfdir=/usr/local/etc \
+	--localstatedir=/var \
+	--disable-static \
+	--enable-tee \
+	--enable-gobject \
+	--disable-xlib-xcb \
+	--with-html-dir=/usr/local/share/doc \
+	--disable-directfb
+	# --enable-test-surfaces \ takes ages
+	#--enable-drm # breaks build
   make
-  make deinstall
-  make package PACKAGES="${srcdir}"
 }
+
+#check() {
+#  cd "$srcdir/$pkgname-$pkgver"
+#  make -k check || /bin/true # 162 Passed, 328 Failed [8 crashed, 10 expected], 26 Skipped
+#}
 
 package() {
-  cd "${pkgdir}"
-  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_${pkgrel},2.txz"
+  cd "$srcdir/$pkgname-$pkgver"
+  make DESTDIR="$pkgdir" install
 }
-
