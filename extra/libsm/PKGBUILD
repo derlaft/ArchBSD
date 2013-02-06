@@ -1,26 +1,41 @@
+# $Id: PKGBUILD 151850 2012-03-03 13:43:52Z andyrtr $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
 pkgname=libsm
-_pkgname=libSM
-pkgver=1.2.0
+pkgver=1.2.1
 pkgrel=1
-category=x11
 pkgdesc="X11 Session Management library"
 arch=('i686' 'x86_64')
 license=('custom')
 url="http://xorg.freedesktop.org/"
 depends=('libice')
 makedepends=('xorg-util-macros' 'xtrans')
+options=('!libtool')
+source=(${url}/releases/individual/lib/libSM-${pkgver}.tar.bz2
+        patch-Makefile.am
+        patch-sm_genid.c
+        )
+sha1sums=('8d354a165e330022ffd3606aba562b8c8154213d'
+          '4fbb5974e51ce1723aa637483d0bb3d8dbf982e8'
+          '0e61ac2a1e352ee336a658977481065d3c87c755')
 
 build() {
-
-  cd "$portsdir/$category/$_pkgname"
-  make clean
+  cd "${srcdir}/libSM-${pkgver}"
+  patch -p0 -i "$srcdir"/patch-Makefile.am
+  patch -p0 -i "$srcdir"/patch-sm_genid.c
+  ./configure --prefix=/usr/local --sysconfdir=/sur/local/etc \
+              --disable-docs --without-xmlto
   make
-  make deinstall
-  make package PACKAGES="$srcdir"
 }
 
 package() {
-  cd $pkgdir
-  tar xpf "${srcdir}/${category}/${_pkgname}-${pkgver},${pkgrel}.txz"
-}
+  cd "${srcdir}/libSM-${pkgver}"
+  make DESTDIR="${pkgdir}" install
 
+  install -dm755 "${pkgdir}/usr/local/libdata"
+  mv "${pkgdir}/usr/local/lib/pkgconfig" \
+     "${pkgdir}/usr/local/libdata/pkgconfig"
+
+  install -dm755 "${pkgdir}/usr/local/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/local/share/licenses/${pkgname}/COPYING"
+}
