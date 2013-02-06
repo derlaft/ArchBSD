@@ -1,24 +1,34 @@
+# $Id: PKGBUILD 151848 2012-03-03 13:42:06Z andyrtr $
+# Contributor: Alexander Baldeck <alexander@archlinux.org>
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
 pkgname=libice
-_pkgname=libICE
-pkgver=1.0.7
+pkgver=1.0.8
 pkgrel=1
-category=x11
 pkgdesc="X11 Inter-Client Exchange library"
 arch=('i686' 'x86_64')
 url="http://xorg.freedesktop.org/"
-depends=('xproto')
-makedepends=('xtrans')
+depends=('xproto>=7.0.18')
+makedepends=('pkgconf' 'xtrans>=1.2.5')
+#options=('!libtool')
+source=(${url}/releases/individual/lib/libICE-${pkgver}.tar.bz2)
+license=('custom')
+sha1sums=('ddb14df8bbc43df7322978f5f9f802936e2a7324')
 
 build() {
-  cd "${portsdir}/${category}/${_pkgname}"
-  make clean
+  cd "${srcdir}/libICE-${pkgver}"
+  ./configure --prefix=/usr/local --sysconfdir=/usr/local/etc
   make
-  make deinstall
-  make package PACKAGES="${srcdir}"
 }
 
 package() {
-  cd "${pkgdir}"
-  tar xpf "${srcdir}/${category}/${_pkgname}-${pkgver},${pkgrel}.txz"
-}
+  cd "${srcdir}/libICE-${pkgver}"
+  make DESTDIR="${pkgdir}" install
 
+  install -dm755 "${pkgdir}/usr/local/libdata"
+  mv "${pkgdir}/usr/local/lib/pkgconfig" \
+     "${pkgdir}/usr/local/libdata/pkgconfig"
+
+  install -dm755 "${pkgdir}/usr/local/share/licenses/${pkgname}/"
+  install -m644 COPYING "${pkgdir}/usr/local/share/licenses/${pkgname}/COPYING"
+}
