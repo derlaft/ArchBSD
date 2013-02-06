@@ -10,7 +10,7 @@ license=('custom')
 url="http://xorg.freedesktop.org/"
 depends=('libice')
 makedepends=('xorg-util-macros' 'xtrans')
-options=('!libtool')
+#options=('!libtool')
 source=(${url}/releases/individual/lib/libSM-${pkgver}.tar.bz2
         patch-Makefile.am
         patch-sm_genid.c
