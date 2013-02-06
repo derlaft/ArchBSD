@@ -1,25 +1,52 @@
+# $Id: PKGBUILD 169446 2012-10-21 10:49:41Z ibiru $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Contributor: dorphell <dorphell@archlinux.org>
+# Contributor: Travis Willard <travis@archlinux.org>
+# Contributor: Douglas Soares de Andrade <douglas@archlinux.org>
+
 pkgname=libpng
-_pkgname=png
 pkgver=1.5.13
+_apngver=1.5.13
 pkgrel=1
-category=graphics
 pkgdesc="A collection of routines used to create PNG format graphics files"
 arch=('i686' 'x86_64')
 url="http://www.libpng.org/pub/png/libpng.html"
 license=('custom')
+options=('!libtool')
+source=("http://downloads.sourceforge.net/sourceforge/$pkgname/$pkgname-$pkgver.tar.xz"
+        "http://downloads.sourceforge.net/sourceforge/libpng-apng/libpng-$_apngver-apng.patch.gz"
+        patch-ac
+        patch-makefile.freebsd
+        )
+md5sums=('0b607a685da977f1bfc96e1c47055183'
+         '23c8765aa6ca188c0575386d5ea8fe70'
+         '8bafc2a81bf6c588727cec782aaefe85'
+         'cf54ad12ef74d5d4bf01d61a40cccb06')
 
 build() {
+  cd $pkgname-$pkgver
 
-  cd "$portsdir/$category/$_pkgname"
-  make clean
+  # Add animated PNG (apng) support
+  # see http://sourceforge.net/projects/libpng-apng/
+  patch -p1 -i ../libpng-$_apngver-apng.patch
+
+  patch -p0 -i "${srcdir}/patch-ac"
+  patch -p0 -i "${srcdir}/patch-makefile.freebsd"
+
+  ./configure --prefix=/usr/local
   make
-  make deinstall
-  make package PACKAGES="$srcdir"
 }
 
 package() {
-  cd $pkgdir
-  tar xpf "${srcdir}/${category}/${_pkgname}-${pkgver}.txz"
+  cd $pkgname-$pkgver
+  make DESTDIR="$pkgdir" install
+
+  cd contrib/pngminus
+  make PNGLIB="-L$pkgdir/usr/local/lib -lpng" -f makefile.std png2pnm pnm2png
+  install -m755 png2pnm pnm2png "$pkgdir/usr/local/bin/"
+  install -d -m755 "$pkgdir/usr/local/share/licenses/$pkgname"
+  install    -m644 ../../LICENSE "$pkgdir/usr/local/share/licenses/$pkgname/LICENSE"
+
+  install -dm755 "$pkgdir/usr/local/libdata"
+  mv "$pkgdir/usr/local/lib/pkgconfig" "$pkgdir/usr/local/libdata/pkgconfig"
 }
-
-
