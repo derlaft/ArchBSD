@@ -157,32 +157,3 @@
  	    do \
  	    if [ ! -d "$$i" ] ; then \
  		echo "Making directory $$i"; \
-@@ -918,15 +934,21 @@
- 		else true; \
- 		fi; \
- 	    done;
--	@echo "Installing header files to $(INCLUDE_INSTALL_DIR)/";
--	@for i in $(GENERIC_DIR)/tcl.h $(GENERIC_DIR)/tclDecls.h \
--		$(GENERIC_DIR)/tclOO.h $(GENERIC_DIR)/tclOODecls.h \
--		$(GENERIC_DIR)/tclPlatDecls.h \
--		$(GENERIC_DIR)/tclTomMath.h \
--		$(GENERIC_DIR)/tclTomMathDecls.h ; \
-+	@for i in $(GENERIC_DIR)/*.h ; \
-+	    do \
-+	    $(INSTALL_DATA) $$i "$(GENERIC_INCLUDE_INSTALL_DIR)"; \
-+	    done;
-+	@for i in $(UNIX_DIR)/*.h ; \
- 	    do \
--	    $(INSTALL_DATA) $$i "$(INCLUDE_INSTALL_DIR)"; \
-+	    $(INSTALL_DATA) $$i "$(UNIX_INCLUDE_INSTALL_DIR)"; \
- 	    done;
-+	@ln -sf "$(GENERIC_INCLUDE_INSTALL_DIR)"/tcl.h "$(INCLUDE_INSTALL_DIR)"/tcl.h
-+	@ln -sf "$(GENERIC_INCLUDE_INSTALL_DIR)"/tclDecls.h "$(INCLUDE_INSTALL_DIR)"/tclDecls.h
-+	@ln -sf "$(GENERIC_INCLUDE_INSTALL_DIR)"/tclPlatDecls.h "$(INCLUDE_INSTALL_DIR)"/tclPlatDecls.h
-+	@ln -sf "$(GENERIC_INCLUDE_INSTALL_DIR)"/tclOO.h "$(INCLUDE_INSTALL_DIR)"/tclOO.h
-+	@ln -sf "$(GENERIC_INCLUDE_INSTALL_DIR)"/tclOODecls.h "$(INCLUDE_INSTALL_DIR)"/tclOODecls.h
-+	@ln -sf "$(GENERIC_INCLUDE_INSTALL_DIR)"/tclTomMath.h "$(INCLUDE_INSTALL_DIR)"/tclTomMath.h
-+	@ln -sf "$(GENERIC_INCLUDE_INSTALL_DIR)"/tclTomMathDecls.h "$(INCLUDE_INSTALL_DIR)"/tclTomMathDecls.h
- 
- # Optional target to install private headers
- install-private-headers:
