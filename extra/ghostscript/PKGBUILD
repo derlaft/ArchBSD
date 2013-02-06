@@ -19,18 +19,18 @@ patch-Resource-Init-FAPIcidfmap patch-Resource-Init-FAPIconfig patch-Resource-In
 patch-Resource-Init-gs_statd.ps patch-Resource-Init-gs_ttf.ps patch-Resource-Init-pdf_font.ps
 patch-base-Makefile.in patch-base-configure.ac patch-base-devs.mak
 patch-base-gdevl256.c patch-base-gdevperm.c patch-base-gdevplib.c patch-base-gdevvglb.c
-patch-base-gs.mak patch-base-gsicc_create.c patch-base-gxobj.h patch-base-openjpeg.mak
+patch-base-gs.mak patch-base-gsicc_create.c patch-base-gxobj.h
 patch-base-unix-gcc.mak patch-base-unixinst.mak patch-contrib-contrib.mak
 patch-contrib__japanese__dmp_site.ps patch-contrib__japanese__gdevdmpr.c patch-lips:gdevlips.c
-patch-lips:gdevlips.h patch-openjpeg-libopenjpeg-opj_includes.h
-patch-openjpeg-libopenjpeg-opj_malloc.h patch-psi-zicc.c
+patch-lips:gdevlips.h 
+patch-psi-zicc.c
 )
 #patch-epag-ert.c patch-epag__gdevepag.c patch-base-contrib.mak 
 #epag.contrib.mak
 
 build() {
   cd ${srcdir}/ghostscript-${pkgver}
-  for i in patch-Resource-Init-FAPIcidfmap patch-Resource-Init-FAPIconfig patch-Resource-Init-cidfmap patch-Resource-Init-gs_statd.ps patch-Resource-Init-gs_ttf.ps patch-Resource-Init-pdf_font.ps patch-base-Makefile.in patch-base-configure.ac patch-base-devs.mak patch-base-gdevl256.c patch-base-gdevperm.c patch-base-gdevplib.c patch-base-gdevvglb.c patch-base-gs.mak patch-base-gsicc_create.c patch-base-gxobj.h patch-base-openjpeg.mak patch-base-unix-gcc.mak patch-base-unixinst.mak patch-contrib-contrib.mak patch-contrib__japanese__dmp_site.ps patch-contrib__japanese__gdevdmpr.c patch-lips:gdevlips.c patch-lips:gdevlips.h patch-openjpeg-libopenjpeg-opj_includes.h patch-openjpeg-libopenjpeg-opj_malloc.h patch-psi-zicc.c
+  for i in patch-Resource-Init-FAPIcidfmap patch-Resource-Init-FAPIconfig patch-Resource-Init-cidfmap patch-Resource-Init-gs_statd.ps patch-Resource-Init-gs_ttf.ps patch-Resource-Init-pdf_font.ps patch-base-Makefile.in patch-base-configure.ac patch-base-devs.mak patch-base-gdevl256.c patch-base-gdevperm.c patch-base-gdevplib.c patch-base-gdevvglb.c patch-base-gs.mak patch-base-gsicc_create.c patch-base-gxobj.h patch-base-unix-gcc.mak patch-base-unixinst.mak patch-contrib-contrib.mak patch-contrib__japanese__dmp_site.ps patch-contrib__japanese__gdevdmpr.c patch-lips:gdevlips.c patch-lips:gdevlips.h patch-psi-zicc.c
   do
   	  msg "patch $i"
     patch -p0 -i "$srcdir/$i"
@@ -38,7 +38,7 @@ build() {
   
   # force it to use system-libs
   # rm -rf jpeg libpng zlib jasper expat tiff lcms freetype 
-  rm -rf jpeg libpng zlib expat tiff freetype lcms lcms2 jasper
+  rm -rf jpeg libpng zlib expat tiff freetype lcms lcms2 jasper openjpeg
 
   export CFLAGS="${CFLAGS} -I/usr/local/include"
   export CPPFLAGS="${CPPFLAGS} -I/usr/local/include"
