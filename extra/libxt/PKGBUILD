@@ -1,25 +1,35 @@
+# $Id: PKGBUILD 153609 2012-03-16 17:09:01Z andyrtr $
+#Maintainer: Jan de Groot <jgc@archlinux.org>
+
 pkgname=libxt
-_pkgname=libXt
-pkgver=1.1.1
+pkgver=1.1.3
 pkgrel=1
 pkgdesc="X11 toolkit intrinsics library"
-category=x11-toolkits
 arch=('i686' 'x86_64')
 url="http://xorg.freedesktop.org/"
 license=('custom')
 depends=('libsm' 'libx11')
-makedepends=('bigreqsproto' 'inputproto' 'libcheck' 'libgcrypt' 'libgpg-error' 'libxml2' 'libxslt' 'python2' 'xcb-proto' 'xcmiscproto' 'xextproto' 'xf86bigfontproto')
-options=('!libtool')
+makedepends=('xorg-util-macros')
+#options=('!libtool')
+source=("${url}/releases/individual/lib/libXt-${pkgver}.tar.bz2")
+sha1sums=('2cef068bc4d7170e31b89b5c06aeaf4451a7699a')
 
 build() {
-  cd "$portsdir/$category/$_pkgname"
-  make clean
-  make 
-  make deinstall
-  make package PACKAGES="$srcdir"
+  cd "${srcdir}/libXt-${pkgver}"
+  sed -i '' -e 's/test.*-traditional.*;/true;/' \
+    configure
+  ./configure --prefix=/usr/local --sysconfdir=/usr/local/etc --disable-static
+  make
 }
 
 package() {
-  cd $pkgdir
-  tar xpf "${srcdir}/${category}/${_pkgname}-${pkgver},${pkgrel}.txz"
+  cd "${srcdir}/libXt-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+
+  install -dm755 "${pkgdir}/usr/local/libdata"
+  mv "${pkgdir}/usr/local/lib/pkgconfig" \
+     "${pkgdir}/usr/local/libdata/pkgconfig"
+
+  install -m755 -d "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/"
 }
