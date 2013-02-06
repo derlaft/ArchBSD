@@ -1,0 +1,95 @@
+# $Id: PKGBUILD 175005 2013-01-10 17:58:12Z andyrtr $
+# Maintainer: Andreas Radke <andyrtr@archlinux.org>
+# Contributor: Tom Newsom <Jeepster@gmx.co.uk>
+
+pkgbase="sqlite"
+pkgname=('sqlite' 'sqlite-tcl' 'sqlite-doc') 
+_amalgamationver=3071502
+#_docver=${_amalgamationver}
+_docver=3071502
+pkgver=3.7.15.2
+pkgrel=1
+pkgdesc="A C library that implements an SQL database engine"
+arch=('i686' 'x86_64')
+license=('custom')
+url="http://www.sqlite.org/"
+makedepends=('tcl')
+source=( # tarball containing the amalgamation for SQLite >= 3.7.5 together with a configure script and makefile for building it; includes now also the Tcl Extension Architecture (TEA)
+	http://www.sqlite.org/sqlite-autoconf-$_amalgamationver.tar.gz
+	http://www.sqlite.org/sqlite-doc-${_docver}.zip
+	license.txt)
+options=('!libtool' '!emptydirs')
+md5sums=('bcb0ab0b5b30116b2531cfeef3c861b4'
+         '159594c17290291fbbb47ee190b180f9'
+         'c1cdbc5544034d9012e421e75a5e4890')
+
+build() {
+  export CFLAGS="$CFLAGS -DSQLITE_ENABLE_FTS3=1 -DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_ENABLE_UNLOCK_NOTIFY -DSQLITE_SECURE_DELETE"
+
+  # build sqlite
+  cd "$srcdir"/sqlite-autoconf-$_amalgamationver
+  # ports uses a patch for this, but it's the only thing they do, and simple
+  # doing it with sed now to avoid any patch conflicts
+  sed -i '' -e 's|^\(pkgconfigdir = \).*$|\1${prefix}/libdata/pkgconfig|' Makefile.in
+  ./configure --prefix=/usr/local \
+	--enable-static
+  make
+  
+  # build the tcl extension    
+  cd "$srcdir"/sqlite-autoconf-$_amalgamationver/tea
+  ./configure --prefix=/usr/local \
+	--with-system-sqlite \
+	--with-tclinclude=/usr/local/include/tcl8.6 \
+	--with-tcl=/usr/local/lib/tcl8.6
+  make
+
+}
+
+package_sqlite() {
+ pkgdesc="A C library that implements an SQL database engine"
+ provides=("sqlite3=$pkgver")
+ replaces=("sqlite3")
+ 
+  cd ${srcdir}/sqlite-autoconf-$_amalgamationver
+  make DESTDIR=${pkgdir} install
+  
+  # license
+  install -d -m755 ${pkgdir}/usr/local/share/licenses/${pkgname}/license.txt
+  install    -m644 ${srcdir}/license.txt ${pkgdir}/usr/local/share/licenses/${pkgname}/license.txt
+}
+
+package_sqlite-tcl() {
+ 
+ pkgdesc="sqlite Tcl Extension Architecture (TEA)"
+ depends=('sqlite')
+ provides=("sqlite3-tcl=$pkgver")
+ replaces=("sqlite3-tcl")
+ 
+  cd ${srcdir}/sqlite-autoconf-$_amalgamationver/tea
+  make DESTDIR=${pkgdir} install
+}
+
+package_sqlite-doc() {
+
+ pkgdesc="most of the static HTML files that comprise this website, including all of the SQL Syntax and the C/C++ interface specs and other miscellaneous documentation"
+ #arch=('any') - not yet supported
+ provides=("sqlite3-doc=$pkgver")
+ replaces=("sqlite3-doc")
+ 
+  #cd ${srcdir}/sqlite-doc-${_amalgamationver}
+  cd ${srcdir}/sqlite-doc-${_docver}
+  mkdir -p ${pkgdir}/usr/local/share/doc/${pkgbase}
+  cp -R *  ${pkgdir}/usr/local/share/doc/${pkgbase}/
+  
+  # fix permissions and remove obsolete files; https://bugs.archlinux.org/task/24605
+  find ${pkgdir} -type f -perm 755 -exec ls -lha {} \;
+  find ${pkgdir} -type f -perm 755 -exec chmod 644 {} \;
+
+  find ${pkgdir} -type f -name '*~' -exec ls -lha {} \;
+  find ${pkgdir} -type d -name '*~' -exec ls -lha {} \;
+  find ${pkgdir} -name '*~' -exec rm -f {} \;
+
+  find ${pkgdir} -type f -name '.~*' -exec ls -lha {} \; # /build/pkg/sqlite-doc/usr/share/doc/sqlite/images/fileformat/.~lock.indexpage.odg#
+  find ${pkgdir} -type d -name '.~*' -exec ls -lha {} \;
+  find ${pkgdir} -name '.~*' -exec rm -f {} \;
+}
