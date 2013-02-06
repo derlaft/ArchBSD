@@ -1,25 +1,37 @@
+# $Id: PKGBUILD 173251 2012-12-16 17:45:49Z andyrtr $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Maintainer: Andreas Radke <andyrtr@archlinux.org>
+# Contributor: Alexander Baldeck <alexander@archlinux.org>
+
 pkgname=pixman
-pkgver=0.24.2
+pkgver=0.28.2
 pkgrel=1
-category=x11
 pkgdesc="The pixel-manipulation library for X and cairo"
-arch=('i686' 'x86_64')
+arch=(i686 x86_64)
 url="http://xorg.freedesktop.org"
 license=('custom')
-depends=('pkgconf' )
-makedepends=('libtool' 'perl' )
+makedepends=('libtool' 'perl')
+source=(http://xorg.freedesktop.org/releases/individual/lib/${pkgname}-${pkgver}.tar.bz2)
+sha1sums=('9e9ede6e13061030f9c827219cb87f47e32ecdb4')
 
 build() {
-  cd "$portsdir/$category/$pkgname"
-  make clean
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  ./configure --prefix=/usr/local --disable-static --disable-gtk
   make
-  make deinstall
-  make package PACKAGES="$srcdir"
+}
+
+check() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make check
 }
 
 package() {
-  cd $pkgdir
-  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  install -m755 -d "${pkgdir}/usr/local/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/local/share/licenses/${pkgname}/"
+
+  install -dm755 "${pkgdir}/usr/local/libdata"
+  mv "${pkgdir}/usr/local/lib/pkgconfig" \
+     "${pkgdir}/usr/local/libdata/pkgconfig"
 }
-
-
