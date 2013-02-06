@@ -1,23 +1,20 @@
-Status as of: Tue Feb  5 20:25:15 CET 2013
+Status as of: Wed Feb  6 17:13:33 CET 2013
 
 There are:
 0 [core]  Ports-Packages out of       32 total
                  Done:  100%
-89 [extra] Ports-Packages out of      156 total
-                 Done:  43%
-That's a total of 89 Ports-PKGBUILDs which need to be converted on this branch.
-There are a total of 188 packages.
-The total conversion progress is: 53%
+76 [extra] Ports-Packages out of      167 total
+                 Done:  55%
+That's a total of 76 Ports-PKGBUILDs which need to be converted on this branch.
+There are a total of 199 packages.
+The total conversion progress is: 62%
 
 Here's the TODO:
     
-    extra/cairo
     extra/consolekit
     extra/dbus-glib
     extra/dbus
     extra/dwm
-    extra/fontconfig
-    extra/freetype2
     extra/gdk-pixbuff2
     extra/giflib
     extra/gtk-update-icon-cache
@@ -30,16 +27,10 @@ Here's the TODO:
     extra/libdrm
     extra/libfontenc
     extra/libgl
-    extra/libice
-    extra/libjpeg
     extra/libpciaccess
-    extra/libpng
     extra/libpthread-stubs
-    extra/libsm
     extra/libthai
-    extra/libtiff
     extra/libwnck
-    extra/libx11
     extra/libxaw
     extra/libxcomposite
     extra/libxcursor
@@ -53,9 +44,7 @@ Here's the TODO:
     extra/libxkbfile
     extra/libxpm
     extra/libxrandr
-    extra/libxrender
     extra/libxres
-    extra/libxt
     extra/libxtst
     extra/libxv
     extra/libxxf86vm
@@ -74,7 +63,6 @@ Here's the TODO:
     extra/mkfontscale
     extra/pango
     extra/pciids
-    extra/pixman
     extra/polkit
     extra/rxvt-unicode
     extra/slim
@@ -99,5 +87,4 @@ Here's the TODO:
     extra/xorg-xkbcomp
     extra/xrdb
     extra/xsetroot
-    extra/xtrans
     extra/zsh
