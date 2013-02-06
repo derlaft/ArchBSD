@@ -16,6 +16,14 @@ sha1sums=('9e9ede6e13061030f9c827219cb87f47e32ecdb4')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
+
+# ltverhack:
+  for i in ltmain.sh libtool; do
+    sed -i '' -e '/freebsd-elf)/,/;;/ s|major="\.$current"|major=.9|' \
+              -e '/freebsd-elf)/,/;;/ s|versuffix="\.$current"|versuffix="$major"|' \
+        $i
+  done
+
   ./configure --prefix=/usr/local --disable-static --disable-gtk
   make
 }
