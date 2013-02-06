@@ -1,26 +1,51 @@
+# $Id: PKGBUILD 160633 2012-06-02 21:43:25Z andyrtr $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
 pkgname=libx11
-_pkgname=libX11
-pkgver=1.4.4
+pkgver=1.5.0
 pkgrel=1
-category=x11
 pkgdesc="X11 client-side library"
-arch=('i686' 'x86_64')
-url="http://xorg.freedesktop.org"
+arch=(i686 x86_64)
+url="http://xorg.freedesktop.org/"
+depends=('libxcb' 'xproto' 'kbproto')
+makedepends=('xorg-util-macros' 'xextproto' 'xtrans' 'inputproto')
+options=('!libtool')
 license=('custom')
-depends=('kbproto' 'libxcb')
-makedepends=('bigreqsproto' 'inputproto' 'libcheck' 'libgcrypt' 'libgpg-error' 'libxml2' 'libxslt' 'python2' 'xcb-proto' 'xcmiscproto' 'xextproto' 'xf86bigfontproto' 'xorg-macros' 'xtrans')
+source=(${url}/releases/individual/lib/libX11-${pkgver}.tar.bz2)
+sha256sums=('c382efd7e92bfc3cef39a4b7f1ecf2744ba4414a705e3bc1e697f75502bd4d86')
 
 build() {
-  cd "$portsdir/$category/$_pkgname"
-  make clean
-  make 
-  make deinstall
-  make package PACKAGES="$srcdir"
+  cd "${srcdir}/libX11-${pkgver}"
+
+  sed -i '' -e 's/test.*-traditional.*;/true;/' \
+    configure
+  sed -i '' -e '/^install-data-am:/,/^$/ s/install-specDATA//' \
+      nls/Makefile.in
+
+  ac_cv_path_PS2PDF="" \
+  ./configure --prefix=/usr/local --disable-static \
+              --datadir=/usr/local/lib \
+              --without-xmlto \
+              --disable-specs
+  make
 }
 
 package() {
-  cd $pkgdir
-  tar xpf "${srcdir}/${category}/${_pkgname}-${pkgver},${pkgrel}.txz"
+  cd "${srcdir}/libX11-${pkgver}"
+  make check
 }
 
+package() {
+  cd "${srcdir}/libX11-${pkgver}"
+  make DESTDIR="${pkgdir}" install
 
+  install -m755 -d "${pkgdir}/usr/local/etc/profile.d"
+
+  install -dm755 "${pkgdir}/usr/local/libdata"
+  mv "${pkgdir}/usr/local/lib/pkgconfig" \
+     "${pkgdir}/usr/local/libdata/pkgconfig"
+
+  install -d -m755 "${pkgdir}/usr/local/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/local/share/licenses/${pkgname}/"
+}
