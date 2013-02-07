@@ -1,26 +1,43 @@
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Contributor: Alexander Baldeck <alexander@archlinux.org>
+
 pkgname=libpciaccess
 pkgver=0.12.1
 pkgrel=1
-category=devel
 pkgdesc="X11 PCI access library"
 arch=(i686 x86_64)
 license=('custom')
 url="http://xorg.freedesktop.org/"
-depends=('pciids' 'pkgconf')
-makedepends=('pkgconfig' 'xorg-util-macros')
-options=('!libtool')
+depends=('pciids')
+makedepends=('pkgconf' 'xorg-util-macros')
+source=(${url}/releases/individual/lib/${pkgname}-${pkgver}.tar.bz2
+        patch-src-common_init.c
+        patch-src-freebsd_pci.c
+        patch-src-pciaccess_private.h
+        )
+md5sums=('d6363ee9f4df79f6fc47cba7c67b0d35'
+         '612da088062606ccd3be6b88da813bac'
+         '66cd7181c1a64d21ff1937620883b754'
+         'fcf90a9811e06be52da385603ac53648')
 
 build() {
-  cd "$portsdir/$category/$pkgname"
-  make clean
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  for i in patch-src-common_init.c patch-src-freebsd_pci.c patch-src-pciaccess_private.h
+  do
+    patch -p0 -i "${srcdir}/$i"
+  done
+  ./configure --prefix=/usr/local --sysconfdir=/usr/local/etc \
+              --with-pciids-path=/usr/local/share/pciids
   make
-  make deinstall
-  make package PACKAGES="$srcdir"
 }
-
 package() {
-  cd $pkgdir
-  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+
+  install -dm755 "${pkgdir}/usr/local/libdata"
+  mv "${pkgdir}/usr/local/lib/pkgconfig" \
+     "${pkgdir}/usr/local/libdata/pkgconfig"
+
+  install -m755 -d "${pkgdir}/usr/local/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/local/share/licenses/${pkgname}/"
 }
-
-
