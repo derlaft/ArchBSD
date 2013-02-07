@@ -15,7 +15,6 @@ depends=('libx11')
 provides=("libungif=${pkgver}")
 conflicts=('libungif')
 replaces=('libungif')
-options=('!libtool')
 source=(http://downloads.sourceforge.net/sourceforge/giflib/${pkgname}-${pkgver}.tar.bz2
         patch-Makefile.in
         patch-gif_lib.h
