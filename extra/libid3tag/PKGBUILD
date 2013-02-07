@@ -1,25 +1,45 @@
+# $Id: PKGBUILD 150540 2012-02-18 12:17:15Z pierre $
+# Maintainer:
+# Contributor: dorphell <dorphell@archlinux.org>
+
 pkgname=libid3tag
-pkgver=0.15.1
-_pkgver=0.15.1b
-pkgrel=1
-category=audio
+pkgver=0.15.1b
+pkgrel=7
 pkgdesc="library for id3 tagging"
 arch=('i686' 'x86_64')
 url="http://www.underbit.com/products/mad/"
 license=('GPL')
 options=('!libtool')
+source=("ftp://ftp.mars.org/pub/mpeg/${pkgname}-${pkgver}.tar.gz"
+	'10_utf16.diff' '11_unknown_encoding.diff' 'CVE-2008-2109.patch'
+    'patch-id3tag.pc.in' 'patch-ltmain.sh'
+    )
+md5sums=('e5808ad997ba32c498803822078748c3'
+         '4f9df4011e6a8c23240fff5de2d05f6e'
+         '3ca856b97924d48a0fdfeff0bd83ce7d'
+         'c51822ea6301b1ca469975f0c9ee8e34'
+         'e031f7dc118b4b4cb91032352505a846'
+         'dc06391bdd75d893c2f6fdc70952a1bb')
 
 build() {
-  cd "$portsdir/$category/$pkgname"
-  make clean
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  patch -p1 -i ${srcdir}/10_utf16.diff
+  patch -p1 -i ${srcdir}/11_unknown_encoding.diff
+  patch -Np0 -i ${srcdir}/CVE-2008-2109.patch
+
+  for i in patch-id3tag.pc.in patch-ltmain.sh
+  do
+    patch -p0 -i "${srcdir}/$i"
+  done
+
+  ./configure --prefix=/usr/local
   make
-  make deinstall
-  make package PACKAGES="$srcdir"
+  CONFIG_FILES=id3tag.pc CONFIG_HEADERS= /usr/local/bin/bash ./config.status
 }
 
 package() {
-  cd $pkgdir
-  tar xpf "${srcdir}/${category}/${pkgname}-${_pkgver}.txz"
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  install -d -m755 "${pkgdir}/usr/local/libdata/pkgconfig/"
+  install -m644 id3tag.pc "${pkgdir}/usr/local/libdata/pkgconfig/id3tag.pc"
 }
-
-
