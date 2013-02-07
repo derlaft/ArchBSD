@@ -7,7 +7,7 @@ url="http://xorg.freedesktop.org/"
 depends=('libxext' 'libxt')
 makedepends=('xorg-util-macros')
 license=('custom')
-options=('!libtool')
+#options=('!libtool')
 source=("${url}/releases/individual/lib/libXmu-${pkgver}.tar.bz2")
 sha1sums=('3e280aa927d78c05f94db6c7ae606f7ad132b495')
 
@@ -21,7 +21,10 @@ package() {
   cd "${srcdir}/libXmu-${pkgver}"
   gmake DESTDIR="${pkgdir}" install
 
+  install -dm755 "${pkgdir}/usr/local/libdata"
+  mv "${pkgdir}/usr/local/lib/pkgconfig" \
+     "${pkgdir}/usr/local/libdata/pkgconfig"
+
   install -m755 -d "${pkgdir}/usr/local/share/licenses/${pkgname}"
   install -m644 COPYING "${pkgdir}/usr/local/share/licenses/${pkgname}/"
 }
-
