@@ -1,28 +1,21 @@
-Status as of: Thu Feb  7 19:13:03 CET 2013
+Status as of: Thu Feb  7 23:58:54 CET 2013
 
 There are:
 0 [core]  Ports-Packages out of       32 total
                  Done:  100%
-70 [extra] Ports-Packages out of      175 total
-                 Done:  60%
-That's a total of 70 Ports-PKGBUILDs which need to be converted on this branch.
+62 [extra] Ports-Packages out of      175 total
+                 Done:  65%
+That's a total of 62 Ports-PKGBUILDs which need to be converted on this branch.
 There are a total of 207 packages.
-The total conversion progress is: 67%
+The total conversion progress is: 71%
 
 Here's the TODO:
     
     extra/consolekit
-    extra/dbus-glib
     extra/dwm
-    extra/giflib
     extra/hal
     extra/irssi
-    extra/lib3dtag
-    extra/libdmx
-    extra/libdrm
-    extra/libfontenc
     extra/libgl
-    extra/libpciaccess
     extra/libpthread-stubs
     extra/libthai
     extra/libwnck
@@ -56,7 +49,6 @@ Here's the TODO:
     extra/mesa
     extra/mkfontscale
     extra/pango
-    extra/pciids
     extra/polkit
     extra/rxvt-unicode
     extra/slim
