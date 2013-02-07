@@ -1,6 +1,6 @@
-# $Id: PKGBUILD 150540 2012-02-18 12:17:15Z pierre $
 # Maintainer:
 # Contributor: dorphell <dorphell@archlinux.org>
+# Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=libid3tag
 pkgver=0.15.1b
@@ -34,7 +34,7 @@ build() {
 
   ./configure --prefix=/usr/local
   make
-  CONFIG_FILES=id3tag.pc CONFIG_HEADERS= /usr/local/bin/bash ./config.status
+  CONFIG_FILES=id3tag.pc CONFIG_HEADERS= sh ./config.status
 }
 
 package() {
