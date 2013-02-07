@@ -22,6 +22,11 @@ source=(http://downloads.sourceforge.net/sourceforge/giflib/${pkgname}-${pkgver}
         patch-rgb2gif.c
         quantize.c
         )
+md5sums=('711ad48551ee14db7c200b5f402df849'
+         'c2b7b2f881b96026aa9ff2195cdbbfc9'
+         '8aabce02e89c4df08b0cbdceab0f9876'
+         '42ace0d2ed86baf15c05eb0f6b40ecb3'
+         '7939ab2e43a1c65ce2bd302a4bad64ad')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
