@@ -1,26 +1,31 @@
+#Maintainer: Jan de Groot <jgc@archlinux.org>
+
 pkgname=libdmx
-pkgver=1.1.1
+pkgver=1.1.2
 pkgrel=1
-category=x11
 pkgdesc="X11 Distributed Multihead extension library"
 arch=('i686' 'x86_64')
 url="http://xorg.freedesktop.org/"
 license=('custom')
-depends=('dmxproto' 'libxext' )
-makedepends=('bigreqsproto' 'inputproto' 'libcheck' 'libgcrypt' 'libgpg-error' 'libxml2' 'libxslt' 'python2' 'xcb-proto' 'xcmiscproto' 'xf86bigfontproto' 'xorg-macros' 'xtrans' )
+depends=('dmxproto' 'libxext')
+makedepends=('xorg-util-macros')
+source=("${url}/releases/individual/lib/${pkgname}-${pkgver}.tar.bz2")
+sha1sums=('76956d4127ded2e6d1bb5746a6d1603ee23b442a')
 
 build() {
-
-  cd "$portsdir/$category/$pkgname"
-  make clean
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  ./configure --prefix=/usr/local
   make
-  make deinstall
-  make package PACKAGES="$srcdir"
 }
 
 package() {
-  cd $pkgdir
-  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+
+  install -dm755 "${pkgdir}/usr/local/libdata"
+  mv "${pkgdir}/usr/local/lib/pkgconfig" \
+     "${pkgdir}/usr/local/libdata/pkgconfig"
+
+  install -m755 -d "${pkgdir}/usr/local/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/local/share/licenses/${pkgname}/"
 }
-
-
