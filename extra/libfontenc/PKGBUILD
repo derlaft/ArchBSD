@@ -1,24 +1,31 @@
+#Maintainer: Jan de Groot <jgc@archlinux.org>
+#Contributor: Wolfgang Bumiller <blub@speed.at>
+
 pkgname=libfontenc
-pkgver=1.1.0
+pkgver=1.1.1
 pkgrel=1
-category=x11-fonts
 pkgdesc="X11 font encoding library"
 arch=('i686' 'x86_64')
 url="http://xorg.freedesktop.org/"
 license=('custom')
-depends=('xproto' )
-build() {
+makedepends=('pkgconf' 'xproto>=7.0.18')
+source=(${url}/releases/individual/lib/${pkgname}-${pkgver}.tar.bz2)
+sha1sums=('90bdd53d75585dd0f06ad7bc23faccd8a01bb733')
 
-  cd "$portsdir/$category/$pkgname"
-  make clean
-  make 
-  make deinstall
-  make package PACKAGES="$srcdir"
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  ./configure --prefix=/usr/local
+  make
 }
 
 package() {
-  cd $pkgdir
-  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+
+  install -dm755 "${pkgdir}/usr/local/libdata"
+  mv "${pkgdir}/usr/local/lib/pkgconfig" \
+     "${pkgdir}/usr/local/libdata/pkgconfig"
+
+  install -dm755 "${pkgdir}/usr/local/share/licenses/${pkgname}/"
+  install -m644 COPYING "${pkgdir}/usr/local/share/licenses/${pkgname}/COPYING"
 }
-
-
