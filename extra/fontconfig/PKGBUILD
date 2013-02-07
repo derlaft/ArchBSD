@@ -61,6 +61,10 @@ package() {
   cd "$srcdir/$pkgname-$pkgver"
   gmake DESTDIR="$pkgdir" install
 
+  install -dm755 "${pkgdir}/usr/local/libdata"
+  mv "${pkgdir}/usr/local/lib/pkgconfig" \
+     "${pkgdir}/usr/local/libdata/pkgconfig"
+
   #Install license
   install -m755 -d "$pkgdir/usr/local/share/licenses/$pkgname"
   install -m644 COPYING "$pkgdir/usr/local/share/licenses/$pkgname"
