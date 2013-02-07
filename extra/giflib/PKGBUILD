@@ -1,28 +1,56 @@
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Contributor: Baptiste Daroussin <baptiste.daroussin@gmail.com>
+# Contributor: Grigorios Bouzakis <grbzks[at]gmail[dot]com>
+# Contributor: mightyjaym <jm.ambrosino@free.fr>
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
 pkgname=giflib
 pkgver=4.2.0
-pkgrel=2
-category=graphics
+pkgrel=1
 pkgdesc="A library for reading and writing gif images"
 url="http://sourceforge.net/projects/giflib/"
 arch=('i686' 'x86_64')
 license=('MIT')
-depends=('libsm' 'libx11')
-makedepends=('bigreqsproto' 'bison' 'inputproto' 'libcheck' 'm4' 'xcb-proto' 'xcmiscproto' 'xextproto' 'xf86bigfontproto' 'xmlto')
+depends=('libx11')
 provides=("libungif=${pkgver}")
 conflicts=('libungif')
 replaces=('libungif')
 options=('!libtool')
+source=(http://downloads.sourceforge.net/sourceforge/giflib/${pkgname}-${pkgver}.tar.bz2
+        patch-Makefile.in
+        patch-gif_lib.h
+        patch-rgb2gif.c
+        quantize.c
+        )
 
 build() {
-  cd "${portsdir}/${category}/${pkgname}"
-  make clean
-  make
-  make deinstall
-  make package PACKAGES="${srcdir}"
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  for i in patch-Makefile.in patch-gif_lib.h patch-rgb2gif.c
+  do
+    patch -p0 -i "${srcdir}/$i"
+  done
+
+  cp "${srcdir}/quantize.c" lib/
+
+  sed -i '' -e '/AC_PATH_XTRA/d' configure.ac
+#  libtoolize -f
+#  autoreconf
+  ./configure --prefix=/usr/local --disable-static
+  gmake
+
+  # libungif compatibility - instructions taken from Redhat specfile
+  MAJOR=`echo ${pkgver} | sed 's/\([0-9]\+\)\..*/\1/'`
+  $CC -shared -Wl,-soname,libungif.so.${MAJOR} -Llib/.libs -lgif -o libungif.so.${pkgver}
 }
 
 package() {
-  cd "${pkgdir}"
-  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_${pkgrel}.txz"
-}
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
 
+  install -m755 libungif.so.${pkgver} "${pkgdir}/usr/local/lib/"
+  ln -sf libungif.so.${pkgver} "${pkgdir}/usr/local/lib/libungif.so.4"
+  ln -sf libungif.so.4 "${pkgdir}/usr/local/lib/libungif.so"
+
+  install -dm755 "${pkgdir}/usr/local/share/licenses/${pkgname}/"
+  install -m644 COPYING "${pkgdir}/usr/local/share/licenses/${pkgname}/COPYING"
+}
