@@ -1,0 +1,37 @@
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
+pkgname=librsvg
+pkgver=2.36.4
+pkgrel=1
+pkgdesc="A SVG viewing library"
+arch=(i686 x86_64)
+license=('LGPL')
+#depends=('gdk-pixbuf2' 'pango' 'libcroco')
+depends=('gdk-pixbuf2' 'libcroco')
+#makedepends=('intltool' 'gtk2' 'gtk3' 'gobject-introspection')
+#optdepends=('gtk3: for rsvg-view-3'
+#            'gtk2: gtk2 SVG engine module')
+options=('!libtool' '!emptydirs')
+url="http://librsvg.sourceforge.net/"
+install=librsvg.install
+source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
+sha256sums=('1021935204798f4f0ad3004a09b583668ea94a48593461b147fdcff68a18e6c2')
+
+build() {
+  cd $pkgname-$pkgver
+  ./configure --prefix=/usr/local \
+              --with-svgz \
+              --with-croco \
+              --enable-gtk-theme
+  gmake
+}
+
+package() {
+  cd $pkgname-$pkgver
+  gmake DESTDIR="$pkgdir" install
+
+  install -dm755 "${pkgdir}/usr/local/libdata"
+  mv "${pkgdir}/usr/local/lib/pkgconfig" \
+     "${pkgdir}/usr/local/libdata/pkgconfig"
+}
