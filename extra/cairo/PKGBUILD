@@ -25,7 +25,10 @@ source=(http://cairographics.org/releases/$pkgname-$pkgver.tar.xz
     )
 sha1sums=('be06d5aaa272bbbd08380f71ca710d5612881493'
           '8bc096dd16a885ad041cb2137a64757f32d1cc88'
-          'fd8ffd9aba3679c344e4f25494f199a51b0ae62c')
+          'fd8ffd9aba3679c344e4f25494f199a51b0ae62c'
+          '6264465e6d301bbdca12ec9d1352bdf4f73a862a'
+          'b4dd184ea55563b276efc0b53a3b1d4c8bcf3331'
+          '5000210e84e795bf4c0c797c911ff8be0e0f735e')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
@@ -41,20 +44,30 @@ build() {
 	--disable-static \
 	--enable-tee \
 	--enable-gobject \
-	--disable-xlib-xcb \
+	--enable-xcb \
 	--with-html-dir=/usr/local/share/doc \
 	--disable-directfb
 	# --enable-test-surfaces \ takes ages
 	#--enable-drm # breaks build
+# ltverhack:
+  for i in build/ltmain.sh libtool; do
+    sed -i '' -e '/freebsd-elf)/,/;;/ s|major="\.$current"|major=.0|' \
+              -e '/freebsd-elf)/,/;;/ s|versuffix="\.$current"|versuffix="$major"|' \
+        $i
+  done
   make
 }
 
 #check() {
 #  cd "$srcdir/$pkgname-$pkgver"
-#  make -k check || /bin/true # 162 Passed, 328 Failed [8 crashed, 10 expected], 26 Skipped
+#  make -k check || /bin/true # 162 Passed, 328 Failed [8 crashed, 10 expected], 26 Skipped <-- from ArchLinux - I don't expect FreeBSD to do better ;P
 #}
 
 package() {
   cd "$srcdir/$pkgname-$pkgver"
   make DESTDIR="$pkgdir" install
+
+  install -dm755 "${pkgdir}/usr/local/libdata"
+  mv "${pkgdir}/usr/local/lib/pkgconfig" \
+     "${pkgdir}/usr/local/libdata/pkgconfig"
 }
