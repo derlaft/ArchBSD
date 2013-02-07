@@ -42,7 +42,6 @@ build() {
   cd dbus-$pkgver
   for i in patch-bus__session.conf.in patch-bus__system.conf.in patch-dbus-1.pc.in patch-dbus_Makefile.in patch-dbus_dbus-connection.c patch-dbus_dbus-sysdeps-util-unix.c patch-doc_Makefile.in
   do
-    msg "$i"
     patch -p0 -i "${srcdir}/$i"
   done
 
@@ -50,24 +49,23 @@ build() {
       -e 's|/lib/dbus/machine-id|/db/dbus/machine-id|g' \
       dbus/Makefile.in \
       tools/Makefile.in
+  sed -i '' -e '/^SUBDIRS/,/^$/ s|test||g' Makefile.in
   sed -i '' \
       -e 's|THREAD_LIBS -lrt|THREAD_LIBS|g ; s|dummy man2html|dummy man2html_disable|g' \
       configure
 
   rm -rf "${srcdir}/test"
-  mkdir -p  "${srcdir}/test"
+  mkdir "${srcdir}/test"
   CFLAGS="${CFLAGS} -I/usr/local/include" \
-  LDFLAGS="${LDFLAGS} -L/usr/local/lib" \
   ./configure --prefix=/usr/local --sysconfdir=/usr/local/etc \
               --localstatedir=/var \
-	          --with-test-socket-dir="${srcdir}/test" \
-		      --with-system-pid-file=/var/run/dbus/dbus.pid \
-		      --with-system-socket=/var/run/dbus/system_bus_socket \
-		      --with-session-socket-dir=/tmp \
-		      --disable-doxygen-docs \
-		      --disable-xml-docs \
+              --with-test-socket-dir="${srcdir}/test" \
+              --with-system-pid-file=/var/run/dbus/dbus.pid \
+              --with-system-socket=/var/run/dbus/system_bus_socket \
+              --with-session-socket-dir=/tmp \
+              --disable-doxygen-docs \
+              --disable-xml-docs \
               --with-dbus-user=messagebus
-
   gmake
 }
 
