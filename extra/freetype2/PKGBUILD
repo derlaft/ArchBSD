@@ -8,7 +8,7 @@ pkgdesc="TrueType font rendering library"
 arch=(i686 x86_64)
 license=('GPL')
 url="http://freetype.sourceforge.net"
-options=('!libtool')
+#options=('!libtool')
 source=(http://downloads.sourceforge.net/sourceforge/freetype/freetype-${pkgver}.tar.bz2
         patch-aa
         patch-builds__unix__freetype-config.in
