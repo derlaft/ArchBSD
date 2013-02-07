@@ -10,6 +10,7 @@ pkgdesc="Introspection system for GObject-based libraries"
 url="https://live.gnome.org/GObjectIntrospection"
 arch=('x86_64' 'i686')
 license=('LGPL' 'GPL')
+depends=('glib2' 'python2' 'libffi>=3.0.11')
 #depends=('glib2' 'python2')
 #'python2-mako')
 #makedepends=('cairo')
@@ -32,7 +33,7 @@ build() {
   patch -p0 -i "${srcdir}/patch-configure"
   patch -p0 -i "${srcdir}/patch-tests_Makefile.in"
   #PYTHON=/usr/local/bin/python2 ./configure --prefix=/usr/local --disable-static --enable-doctool
-  ./configure --prefix=/usr/local --mandir=/usr/local/man
+  PYTHON=/usr/local/bin/python2 ./configure --prefix=/usr/local --mandir=/usr/local/man
   gmake
 }
 
