@@ -1,0 +1,98 @@
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
+pkgbase=poppler
+#pkgname=('poppler' 'poppler-glib' 'poppler-qt')
+pkgname=('poppler' 'poppler-glib')
+pkgver=0.22.0
+pkgrel=1
+arch=(i686 x86_64)
+license=('GPL')
+#makedepends=('libjpeg' 'cairo' 'fontconfig' 'openjpeg' 'gtk2' 'qt' 'pkgconf' 'lcms' 'gobject-introspection' 'icu')
+makedepends=('libjpeg' 'fontconfig' 'gtk2' 'pkgconf' 'lcms' 'gobject-introspection' 'icu')
+options=('!emptydirs')
+url="http://poppler.freedesktop.org/"
+_testtag=0d2bfd4af4c76a3bac27ccaff793d9129df7b57a
+source=(http://poppler.freedesktop.org/${pkgbase}-${pkgver}.tar.gz
+        http://cgit.freedesktop.org/poppler/test/snapshot/test-${_testtag}.tar.bz2)
+md5sums=('c7038be37a7d446544e83a7df3c26196'
+         '9dc64c254a31e570507bdd4ad4ba629a')
+
+build() {
+  cd "${srcdir}/${pkgbase}-${pkgver}"
+  sed -i -e '/AC_PATH_XTRA/d' configure.ac
+
+  autoreconf -fi
+
+  CPPFLAGS="${CPPFLAGS} -I/usr/local/include" \
+  LDFLAGS="${LDFLAGS} -L/usr/local/lib" \
+  ./configure --prefix=/usr/local --sysconfdir=/usr/local/etc \
+      --localstatedir=/var --disable-static \
+      --enable-zlib \
+      --enable-xpdf-headers \
+      --enable-libjpeg --enable-zlib \
+      --enable-poppler-glib \
+      --disable-gtk-test \
+      --with-html-dir=/usr/local/share/doc/poppler
+
+# FIXME: --enable-cairo-output  -- circular dependency - enable later
+# FIXME: needs qt4 (obviously) --enable-poppler-qt4 \
+
+# ltverhack:
+  for i in ltmain.sh libtool; do
+    sed -i '' -e '/freebsd-elf)/,/;;/ s|major="\.$current"|major=.18|' \
+              -e '/freebsd-elf)/,/;;/ s|versuffix="\.$current"|versuffix="$major"|' \
+        $i
+  done
+
+  gmake
+}
+
+check() {
+  cd "${srcdir}"
+  ln -sf test-${_testtag} test
+  cd ${pkgbase}-${pkgver}
+  LANG=en_US.UTF8 gmake check
+}
+
+package_poppler() {
+  pkgdesc="PDF rendering library based on xpdf 3.0"
+#  depends=('libjpeg' 'cairo' 'fontconfig' 'openjpeg' 'lcms' 'poppler-data')
+  depends=('libjpeg' 'cairo' 'fontconfig' 'lcms' 'poppler-data')
+  conflicts=("poppler-qt3<${pkgver}")
+
+  cd "${srcdir}/${pkgbase}-${pkgver}"
+  sed -i '' \
+      -e 's/^glib_subdir =.*/glib_subdir =/' \
+      -e 's/^qt4_subdir =.*/qt4_subdir =/' Makefile
+  gmake DESTDIR="${pkgdir}" install
+
+  rm -f "${pkgdir}"/usr/local/lib/pkgconfig/poppler-{glib,qt4}.pc
+}
+
+package_poppler-glib() {
+  pkgdesc="Poppler glib bindings"
+  depends=("poppler=${pkgver}" 'glib2')
+
+  cd "${srcdir}/${pkgbase}-${pkgver}/poppler"
+  gmake DESTDIR="${pkgdir}" install-libLTLIBRARIES
+  cd "${srcdir}/${pkgbase}-${pkgver}/glib"
+  gmake DESTDIR="${pkgdir}" install
+  install -m755 -d "${pkgdir}/usr/local/libdata/pkgconfig"
+  install -m644 ../poppler-glib.pc "${pkgdir}/usr/local/libdata/pkgconfig/"
+  rm -f "${pkgdir}"/usr/local/lib/libpoppler.*
+  rm -f "${pkgdir}/usr/local/bin/poppler-glib-demo"
+}
+
+package_poppler-qt() {
+  pkgdesc="Poppler Qt bindings"
+  depends=("poppler=${pkgver}" 'qt')
+
+  cd "${srcdir}/${pkgbase}-${pkgver}/poppler"
+  gmake DESTDIR="${pkgdir}" install-libLTLIBRARIES
+  cd "${srcdir}/${pkgbase}-${pkgver}/qt4"
+  gmake DESTDIR="${pkgdir}" install
+  install -m755 -d "${pkgdir}/usr/local/lib/pkgconfig"
+  install -m644 ../poppler-qt4.pc "${pkgdir}/usr/local/libdata/pkgconfig/"
+  rm -f "${pkgdir}"/usr/local/libdata/libpoppler.*
+}
