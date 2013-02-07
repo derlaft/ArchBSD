@@ -1,0 +1,45 @@
+# Maintainer: AndyRTR <andyrtr@archlinux.org>
+# Contributor: Miguel Revilla <yo at miguelrevilla.com>
+# Contributor: David Sotelo <dvsotelo at gmail.com>
+# Contributor: Nuno Araujo <nuno.araujo@russo79.com>
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
+pkgname=qpdf
+pkgver=4.0.1
+pkgrel=1
+pkgdesc="QPDF: A Content-Preserving PDF Transformation System"
+arch=('i686' 'x86_64')
+url="http://qpdf.sourceforge.net/"
+license=('custom:Artistic-2.0')
+depends=('pcre' 'perl')
+makedepend=('bash')
+options=('!libtool')
+source=(http://downloads.sourceforge.net/${pkgname}/${pkgname}-${pkgver}.tar.gz)
+md5sums=('093baece867a0a7e07774bd4008156b3')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  CONFIG_SHELL=/usr/local/bin/bash \
+  CPPFLAGS="-I/usr/local/include" \
+  ./configure --prefix=/usr/local CONFIG_SHELL=/usr/local/bin/bash
+  sed -i '' -e 's|^\(SHELL=\).*$|\1/usr/local/bin/bash|' make/libtool.mk
+  gmake
+}
+
+check() {
+  cd "$srcdir/$pkgname-$pkgver"
+  gmake -k check
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake DESTDIR="${pkgdir}/" install
+
+  install -dm755 "${pkgdir}/usr/local/libdata"
+  mv "${pkgdir}/usr/local/lib/pkgconfig" \
+     "${pkgdir}/usr/local/libdata/pkgconfig"
+
+  mkdir -m755 -p ${pkgdir}/usr/local/share/licenses/${pkgname}
+  install -m644 Artistic-2.0 ${pkgdir}/usr/local/share/licenses/${pkgname}/
+}
