@@ -1,27 +1,21 @@
-Status as of: Wed Feb  6 17:15:07 CET 2013
+Status as of: Thu Feb  7 19:13:03 CET 2013
 
 There are:
 0 [core]  Ports-Packages out of       32 total
                  Done:  100%
-77 [extra] Ports-Packages out of      167 total
-                 Done:  54%
-That's a total of 77 Ports-PKGBUILDs which need to be converted on this branch.
-There are a total of 199 packages.
-The total conversion progress is: 62%
+70 [extra] Ports-Packages out of      175 total
+                 Done:  60%
+That's a total of 70 Ports-PKGBUILDs which need to be converted on this branch.
+There are a total of 207 packages.
+The total conversion progress is: 67%
 
 Here's the TODO:
     
-    extra/cairo
     extra/consolekit
     extra/dbus-glib
-    extra/dbus
     extra/dwm
-    extra/gdk-pixbuff2
     extra/giflib
-    extra/gtk-update-icon-cache
-    extra/gtk2
     extra/hal
-    extra/icu
     extra/irssi
     extra/lib3dtag
     extra/libdmx
@@ -36,7 +30,6 @@ Here's the TODO:
     extra/libxcomposite
     extra/libxcursor
     extra/libxdamage
-    extra/libxext
     extra/libxfixes
     extra/libxfont
     extra/libxft
