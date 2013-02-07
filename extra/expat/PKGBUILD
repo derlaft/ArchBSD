@@ -1,4 +1,4 @@
-# $Id: PKGBUILD 156201 2012-04-16 03:41:12Z allan $
+# $Id$
 # Maintainer: Allan McRae <allan@archlinux.org>
 # Committer: Judd Vinet <jvinet@zeroflux.org>
 
@@ -9,13 +9,22 @@ pkgdesc="An XML parser library"
 arch=('i686' 'x86_64')
 url="http://expat.sourceforge.net/"
 license=('custom')
+depends=('freebsd-world')
 options=('!libtool')
-source=(http://downloads.sourceforge.net/sourceforge/expat/${pkgname}-${pkgver}.tar.gz)
-md5sums=('dd7dab7a5fea97d2a6a43f511449b7cd')
+source=(http://downloads.sourceforge.net/sourceforge/expat/${pkgname}-${pkgver}.tar.gz
+	patch-xmlparse.c
+	patch-xmltok_impl.c)
+md5sums=('dd7dab7a5fea97d2a6a43f511449b7cd'
+         'dc43c4e27ae90895b8d8236f1615796a'
+         '1195eb77bc27c2f218bd994e5cb7e6af')
 
 build() {
   cd ${srcdir}/${pkgname}-${pkgver}
-  ./configure --prefix=/usr/local --mandir=/usr/local/man
+
+  patch -p0 -i ${srcdir}/patch-xmlparse.c
+  patch -p0 -i ${srcdir}/patch-xmltok_impl.c
+
+  ./configure --prefix=/usr/local/ --mandir=/usr/share/man
   make
 }
 
@@ -27,10 +36,7 @@ check() {
 package() {
   cd ${srcdir}/${pkgname}-${pkgver}
   make DESTDIR=${pkgdir} install
-
-  install -dm755 "$pkgdir"/usr/local/libdata
-  mv "$pkgdir"/usr/local/lib/pkgconfig "$pkgdir"/usr/local/libdata/pkgconfig
-
-  install -dm755 ${pkgdir}/usr/local/share/licenses/${pkgname}
-  install -m644 COPYING ${pkgdir}/usr/local/share/licenses/${pkgname}/COPYING
+  install -dm755 ${pkgdir}/usr/local/share/licenses/${pkgname}/
+  install -m644 COPYING ${pkgdir}/usr/local/share/licenses/${pkgname}/
 }
+

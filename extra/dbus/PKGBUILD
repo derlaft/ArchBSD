@@ -1,35 +1,89 @@
+# $Id: PKGBUILD 172792 2012-12-06 01:48:03Z tomegun $
+# Maintainer: Tom Gundersen <teg@jklm.no>
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Contributor: Link Dupont <link@subpop.net>
+#
 pkgname=dbus
-pkgver=1.4.14
-pkgrel=4
-category=devel
+pkgver=1.6.8
+pkgrel=6
 pkgdesc="Freedesktop.org message bus system"
 url="http://www.freedesktop.org/Software/dbus"
 arch=(i686 x86_64)
 license=('GPL' 'custom')
-# do not depend on systemd to avoid circular dep,
-# dep on shadow for install scriptlet FS#29341
-depends=('expat' 'gnome_subr' 'libsm' 'libx11' 'libxml2')
+depends=('expat')
 makedepends=('libx11')
 optdepends=('libx11: dbus-launch support')
 provides=('dbus-core')
 conflicts=('dbus-core')
 replaces=('dbus-core')
+options=(!libtool)
 install=dbus.install
-
+source=(http://dbus.freedesktop.org/releases/dbus/dbus-$pkgver.tar.gz #{,.asc}
+        dbus
+        patch-bus__session.conf.in
+        patch-bus__system.conf.in
+        patch-dbus-1.pc.in
+        patch-dbus_Makefile.in
+        patch-dbus_dbus-connection.c
+        patch-dbus_dbus-sysdeps-util-unix.c
+        patch-doc_Makefile.in
+        )
+md5sums=('3bf059c7dd5eda5f539a1b7cfe7a14a2'
+         '097fae1b16597e568b12f49264d49f70'
+         'ecb16fff9a0deec0a1d0fabef6160609'
+         'bd423a571ef529d9e97a26a6db572951'
+         '344dee9983fd376ac53bfe09691a93ce'
+         '0697a4474d7748e93e7f0f5a66497735'
+         '169de96d0d328f45b58fe2113295f487'
+         'f21785dbfd848b4b0d9185085e95acc3'
+         'f07e395a955fe1bda6b25854076f771c')
 
 build() {
-  cd "${portsdir}/${category}/${pkgname}"
-  make clean
-  make
-  make deinstall
-  make PACKAGES="${srcdir}" package
+  cd dbus-$pkgver
+  for i in patch-bus__session.conf.in patch-bus__system.conf.in patch-dbus-1.pc.in patch-dbus_Makefile.in patch-dbus_dbus-connection.c patch-dbus_dbus-sysdeps-util-unix.c patch-doc_Makefile.in
+  do
+    msg "$i"
+    patch -p0 -i "${srcdir}/$i"
+  done
 
+  sed -i '' \
+      -e 's|/lib/dbus/machine-id|/db/dbus/machine-id|g' \
+      dbus/Makefile.in \
+      tools/Makefile.in
+  sed -i '' \
+      -e 's|THREAD_LIBS -lrt|THREAD_LIBS|g ; s|dummy man2html|dummy man2html_disable|g' \
+      configure
+
+  rm -rf "${srcdir}/test"
+  mkdir -p  "${srcdir}/test"
+  CFLAGS="${CFLAGS} -I/usr/local/include" \
+  LDFLAGS="${LDFLAGS} -L/usr/local/lib" \
+  ./configure --prefix=/usr/local --sysconfdir=/usr/local/etc \
+              --localstatedir=/var \
+	          --with-test-socket-dir="${srcdir}/test" \
+		      --with-system-pid-file=/var/run/dbus/dbus.pid \
+		      --with-system-socket=/var/run/dbus/system_bus_socket \
+		      --with-session-socket-dir=/tmp \
+		      --disable-doxygen-docs \
+		      --disable-xml-docs \
+              --with-dbus-user=messagebus
+
+  gmake
 }
 
+package(){
+  cd dbus-$pkgver
+  gmake DESTDIR="$pkgdir" install
 
-package() {
-  cd ${pkgdir}
-  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_${pkgrel}.txz"
+  install -dm755 "${pkgdir}/usr/local/libdata"
+  mv "${pkgdir}/usr/local/lib/pkgconfig" \
+     "${pkgdir}/usr/local/libdata/pkgconfig"
+
+  rm -rf "$pkgdir/var/run"
+
   install -m755 -d "$pkgdir/etc/init.d/"
   install -m755 ../dbus "$pkgdir/etc/init.d/dbus"
+
+  install -dm755 "$pkgdir/usr/share/licenses/dbus/"
+  install -m644 COPYING "$pkgdir/usr/share/licenses/dbus/COPYING"
 }
