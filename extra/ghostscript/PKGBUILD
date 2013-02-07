@@ -27,7 +27,7 @@ build() {
   export CPPFLAGS="${CPPFLAGS} -I/usr/local/include"
 
 	#--enable-contrib 
-  ./configure --prefix=/usr \
+  ./configure --prefix=/usr/local \
 	--enable-dynamic \
 	--with-ijs \
 	--with-jbig2dec \
@@ -55,12 +55,16 @@ build() {
 
 package() {
   cd ${srcdir}/ghostscript-${pkgver}
-  gmake DESTDIR=${pkgdir}
+  gmake DESTDIR=${pkgdir} install soinstall
 #   cups_serverroot=${pkgdir}/usr/local/etc/cups \
 #   cups_serverbin=${pkgdir}/usr/local/lib/cups install soinstall
 
   # install missing doc files # http://bugs.archlinux.org/task/18023
-  install -m 644 ${srcdir}/ghostscript-${pkgver}/doc/{Ps2ps2.htm,gs-vms.hlp,gsdoc.el,pscet_status.txt} ${pkgdir}/usr/local/share/ghostscript/$pkgver/doc/
+  install -dm755 ${pkgdir}/usr/local/share/ghostscript/$pkgver/doc/
+  for i in ${srcdir}/ghostscript-${pkgver}/doc/{Ps2ps2.htm,gs-vms.hlp,gsdoc.el,pscet_status.txt}
+  do
+    install -m644 "$i" ${pkgdir}/usr/local/share/ghostscript/$pkgver/doc/
+  done
   
   mkdir -p ${pkgdir}/usr/local/share/licenses/${pkgname}
   install -m644 LICENSE ${pkgdir}/usr/local/share/licenses/${pkgname}/

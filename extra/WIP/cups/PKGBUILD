@@ -47,6 +47,8 @@ build() {
   aclocal -I config-scripts
   autoconf -I config-scripts
 
+  CFLAGS="-fPIC" \
+  LDFLAGS="-fPIC" \
   ./configure --prefix=/usr/local --sysconfdir=/etc --localstatedir=/var \
      --libdir=/usr/local/lib \
      --with-docdir=/usr/local/share/doc/cups \
@@ -65,7 +67,7 @@ build() {
      --enable-pam \
      --with-pam-module="unix" \
      --with-optim="$CFLAGS"
-  make
+  gmake
 }
 
 check() {
@@ -73,7 +75,7 @@ check() {
   #httpAddrGetList(workstation64): FAIL
   #1 TESTS FAILED!
   #make[1]: *** [testhttp] Error 1
-  make -k check || /bin/true
+  gmake -k check || /bin/true
 }
 
 package_libcups() {
@@ -82,7 +84,7 @@ depends=('gnutls>=2.8.3' 'libtiff>=4.0.0' 'libpng>=1.5.7' 'krb5' 'avahi')
 backup=(etc/cups/client.conf)
 
   cd ${srcdir}/${pkgbase}-${pkgver}
-  make BUILDROOT=${pkgdir} install-headers install-libs
+  gmake BUILDROOT=${pkgdir} install-headers install-libs
   # put this into the libs pkg to make other software find the libs(no pkg-config file included)
   mkdir -p ${pkgdir}/usr/bin 
   install -m755 ${srcdir}/${pkgbase}-${pkgver}/cups-config ${pkgdir}/usr/bin/cups-config
@@ -114,7 +116,7 @@ depends=("libcups>=${pkgver}" 'cups-filters' 'dbus-core')
 optdepends=('xdg-utils: xdg .desktop file support')
 
   cd ${srcdir}/${pkgbase}-${pkgver}
-  make BUILDROOT=${pkgdir} install-data install-exec
+  gmake BUILDROOT=${pkgdir} install-data install-exec
 
   # this one we ship in the libcups pkg
   rm -f ${pkgdir}/usr/bin/cups-config

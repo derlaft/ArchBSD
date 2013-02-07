@@ -16,10 +16,8 @@ optdepends=('ghostscript: for non-PostScript printers to print with CUPS to conv
 backup=(etc/fonts/conf.d/99pdftoopvp.conf)
 options=(!libtool)
 source=(http://www.openprinting.org/download/cups-filters/$pkgname-$pkgver.tar.gz
-        cups-browsed.service
         poppler_buildfix.diff)
 md5sums=('0640a02a3fb88d3dbdb224e3becd400d'
-         '4c9f97eae201798000483c4e7109e690'
          'bd97d1d9dbd4feec3a0330fd9fb7a03c')
 
 build() {
@@ -28,6 +26,11 @@ build() {
   # fix build with poppler 0.22
   patch -Np0 -i ${srcdir}/poppler_buildfix.diff
   
+  ZLIB_CFLAGS=" " \
+  ZLIB_LIBS="-lz" \
+  LIBQPDF_CFLAGS="`pkg-config --cflags libqpdf`" \
+  LIBQPDF_LIBS="`pkg-config --libs libqpdf`" \
+  PKG_CONFIG_PATH="${PKG_CONFIG_PATH}:/usr/local/libdata/pkgconfig" \
   ./configure --prefix=/usr/local \
     --sysconfdir=/usr/local/etc \
     --with-rcdir=no \
