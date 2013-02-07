@@ -51,7 +51,7 @@ build() {
 	#--enable-drm # breaks build
 # ltverhack:
   for i in build/ltmain.sh libtool; do
-    sed -i '' -e '/freebsd-elf)/,/;;/ s|major="\.$current"|major=.0|' \
+    sed -i '' -e '/freebsd-elf)/,/;;/ s|major="\.$current"|major=.2|' \
               -e '/freebsd-elf)/,/;;/ s|versuffix="\.$current"|versuffix="$major"|' \
         $i
   done
