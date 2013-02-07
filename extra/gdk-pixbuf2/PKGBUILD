@@ -27,6 +27,12 @@ build() {
     --without-libjasper \
     --with-x11 \
     --with-included-loaders=png
+# ltverhack:
+  for i in ltmain.sh libtool; do
+    sed -i '' -e '/freebsd-elf)/,/;;/ s|major="\.$current"|major=.0|' \
+              -e '/freebsd-elf)/,/;;/ s|versuffix="\.$current"|versuffix="$major"|' \
+        $i
+  done
   gmake
 }
 
