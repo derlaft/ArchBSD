@@ -1,26 +1,51 @@
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
 pkgname=libdrm
-pkgver=2.4.31
+pkgver=2.4.41
 pkgrel=1
-category=graphics
-pkgdesc="Userspace interface to kernel Direct Rendering Module services"
-arch=('i686' 'x86_64')
-url="http://xorg.freedesktop.org/"
+pkgdesc="Userspace interface to kernel DRM services"
+arch=(i686 x86_64)
 license=('custom')
-depends=('libpciaccess' 'libpthread-stubs' )
-makedepends=('gettext' 'gmake' 'libiconv' )
+depends=('libpciaccess')
+makedepends=('cairo')
+replaces=('libdrm-new' 'libdrm-nouveau')
+url="http://dri.freedesktop.org/"
+source=(http://dri.freedesktop.org/$pkgname/$pkgname-$pkgver.tar.bz2
+        no-pthread-stubs.patch
+        COPYING
+        buildfix.diff)
+sha256sums=('52b3ca670df43fc9f5164f0f55fa40b008de297c0ceedab7c77c30bf9022f212'
+            '3915aaff4d5b0ed523c3144911e7f79ee812dece0e3933c13a88dddcf5912ded'
+            '9631d4f694952e3e6ae5a05534c2e93e994e47d3413677a3a00e45c8cef6db93'
+            '9b293bbe682381b6822b5abfb1b1ce713185bcefde255d300367b26f47102ddc')
 
 build() {
+  cd $pkgname-$pkgver
+  patch -Np1 -i ../no-pthread-stubs.patch
 
-  cd "$portsdir/$category/$pkgname"
-  make clean
+  # man/Makefile,in is missing
+  patch -Np1 -i ${srcdir}/buildfix.diff
+
+  sed -i '' -e 's|{libdir}/pkgconfig|{prefix}/libdata/pkgconfig|g' \
+  	configure
+
+  sed -i '' -e '/86|x86_64) INTEL=yes/ s@x86_64@&|amd64@' configure
+
+  #libtoolize --force
+  autoreconf --force --install
+  ./configure --prefix=/usr/local \
+      --enable-nouveau-experimental-api
   make
-  make deinstall
-  make package PACKAGES="$srcdir"
+}
+
+check() {
+  cd $pkgname-$pkgver
+  make -k check
 }
 
 package() {
-  cd $pkgdir
-  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_${pkgrel}.txz"
+  cd $pkgname-$pkgver
+  make DESTDIR="$pkgdir" install
+  install -m755 -d "$pkgdir/usr/local/share/licenses/$pkgname"
+  install -m644 ../COPYING "$pkgdir/usr/local/share/licenses/$pkgname/"
 }
-
-
