@@ -1,8 +1,8 @@
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
 pkgname=xorg-xkbcomp
-_pkgname=xkbcomp
-pkgver=1.2.3
+pkgver=1.2.4
 pkgrel=1
-category=x11
 pkgdesc="X Keyboard description compiler"
 arch=(i686 x86_64)
 url="http://xorg.freedesktop.org/"
@@ -10,19 +10,19 @@ license=('custom')
 depends=('libxkbfile')
 makedepends=('xorg-util-macros')
 groups=('xorg-apps' 'xorg')
+source=(${url}/releases/individual/app/xkbcomp-${pkgver}.tar.bz2)
+sha1sums=('695d2f2824884d9e54aa1419282ae167fdea163b')
 
 build() {
-
-  cd "$portsdir/$category/$_pkgname"
-  make clean
+  cd "${srcdir}/xkbcomp-${pkgver}"
+  sed -i '' -e 's|[(]libdir[)]/pkgconfig|(prefix)/libdata/pkgconfig|g' Makefile.in
+  ./configure --prefix=/usr/local
   make
-  make deinstall
-  make package PACKAGES="$srcdir"
 }
 
 package() {
-  cd $pkgdir
-  tar xpf "${srcdir}/${category}/${_pkgname}-${pkgver}.txz"
+  cd "${srcdir}/xkbcomp-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  install -m755 -d "${pkgdir}/usr/local/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/local/share/licenses/${pkgname}/"
 }
-
-
