@@ -1,13 +1,13 @@
-Status as of: Fri Feb  8 19:15:52 CET 2013
+Status as of: Fri Feb  8 22:03:47 CET 2013
 
 There are:
 0 [core]  Ports-Packages out of       32 total
                  Done:  100%
-53 [extra] Ports-Packages out of      180 total
-                 Done:  71%
-That's a total of 53 Ports-PKGBUILDs which need to be converted on this branch.
+42 [extra] Ports-Packages out of      180 total
+                 Done:  77%
+That's a total of 42 Ports-PKGBUILDs which need to be converted on this branch.
 There are a total of 212 packages.
-The total conversion progress is: 75%
+The total conversion progress is: 81%
 
 Here's the TODO:
     
@@ -18,17 +18,6 @@ Here's the TODO:
     extra/libpthread-stubs
     extra/libthai
     extra/libwnck
-    extra/libxcomposite
-    extra/libxcursor
-    extra/libxfont
-    extra/libxft
-    extra/libxi
-    extra/libxinerama
-    extra/libxkbfile
-    extra/libxrandr
-    extra/libxres
-    extra/libxtst
-    extra/libxv
     extra/links
     extra/lxappearence
     extra/lxde-common
