@@ -1,25 +1,37 @@
+# Maintainer: Jan de Groot  <jgc@archlinux.org>
 pkgname=libwnck
-pkgver=2.30.6
+pkgver=2.30.7
 pkgrel=1
-category=x11-toolkits
 pkgdesc="Window Navigator Construction Kit"
 arch=('i686' 'x86_64')
 license=('LGPL')
 depends=('gtk2' 'startup-notification' 'libxres')
 makedepends=('libxt' 'intltool' 'gobject-introspection')
-options=('!libtool')
 url="http://www.gnome.org/"
+source=(http://ftp.gnome.org/pub/gnome/sources/${pkgname}/2.30/${pkgname}-${pkgver}.tar.xz)
+sha256sums=('8be84d5333f0ade0e61af9f4cbf7685cb7cce2aa0ee32f53bac32107a81fe194')
 
 build() {
-  cd "${portsdir}/${category}/${pkgname}"
-  make clean
-  make
-  make deinstall
-  make package PACKAGES="${srcdir}"
+    cd "${srcdir}/${pkgname}-${pkgver}"
+    CPPFLAGS="${CPPFLAGS} -I/usr/local/include" \
+    LDFLAGS="${LDFLAGS} -L/usr/local/lib" \
+    ./configure --prefix=/usr/local --sysconfdir=/usr/local/etc \
+        --localstatedir=/var \
+        --with-html-dir=/usr/local/share/doc \
+        --enable-startup-notification
+
+    gmake
 }
 
 package() {
-  cd "${pkgdir}"
-  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_${pkgrel}.txz"
-}
+    cd "${srcdir}/${pkgname}-${pkgver}"
+    gmake DESTDIR="${pkgdir}" install
 
+    install -dm755 "${pkgdir}/usr/local/libdata"
+    mv "${pkgdir}/usr/local/lib/pkgconfig" \
+       "${pkgdir}/usr/local/libdata/pkgconfig"
+
+    #The binaries are shipped in libwnck3
+    rm -f ${pkgdir}/usr/local/bin/wnckprop
+    rm -f ${pkgdir}/usr/local/bin/wnck-urgency-monitor
+}
