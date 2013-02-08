@@ -1,27 +1,31 @@
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
 pkgname=libxtst
-_pkgname=libXtst
-pkgver=1.2.0
+pkgver=1.2.1
 pkgrel=1
-category=x11
 pkgdesc="X11 Testing -- Resource extension library"
 arch=('i686' 'x86_64')
 url="http://xorg.freedesktop.org/"
 license=('custom')
-depends=('libxi' 'recordproto')
+depends=('libxext' 'libxi' 'recordproto' 'inputproto')
 makedepends=('xorg-util-macros')
+source=("${url}/releases/individual/lib/libXtst-${pkgver}.tar.bz2")
+sha1sums=('44e19899f9938d3db5546e51c338d6f86d88cfe2')
 
 build() {
-
-  cd "$portsdir/$category/$_pkgname"
-  make clean
+  cd "${srcdir}/libXtst-${pkgver}"
+  ./configure --prefix=/usr/local --disable-specs --without-xmlto
   make
-  make deinstall
-  make package PACKAGES="$srcdir"
 }
 
 package() {
-  cd $pkgdir
-  tar xpf "${srcdir}/${category}/${_pkgname}-${pkgver}.txz"
+  cd "${srcdir}/libXtst-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+
+  install -dm755 "${pkgdir}/usr/local/libdata"
+  mv "${pkgdir}/usr/local/lib/pkgconfig" \
+     "${pkgdir}/usr/local/libdata/pkgconfig"
+
+  install -m755 -d "${pkgdir}/usr/local/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/local/share/licenses/${pkgname}/"
 }
-
-
