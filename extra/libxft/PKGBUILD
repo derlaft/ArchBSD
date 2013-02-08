@@ -1,27 +1,31 @@
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
 pkgname=libxft
-_pkgname=libXft
-pkgver=2.1.14
+pkgver=2.3.1
 pkgrel=1
-category=x11-fonts
 pkgdesc="FreeType-based font drawing library for X"
 arch=('i686' 'x86_64')
 license=('custom')
 url="http://xorg.freedesktop.org/"
 depends=('fontconfig' 'libxrender')
-makedepends=('pkgconfig')
+makedepends=('pkgconf')
+source=("${url}/releases/individual/lib/libXft-${pkgver}.tar.bz2")
+sha256sums=('7fce32b92dcb7b2869bed567af2abc7bbad0d5d6fcf471b8a3e137964a31bbbd')
 
 build() {
-
-  cd "$portsdir/$category/$_pkgname"
-  make clean
-  make 
-  make deinstall
-  make package PACKAGES="$srcdir"
+  cd "${srcdir}/libXft-${pkgver}"
+  ./configure --prefix=/usr/local --sysconfdir=/usr/local/etc
+  make
 }
 
 package() {
-  cd $pkgdir
-  tar xpf "${srcdir}/${category}/${_pkgname}-${pkgver}.txz"
+  cd "${srcdir}/libXft-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+
+  install -dm755 "${pkgdir}/usr/local/libdata"
+  mv "${pkgdir}/usr/local/lib/pkgconfig" \
+     "${pkgdir}/usr/local/libdata/pkgconfig"
+
+  install -d -m755 "${pkgdir}/usr/local/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/local/share/licenses/${pkgname}/"
 }
-
-
