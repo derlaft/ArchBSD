@@ -17,7 +17,10 @@ source=(#http://download.icu-project.org/files/${pkgname}4c/${pkgver}/${pkgname}
         patch-tools_genrb_derb.c
 )
 md5sums=('beb98aa972219c9fcd9c8a71314943c9'
-         'ebd5470fc969c75e52baf4af94a9ee82')
+         'f7d1f090364f4fae01626e087abccb78'
+         '2717f21ede04b55edae471bdf3b32ca0'
+         'ff0c9f6e52ac8f2203fa34909020492c'
+         '57459ad807cd79a585d9a5210ef3bf24')
 
 build() {
   cd ${srcdir}/icu/source
@@ -27,7 +30,7 @@ build() {
     patch -p0 -i "${srcdir}/$i"
   done
 
-  sed -i '' -e 's,$(libdir)/pkgconfig,/usr/local/libdata/pkgconfig,g' Makefile.in
+  sed -i '' -e 's,\$(libdir)/pkgconfig,/usr/local/libdata/pkgconfig,g' Makefile.in
 
   ./configure --prefix=/usr/local \
 	--sysconfdir=/usr/local/etc \
