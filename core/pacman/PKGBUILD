@@ -74,6 +74,6 @@ package() {
   sed -i '' -e "s|@CARCHFLAGS[@]|$myflags|g" \
       $pkgdir/usr/local/etc/makepkg.conf
 
-  install -dm755 "${pkgdir}/usr/local/share/pacman"
+  install -dm750 "${pkgdir}/usr/local/share/pacman"
   install -m644 "${srcdir}/makepkg.site" "${pkgdir}/usr/local/share/pacman/makepkg.site"
 }
