@@ -98,7 +98,8 @@ fi
 
 # create obligatory directories
 msg 'Creating install root at %s' "$newroot"
-mkdir -m 0750 -p "$newroot"/var/{cache/pacman/pkg,lib/pacman,log} "$newroot"/run
+mkdir -m 0750 -p "$newroot"/var/{cache/pacman/pkg,lib/pacman} "$newroot"/run
+mkdir -m 0755 -p "$newroot"/var/log
 mkdir -m 1777 -p "$newroot"/tmp
 mkdir -m 0555 -p "$newroot"/{proc,dev}
 
