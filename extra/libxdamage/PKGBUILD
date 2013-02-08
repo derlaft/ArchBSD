@@ -1,29 +1,32 @@
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
 pkgname=libxdamage
-_pkgname=libXdamage
-pkgver=1.1.3
+pkgver=1.1.4
 pkgrel=1
-category=x11
-pkgdesc="X Damage extension library"
+pkgdesc="X11 damaged region extension library"
 arch=('i686' 'x86_64')
-source=('libxdamage.install')
-md5sums=('57ee0b40b0a23df31c06e7128e877a91')
 url="http://xorg.freedesktop.org/"
-depends=('damageproto' 'libXfixes' )
 license=('custom')
-options=('!libtool')
-install=libxdamage.install
+depends=('libxfixes>=4.0.4' 'damageproto>=1.2.0')
+makedepends=('pkg-config')
+source=(${url}/releases/individual/lib/libXdamage-${pkgver}.tar.bz2)
+sha256sums=('7c3fe7c657e83547f4822bfde30a90d84524efb56365448768409b77f05355ad')
 
 build() {
-  cd "$portsdir/$category/$_pkgname"
-  make clean
+  cd "${srcdir}/libXdamage-${pkgver}"
+  ./configure --prefix=/usr/local --sysconfdir=/usr/local/etc
   make
-  make deinstall
-  make package PACKAGES="$srcdir"
 }
 
 package() {
-  cd $pkgdir
-  tar xpf "${srcdir}/${category}/${_pkgname}-${pkgver}.txz"
+  cd "${srcdir}/libXdamage-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+
+  install -dm755 "${pkgdir}/usr/local/libdata"
+  mv "${pkgdir}/usr/local/lib/pkgconfig" \
+     "${pkgdir}/usr/local/libdata/pkgconfig"
+
+  install -dm755 "${pkgdir}/usr/local/share/licenses/${pkgname}/"
+  install -m644 COPYING "${pkgdir}/usr/local/share/licenses/${pkgname}/COPYING"
 }
-
-
