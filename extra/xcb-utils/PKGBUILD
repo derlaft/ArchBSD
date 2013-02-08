@@ -1,25 +1,37 @@
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Maintainer: Andreas Radke <andyrtr@archlinux.org>
+# Contributor: Andrea Scarpino <andrea@archlinux.org>
+
 pkgname=xcb-util
 pkgver=0.3.9
 pkgrel=1
-category=x11
 pkgdesc="Utility libraries for XC Binding"
 arch=('i686' 'x86_64')
 url="http://xcb.freedesktop.org"
 license=('custom')
-depends=('libxcb')
-makedepends=('libcheck' 'libgcrypt' 'libgpg-error' 'libxml2' 'libxslt' 'python2' 'xcb-proto')
-options=('!libtool')
+depends=('libxcb>=1.7')
+makedepends=('xorg-util-macros')
+source=("http://xcb.freedesktop.org/dist/${pkgname}-${pkgver}.tar.bz2"
+        'LICENSE')
+sha256sums=('c611259c0ab20fd76f79f48f4684843c18ea9c967eba78a45e8b3636315c18c4'
+            'ded299aa179dcf0d885bf89274a4db77a530e03f9f5e7cf1c3c4ef1d60e914b9')
 
 build() {
-  cd "${portsdir}/${category}/${pkgname}"
-  make clean
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  sed -i '' -e 's|\${libdir}/pkgconfig|${prefix}/libdata/pkgconfig|' configure
+  ./configure --prefix=/usr/local
   make
-  make deinstall
-  make package PACKAGES="${srcdir}"
 }
 
-package() {
-  cd "${pkgdir}"
-  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_${pkgrel},1.txz"
+check() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make check
 }
 
+package() { 
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+
+  install -dm755 "${pkgdir}/usr/local/share/licenses/${pkgname}/"
+  install -m644 "${srcdir}/LICENSE" "${pkgdir}/usr/local/share/licenses/${pkgname}/LICENSE"
+}
