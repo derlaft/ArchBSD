@@ -14,7 +14,8 @@ install=texi2html.install
 source=("http://download.savannah.gnu.org/releases/texi2html/$pkgname-$pkgver.tar.bz2"
         patch-texi2html.pl
 )
-md5sums=('f15ac876fcdc8be865b16535f480aa54')
+md5sums=('f15ac876fcdc8be865b16535f480aa54'
+         '9647734f049003324c8f121414498970')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
