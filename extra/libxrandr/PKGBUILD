@@ -1,27 +1,33 @@
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Maintainer: Andreas Radke <andyrtr@archlinux.org>
+# Contributor: Alexander Baldeck <alexander@archlinux.org>
+
 pkgname=libxrandr
-_pkgname=libXrandr
-pkgver=1.3.2
+pkgver=1.4.0
 pkgrel=1
-category=x11
 pkgdesc="X11 RandR extension library"
 arch=('i686' 'x86_64')
 license=('custom')
 url="http://xorg.freedesktop.org/"
-depends=('libxext' 'libxrender' 'randrproto')
-makedepends=('bigreqsproto' 'inputproto' 'libcheck' 'libgcrypt' 'libgpg-error' 'libxml2' 'libxslt' 'python2' 'xcb-proto' 'xcmiscproto' 'xf86bigfontproto' 'xorg-macros' 'xtrans')
-
-options=('!libtool')
+depends=('libxext' 'libxrender' 'randrproto>=1.4.0')
+makedepends=('xorg-util-macros')
+source=(${url}/releases/individual/lib/libXrandr-${pkgver}.tar.bz2)
+sha256sums=('033ad0ac2f012afb05268660f6d78705c85f84689f92fa7b47ce12959b15f5c3')
 
 build() {
-  cd "${portsdir}/${category}/${_pkgname}"
-  make clean
+  cd "${srcdir}/libXrandr-${pkgver}"
+  ./configure --prefix=/usr/local --sysconfdir=/usr/local/etc
   make
-  make deinstall
-  make package PACKAGES="${srcdir}"
 }
 
 package() {
-  cd "${pkgdir}"
-  tar xpf "${srcdir}/${category}/${_pkgname}-${pkgver}.txz"
-}
+  cd "${srcdir}/libXrandr-${pkgver}"
+  make DESTDIR="${pkgdir}" install
 
+  install -dm755 "${pkgdir}/usr/local/libdata"
+  mv "${pkgdir}/usr/local/lib/pkgconfig" \
+     "${pkgdir}/usr/local/libdata/pkgconfig"
+
+  install -d -m755 "${pkgdir}/usr/local/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/local/share/licenses/${pkgname}/"
+}
