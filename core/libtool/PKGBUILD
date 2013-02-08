@@ -43,11 +43,6 @@ build() {
   make
 }
 
-check() {
-  cd ${srcdir}/${pkgbase}-${pkgver}
-  make check
-}
-
 package_libtool() {
   depends=("libltdl=$pkgver")
 # Arch has this silly dependency...

@@ -39,13 +39,9 @@ build() {
                 --without-libintl-prefix \
                 --docdir=/usr/local/doc \
                 --enable-extra-encodings
+
   unset gl_cv_cc_visibility am_cv_func_iconv am_cv_proto_iconv_arg1
   gmake
-}
-
-check() {
-  cd ${srcdir}/${pkgname}-${pkgver}
-  gmake check
 }
 
 package() {
