@@ -1,27 +1,31 @@
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
 pkgname=libxv
-_pkgname=libXv
-pkgver=1.0.6
+pkgver=1.0.7
 pkgrel=1
-category=x11
 pkgdesc="X11 Video extension library"
 arch=('i686' 'x86_64')
 license=('custom')
 url="http://xorg.freedesktop.org/"
 depends=('libxext' 'videoproto')
-makedepends=('pkgconfig')
+makedepends=('pkgconf')
+source=("${url}/releases/individual/lib/libXv-${pkgver}.tar.bz2")
+sha1sums=('49c87e0ccb999966b7b1b4e72cb927f05e0835bd')
 
 build() {
-
-  cd "$portsdir/$category/$_pkgname"
-  make clean
-  make 
-  make deinstall
-  make package PACKAGES="$srcdir"
+  cd "${srcdir}/libXv-${pkgver}"
+  ./configure --prefix=/usr/local
+  make
 }
 
 package() {
-  cd $pkgdir
-  tar xpf "${srcdir}/${category}/${_pkgname}-${pkgver},${pkgrel}.txz"
+  cd "${srcdir}/libXv-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+
+  install -dm755 "${pkgdir}/usr/local/libdata"
+  mv "${pkgdir}/usr/local/lib/pkgconfig" \
+     "${pkgdir}/usr/local/libdata/pkgconfig"
+
+  install -m755 -d "${pkgdir}/usr/local/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/local/share/licenses/${pkgname}/"
 }
-
-

@@ -1,27 +1,32 @@
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
 pkgname=libxi
-_pkgname=libXi
-pkgver=1.4.5
+pkgver=1.6.2
 pkgrel=1
-category=x11
 pkgdesc="X11 Input extension library"
 arch=('i686' 'x86_64')
 url="http://xorg.freedesktop.org"
 depends=('libxext' 'inputproto')
-makedepends=('pkgconfig')
+makedepends=('pkgconf' 'xorg-util-macros')
 license=('custom')
+source=(${url}/releases/individual/lib/libXi-${pkgver}.tar.bz2)
+sha256sums=('3250fd34cdd099a15b78abdb87c7e1a9b7a2188ab893f273e90d831dbc604058')
 
 build() {
-
-  cd "$portsdir/$category/$_pkgname"
-  make clean
-  make 
-  make deinstall
-  make package PACKAGES="$srcdir"
+  cd "${srcdir}/libXi-${pkgver}"
+  ./configure --prefix=/usr/local --sysconfdir=/usr/local/etc \
+              --disable-specs --without-xmlto
+  make
 }
 
 package() {
-  cd $pkgdir
-  tar xpf "${srcdir}/${category}/${_pkgname}-${pkgver},${pkgrel}.txz"
+  cd "${srcdir}/libXi-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+
+  install -dm755 "${pkgdir}/usr/local/libdata"
+  mv "${pkgdir}/usr/local/lib/pkgconfig" \
+     "${pkgdir}/usr/local/libdata/pkgconfig"
+
+  install -m755 -d "${pkgdir}/usr/local/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/local/share/licenses/${pkgname}/"
 }
-
-
