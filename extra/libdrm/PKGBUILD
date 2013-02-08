@@ -26,9 +26,6 @@ build() {
   # man/Makefile,in is missing
   patch -Np1 -i ${srcdir}/buildfix.diff
 
-  sed -i '' -e 's|{libdir}/pkgconfig|{prefix}/libdata/pkgconfig|g' \
-  	configure
-
   sed -i '' -e '/86|x86_64) INTEL=yes/ s@x86_64@&|amd64@' configure
 
   #libtoolize --force
@@ -46,6 +43,11 @@ check() {
 package() {
   cd $pkgname-$pkgver
   make DESTDIR="$pkgdir" install
+
+  install -dm755 "${pkgdir}/usr/local/libdata"
+  mv "${pkgdir}/usr/local/lib/pkgconfig" \
+     "${pkgdir}/usr/local/libdata/pkgconfig"
+
   install -m755 -d "$pkgdir/usr/local/share/licenses/$pkgname"
   install -m644 ../COPYING "$pkgdir/usr/local/share/licenses/$pkgname/"
 }
