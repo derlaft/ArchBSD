@@ -9,12 +9,10 @@ arch=('i686' 'x86_64')
 url="http://freebsd.org"
 source=('loader.conf'
 	'sysctl.conf'
-        'freebsdworld.install'
 	'src.conf')
 
 md5sums=('a0207b6316254bf13409e4feb574640f'
          'de332851385c7219c51d7254236bde1f'
-         'bf0d50295ffc8a23b4dc6bced65f5500'
          '3b79aa8dae89b5894e7a012ca361542d')
 
 install=freebsdworld.install
