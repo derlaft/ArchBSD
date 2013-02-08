@@ -1,17 +1,17 @@
 pre_remove() {
-  	for i in /bin /usr/lib /libexec /sbin /usr/bin /usr/sbin /usr/lib /usr/lib32; do
+  	for i in bin usr/lib libexec sbin usr/bin usr/sbin usr/lib usr/lib32; do
 		chflags -R noschg $i
 	done
 }
 
 pre_upgrade() {
-	for i in /bin /usr/lib /libexec /sbin /usr/bin /usr/sbin /usr/lib /usr/lib32; do
+	for i in bin usr/lib libexec sbin usr/bin usr/sbin usr/lib usr/lib32; do
                 chflags -R noschg $i       
         done
 }
 
 pre_install() {
-        for i in /bin /usr/lib /libexec /sbin /usr/bin /usr/sbin /usr/lib /usr/lib32; do
+        for i in bin usr/lib libexec sbin usr/bin usr/sbin usr/lib usr/lib32; do
                 chflags -R noschg $i
         done
 }
