@@ -1,27 +1,33 @@
+#Maintainer: Jan de Groot <jgc@archlinux.org>
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
 pkgname=libxxf86vm
-_pkgname=libXxf86vm
-pkgver=1.1.1
+pkgver=1.1.2
 pkgrel=1
-category=x11
 pkgdesc="X11 XFree86 video mode extension library"
 arch=('x86_64' 'i686')
 license=('custom')
 url="http://xorg.freedesktop.org/"
 depends=('libxext' 'xf86vidmodeproto')
-options=('!libtool')
+makedepends=('xorg-util-macros')
+source=(${url}/releases/individual/lib/libXxf86vm-${pkgver}.tar.bz2)
+sha1sums=('57bbf3bb69a49f6a6dec515813394a383f85502f')
 
 build() {
-
-  cd "$portsdir/$category/$_pkgname"
-  make clean
-  make 
-  make deinstall
-  make package PACKAGES="$srcdir"
+  cd "${srcdir}/libXxf86vm-${pkgver}"
+  ./configure --prefix=/usr/local
+  make
 }
 
-package() {
-  cd $pkgdir
-  tar xpf "${srcdir}/${category}/${_pkgname}-${pkgver}.txz"
+package()
+{
+  cd "${srcdir}/libXxf86vm-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+
+  install -dm755 "${pkgdir}/usr/local/libdata"
+  mv "${pkgdir}/usr/local/lib/pkgconfig" \
+     "${pkgdir}/usr/local/libdata/pkgconfig"
+
+  install -dm755 "${pkgdir}/usr/local/share/licenses/${pkgname}/"
+  install -m644 COPYING "${pkgdir}/usr/local/share/licenses/${pkgname}/COPYING"
 }
-
-
