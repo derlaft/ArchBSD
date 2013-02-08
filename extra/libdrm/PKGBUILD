@@ -13,14 +13,20 @@ url="http://dri.freedesktop.org/"
 source=(http://dri.freedesktop.org/$pkgname/$pkgname-$pkgver.tar.bz2
         no-pthread-stubs.patch
         COPYING
-        buildfix.diff)
+        buildfix.diff
+        extra-xf86drmMode.c
+        )
 sha256sums=('52b3ca670df43fc9f5164f0f55fa40b008de297c0ceedab7c77c30bf9022f212'
             '3915aaff4d5b0ed523c3144911e7f79ee812dece0e3933c13a88dddcf5912ded'
             '9631d4f694952e3e6ae5a05534c2e93e994e47d3413677a3a00e45c8cef6db93'
-            '9b293bbe682381b6822b5abfb1b1ce713185bcefde255d300367b26f47102ddc')
+            '9b293bbe682381b6822b5abfb1b1ce713185bcefde255d300367b26f47102ddc'
+            '87ee4bf81818dc8e1929f1d640ed3002b5cff1f1b458247801060866f6ec4e4a')
 
 build() {
   cd $pkgname-$pkgver
+
+  patch -p0 -i "${srcdir}/extra-xf86drmMode.c"
+
   patch -Np1 -i ../no-pthread-stubs.patch
 
   # man/Makefile,in is missing
@@ -30,8 +36,12 @@ build() {
 
   #libtoolize --force
   autoreconf --force --install
+  PCIACCESS_CFLAGS="-I/usr/local/include" \
+  PCIACCESS_LIBS="-lpciaccess" \
   ./configure --prefix=/usr/local \
       --enable-nouveau-experimental-api
+  make
+  cd intel
   make
 }
 
@@ -43,6 +53,7 @@ check() {
 package() {
   cd $pkgname-$pkgver
   make DESTDIR="$pkgdir" install
+  make -C intel DESTDIR="$pkgdir" install
 
   install -dm755 "${pkgdir}/usr/local/libdata"
   mv "${pkgdir}/usr/local/lib/pkgconfig" \
