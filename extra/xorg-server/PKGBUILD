@@ -35,7 +35,7 @@ md5sums=('553fd7902e1156115f15cc1656f46a6f'
          'aae084dbdb8045b3fc1b11b59db4186d'
          '7a5f37c45511b890a5fa7278c633a12b'
          '7368001c17d37acf0a0e9a1147af705f'
-         '95238ad1ddb6a14bd48caf024ca920ce')
+         '6d2134f5f58463fa79c901a1bbd246ee')
 
 build() {
   cd "${srcdir}/${pkgbase}-${pkgver}"

@@ -21,33 +21,32 @@
          char **list;
  
          TestFree(ptr->identifier);
---- hw/xfree86/dri2/dri2.c.orig	2012-12-14 00:06:39.680738243 +0100
-+++ hw/xfree86/dri2/dri2.c	2012-12-14 00:08:14.310729622 +0100
-@@ -201,7 +201,7 @@
+--- hw/xfree86/dri2/dri2.c.orig	2012-11-02 05:17:59.000000000 +0100
++++ hw/xfree86/dri2/dri2.c	2013-02-09 21:12:54.000000000 +0100
+@@ -292,7 +292,7 @@ typedef struct DRI2DrawableRefRec {
  static DRI2DrawableRefPtr
  DRI2LookupDrawableRef(DRI2DrawablePtr pPriv, XID id)
  {
 -    DRI2DrawableRefPtr ref;
 +    DRI2DrawableRefPtr ref = NULL;
  
-     list_for_each_entry(ref, &pPriv->reference_list, link) {
- 	if (ref->id == id)
-@@ -267,7 +267,8 @@
+     xorg_list_for_each_entry(ref, &pPriv->reference_list, link) {
+         if (ref->id == id)
+@@ -372,7 +372,7 @@ static int
+ DRI2DrawableGone(pointer p, XID id)
  {
      DRI2DrawablePtr pPriv = p;
-     DRI2ScreenPtr   ds = pPriv->dri2_screen;
 -    DRI2DrawableRefPtr ref, next;
-+    DRI2DrawableRefPtr ref = NULL;
-+    DRI2DrawableRefPtr  next;
++    DRI2DrawableRefPtr ref = NULL, next = NULL;
      WindowPtr pWin;
      PixmapPtr pPixmap;
      DrawablePtr pDraw;
-@@ -534,7 +535,7 @@
+@@ -695,7 +695,7 @@ static void
  DRI2InvalidateDrawable(DrawablePtr pDraw)
  {
      DRI2DrawablePtr pPriv = DRI2GetDrawable(pDraw);
 -    DRI2DrawableRefPtr ref;
 +    DRI2DrawableRefPtr ref = NULL;
  
-     if (!pPriv)
+     if (!pPriv || !pPriv->needInvalidate)
          return;
