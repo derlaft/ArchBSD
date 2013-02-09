@@ -1,26 +1,30 @@
+# Contributor: Jan de Groot <jgc@archlinux.org>
+# Maintainer: Gaetan Bisson <bisson@archlinux.org>
+
 pkgname=xorg-setxkbmap
-_pkgname=setxkbmap
-pkgver=1.2.0
+pkgver=1.3.0
 pkgrel=1
-category=x11
 pkgdesc='Set the keyboard using the X Keyboard Extension'
 url='http://xorg.freedesktop.org/'
 license=('custom')
 arch=('i686' 'x86_64')
 depends=('libxkbfile')
+makedepends=('xorg-util-macros')
+source=("${url}/releases/individual/app/setxkbmap-${pkgver}.tar.bz2")
+sha1sums=('d10885d6215b06789961c67557df46406f99c2b7')
+
+groups=('xorg-apps' 'xorg')
 
 build() {
-
-  cd "$portsdir/$category/$_pkgname"
-  make clean
-  make
-  make deinstall
-  make package PACKAGES="$srcdir"
+	cd "${srcdir}/setxkbmap-${pkgver}"
+	./configure --prefix=/usr/local \
+	            --with-xkb-config-root=/usr/local/share/X11/xkb
+	make
 }
 
 package() {
-  cd $pkgdir
-  tar xpf "${srcdir}/${category}/${_pkgname}-${pkgver}.txz"
+	cd "${srcdir}/setxkbmap-${pkgver}"
+	make DESTDIR="${pkgdir}" install
+	install -dm755 "${pkgdir}/usr/local/share/licenses/${pkgname}/"
+	install -m644 COPYING "${pkgdir}/usr/local/share/licenses/${pkgname}/COPYING"
 }
-
-

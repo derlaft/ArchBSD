@@ -1,28 +1,35 @@
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
 pkgname=xf86-input-keyboard
-pkgver=1.6.1
-pkgrel=1
-category=x11-drivers
-pkgdesc="X11 vmware display driver"
-arch=('i686' 'x86_64')
-url="http://xorg.freedesktop.org/"
+pkgver=1.6.2
+pkgrel=2
+pkgdesc="X.Org keyboard input driver"
+arch=(i686 x86_64)
 license=('custom')
-depends=('libxi' 'xorg-server')
-makedepends=('xorg-server-devel' 'X-ABI-XINPUT_VERSION=12' 'resourceproto' 'scrnsaverproto')
-conflicts=('xorg-server<1.10.0' 'X-ABI-XINPUT_VERSION<12' 'X-ABI-XINPUT_VERSION>=14')
+url="http://xorg.freedesktop.org/"
+depends=('glibc')
+makedepends=('xorg-server-devel' 'X-ABI-XINPUT_VERSION=18' 'resourceproto' 'scrnsaverproto')
+conflicts=('xorg-server<1.13.0' 'X-ABI-XINPUT_VERSION<18' 'X-ABI-XINPUT_VERSION>=19')
 groups=('xorg-drivers' 'xorg')
+source=(${url}/releases/individual/driver/${pkgname}-${pkgver}.tar.bz2
+patch-at_scancode.c)
+sha256sums=('76651a84f5031f7c6ecf075d55989c04a00689642579df6d1a1bee6d5c2e5f8a')
 
 build() {
-
-  cd "$portsdir/$category/$pkgname"
-  make clean
-  make 
-  make deinstall
-  make package PACKAGES="$srcdir"
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  patch -p0 -i "$srcdir"/patch-at_scancode.c
+  ./configure --prefix=/usr/local
+  make
 }
 
 package() {
-  cd $pkgdir
-  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+
+  install -dm755 "${pkgdir}/usr/local/libdata"
+  mv "${pkgdir}/usr/local/lib/pkgconfig" \
+     "${pkgdir}/usr/local/libdata/pkgconfig"
+
+  install -m755 -d "${pkgdir}/usr/local/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/local/share/licenses/${pkgname}/"
 }
-
-

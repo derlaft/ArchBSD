@@ -1,28 +1,34 @@
+# $Id: PKGBUILD 168559 2012-10-13 11:43:43Z andyrtr $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
 pkgname=xf86-input-mouse
-pkgver=1.7.1
-pkgrel=1
-category=x11-drivers
-pkgdesc="X11 mouse driver"
-arch=('i686' 'x86_64')
-url="http://xorg.freedesktop.org/"
+pkgver=1.8.1
+pkgrel=2
+pkgdesc="X.org mouse input driver"
+arch=(i686 x86_64)
 license=('custom')
-depends=('libxi' 'xorg-server')
-makedepends=('xorg-server-devel' 'X-ABI-XINPUT_VERSION=12' 'resourceproto' 'scrnsaverproto')
-conflicts=('xorg-server<1.10.0' 'X-ABI-XINPUT_VERSION<12' 'X-ABI-XINPUT_VERSION>=14')
+url="http://xorg.freedesktop.org/"
+depends=('glibc')
+makedepends=('xorg-server-devel' 'X-ABI-XINPUT_VERSION=18' 'resourceproto' 'scrnsaverproto')
+conflicts=('xorg-server<1.13.0' 'X-ABI-XINPUT_VERSION<18' 'X-ABI-XINPUT_VERSION>=19')
+options=('!libtool')
 groups=('xorg-drivers' 'xorg')
+source=(${url}/releases/individual/driver/${pkgname}-${pkgver}.tar.bz2
+        patch-src-bsd_mouse.c patch-src_mouse.c
+)
+sha256sums=('f5b97aac9aab8fa8b933e960631441ae23b18681c8bf3d5007c00da838f9c9c8')
 
 build() {
-
-  cd "$portsdir/$category/$pkgname"
-  make clean
-  make 
-  make deinstall
-  make package PACKAGES="$srcdir"
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  patch -p0 -i "$srcdir"/patch-src-bsd_mouse.c
+  patch -p0 -i "$srcdir"/patch-src_mouse.c
+  ./configure --prefix=/usr/local --disable-silent-rules
+  make
 }
 
 package() {
-  cd $pkgdir
-  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_${pkgrel}.txz"
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  install -d -m755 "${pkgdir}/usr/local/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/local/share/licenses/${pkgname}/"
 }
-
-

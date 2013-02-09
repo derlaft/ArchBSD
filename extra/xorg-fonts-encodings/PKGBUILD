@@ -1,0 +1,33 @@
+#Maintainer: Jan de Groot <jgc@archlinux.org>
+
+pkgname=xorg-fonts-encodings
+pkgver=1.0.4
+pkgrel=3
+pkgdesc="X.org font encoding files"
+arch=(any)
+url="http://xorg.freedesktop.org/"
+license=('custom')
+makedepends=('xorg-mkfontscale' 'xorg-util-macros' 'xorg-font-util')
+groups=('xorg-fonts' 'xorg')
+options=(!makeflags)
+source=(${url}/releases/individual/font/encodings-${pkgver}.tar.bz2)
+sha1sums=('24ace2470403f85a0d393769204029bd8247992a')
+
+build() {
+  cd "${srcdir}/encodings-${pkgver}"
+  ./configure --prefix=/usr/local
+  make
+}
+
+package() {
+  cd "${srcdir}/encodings-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  install -dm755 "${pkgdir}/usr/local/share/licenses/${pkgname}/"
+  install -m644 COPYING "${pkgdir}/usr/local/share/licenses/${pkgname}/COPYING"
+
+  # regenerate encodngs file not to include non-compressed versions
+  cd $pkgdir/usr/local/lib/X11/fonts/encodings/large
+  mkfontscale -b -s -l -n -r -p /usr/local/lib/X11/fonts/encodings/large -e . .
+  cd $pkgdir/usr/local/lib/X11/fonts/encodings/
+  mkfontscale -b -s -l -n -r -p /usr/local/lib/X11/fonts/encodings -e . -e large .
+}
