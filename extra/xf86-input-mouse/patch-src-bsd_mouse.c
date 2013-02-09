@@ -15,7 +15,7 @@
  #define DEFAULT_MOUSE_DEV               "/dev/mouse"
  #define DEFAULT_SYSMOUSE_DEV            "/dev/sysmouse"
  #define DEFAULT_PS2_DEV                 "/dev/psm0"
-+#define DEFAULT_PS2_DEV                 "/dev/ums0"
++#define DEFAULT_USB_DEV                 "/dev/ums0"
  
  static const char *mouseDevs[] = {
          DEFAULT_MOUSE_DEV,

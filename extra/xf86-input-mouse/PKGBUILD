@@ -16,7 +16,8 @@ groups=('xorg-drivers' 'xorg')
 source=(${url}/releases/individual/driver/${pkgname}-${pkgver}.tar.bz2
         patch-src-bsd_mouse.c
 )
-sha256sums=('f5b97aac9aab8fa8b933e960631441ae23b18681c8bf3d5007c00da838f9c9c8')
+sha256sums=('f5b97aac9aab8fa8b933e960631441ae23b18681c8bf3d5007c00da838f9c9c8'
+            '1fc903820e8dae1d4ff55d00b0067ca8fcdcc3545da0117df978ba6677b576a2')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
