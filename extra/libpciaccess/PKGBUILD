@@ -15,9 +15,9 @@ source=(${url}/releases/individual/lib/${pkgname}-${pkgver}.tar.bz2
         patch-src-freebsd_pci.c
         patch-src-pciaccess_private.h
         )
-md5sums=('d6363ee9f4df79f6fc47cba7c67b0d35'
+md5sums=('399a419ac6a54f0fc07c69c9bdf452dc'
          '612da088062606ccd3be6b88da813bac'
-         '66cd7181c1a64d21ff1937620883b754'
+         'e3a226f4f99dbcc7ef11267ac12a49c4'
          'fcf90a9811e06be52da385603ac53648')
 
 build() {

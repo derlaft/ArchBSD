@@ -5,7 +5,6 @@ pkgver=1.1.4
 pkgrel=1
 pkgdesc="getopt replacement that supports GNU-style long options"
 arch=('i686' 'x86_64')
-url="http://xorg.freedesktop.org/"
 license=('custom')
 depend=('gettext')
 url=http://software.frodo.looijaard.name/getopt
