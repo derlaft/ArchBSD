@@ -51,7 +51,7 @@ build() {
 
    ./configure  --prefix=/usr/local \
 	        --with-html-dir=/usr/local/share/doc \
-		--without-python
+	        --with-python=/usr/local/bin/python2
    gmake
 }
 
