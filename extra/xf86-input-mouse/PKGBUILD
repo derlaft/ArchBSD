@@ -13,16 +13,14 @@ conflicts=('xorg-server<1.13.0' 'X-ABI-XINPUT_VERSION<18' 'X-ABI-XINPUT_VERSION>
 options=('!libtool')
 groups=('xorg-drivers' 'xorg')
 source=(${url}/releases/individual/driver/${pkgname}-${pkgver}.tar.bz2
-        patch-src-bsd_mouse.c patch-src_mouse.c
+        patch-src-bsd_mouse.c
 )
 sha256sums=('f5b97aac9aab8fa8b933e960631441ae23b18681c8bf3d5007c00da838f9c9c8'
-            '6ff626bac844e91cd4c347e9aec69f5ae106b2a8b5609f1267207884235f4542'
-            '6252ce04cb15b329da21ed437317e78e1d66b92382187ae5427f73d7d841f1e7')
+            '208c4fcefd6ed19f7c959b905ae73c628af13c28cd8ab63f56909d1e2b2d9e18')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   patch -p0 -i "$srcdir"/patch-src-bsd_mouse.c
-  patch -p0 -i "$srcdir"/patch-src_mouse.c
   ./configure --prefix=/usr/local --disable-silent-rules
   make
 }
