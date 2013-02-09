@@ -23,6 +23,7 @@ source=(${url}/releases/individual/xserver/${pkgbase}-${pkgver}.tar.bz2
         #git-fixes.patch
         use-pixman-glyph-cache.patch
 patch-Xserver-hw-xfree86-common-xf86Config.c patch-Xserver-hw-xfree86-os-support-bsd-i386_video.c patch-xorgconf.cpp
+extra-clang
 )
 md5sums=('553fd7902e1156115f15cc1656f46a6f'
          'ea4852dedbb89550f6bc113ca66348a2'
@@ -33,12 +34,13 @@ md5sums=('553fd7902e1156115f15cc1656f46a6f'
          '2757f70c60921215ac2992aa50925ffa'
          'aae084dbdb8045b3fc1b11b59db4186d'
          '7a5f37c45511b890a5fa7278c633a12b'
-         '7368001c17d37acf0a0e9a1147af705f')
+         '7368001c17d37acf0a0e9a1147af705f'
+         '95238ad1ddb6a14bd48caf024ca920ce')
 
 build() {
   cd "${srcdir}/${pkgbase}-${pkgver}"
 
-  for i in patch-Xserver-hw-xfree86-common-xf86Config.c patch-Xserver-hw-xfree86-os-support-bsd-i386_video.c patch-xorgconf.cpp
+  for i in patch-Xserver-hw-xfree86-common-xf86Config.c patch-Xserver-hw-xfree86-os-support-bsd-i386_video.c patch-xorgconf.cpp extra-clang
   do
     patch -p0 -i "${srcdir}/$i"
   done
