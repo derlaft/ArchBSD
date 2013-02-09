@@ -34,4 +34,8 @@ package() {
   ln -sf /var/lib/xkb "${pkgdir}/usr/local/share/X11/xkb/compiled"
   install -m755 -d "${pkgdir}/usr/local/share/licenses/${pkgname}"
   install -m644 COPYING "${pkgdir}/usr/local/share/licenses/${pkgname}/"
+
+  install -dm755 "${pkgdir}/usr/local/libdata"
+  mv "${pkgdir}/usr/local/share/pkgconfig" \
+     "${pkgdir}/usr/local/libdata/pkgconfig"
 }
