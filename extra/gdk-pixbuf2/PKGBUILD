@@ -2,7 +2,7 @@
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=gdk-pixbuf2
-pkgver=2.23.5
+pkgver=2.24.1
 pkgrel=1
 pkgdesc="An image loading library"
 arch=('i686' 'x86_64')
