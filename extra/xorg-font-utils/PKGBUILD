@@ -23,7 +23,8 @@ build() {
 	./configure \
 		--prefix=/usr/local \
 		--mandir=/usr/local/man \
-		--with-mapdir=/usr/local/lib/X11/fonts/util
+		--with-mapdir=/usr/local/lib/X11/fonts/util \
+		--with-fontrootdir=/usr/local/lib/X11/fonts
 
 	make
 }
