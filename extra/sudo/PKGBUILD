@@ -12,6 +12,7 @@ url="http://www.sudo.ws/sudo/"
 license=('custom')
 backup=('usr/local/etc/sudoers' 'usr/local/etc/pam.d/sudo')
 options=('!libtool')
+install=sudo.install
 source=(http://www.sudo.ws/sudo/dist/$pkgname-$_sudover.tar.gz{,.sig}
         sudo.pam
         patch-plugins__sudoers__sudoers.in)
