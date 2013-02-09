@@ -17,7 +17,7 @@ sha256sums=('b342f9df956a84678611d1704b6ae689267e3bb8b385baa6578522e549716b80')
 build() {
   cd ${pkgname}-${pkgver}
 
-  ./configure --prefix=/usr --sysconfdir=/etc \
+  ./configure --prefix=/usr/local --sysconfdir=/usr/local/etc \
       --localstatedir=/var --with-included-modules=basic-fc \
       --enable-static \
       --with-html-dir=/usr/local/share/doc

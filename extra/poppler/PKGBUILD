@@ -69,6 +69,10 @@ package_poppler() {
   gmake DESTDIR="${pkgdir}" install
 
   rm -f "${pkgdir}"/usr/local/lib/pkgconfig/poppler-{glib,qt4}.pc
+
+  install -dm755 "${pkgdir}/usr/local/libdata"
+  mv "${pkgdir}/usr/local/lib/pkgconfig" \
+     "${pkgdir}/usr/local/libdata/pkgconfig"
 }
 
 package_poppler-glib() {
