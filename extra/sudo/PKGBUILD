@@ -1,0 +1,63 @@
+# Maintainer: Evangelos Foutras <evangelos@foutrelis.com>
+# Contributor: Allan McRae <allan@archlinux.org>
+# Contributor: Tom Newsom <Jeepster@gmx.co.uk>
+
+pkgname=sudo
+_sudover=1.8.6p4
+pkgver=${_sudover/p/.p}
+pkgrel=1
+pkgdesc="Give certain users the ability to run some commands as root"
+arch=('i686' 'x86_64')
+url="http://www.sudo.ws/sudo/"
+license=('custom')
+backup=('usr/local/etc/sudoers' 'usr/local/etc/pam.d/sudo')
+options=('!libtool')
+source=(http://www.sudo.ws/sudo/dist/$pkgname-$_sudover.tar.gz{,.sig}
+        sudo.pam
+        patch-plugins__sudoers__sudoers.in)
+sha256sums=('364ad88ca3afcadcff6bd6820b0af19c56ce4876704dae210e21845d923e59e8'
+            'e0495c4594d58c6360b9399d3225e41224284afbd64055280f509efa24e7a000'
+            '7325f2c17a8a7c3efcb5a03d2d328bacc2459077286543eaf8a80f7dd49dd53c'
+            'c33439e281313947be4ed6e9477014fc8077e6bf3d7075992896fbb0d3a27f2e')
+
+build() {
+  cd "$srcdir/$pkgname-$_sudover"
+
+  patch -p0 -i "${srcdir}/patch-plugins__sudoers__sudoers.in"
+
+	sed -i '' \
+	    -e 's,\$(srcdir)/sudoers2ldif \$(DESTDIR)\$(docdir),$(srcdir)/sudoers2ldif $(DESTDIR)$(bindir),' plugins/sudoers/Makefile.in
+
+  ./configure \
+    --prefix=/usr/local \
+    --sysconfdir=/usr/local/etc \
+    --with-logfac=local2 \
+    --with-pam \
+    --with-env-editor \
+    --with-long-otp-prompt \
+    --with-logincap \
+    --with-tty-tickets \
+    --with-ignore-dot \
+    --with-all-insults
+  make
+}
+
+check() {
+  cd "$srcdir/$pkgname-$_sudover"
+  make check
+}
+
+package() {
+  cd "$srcdir/$pkgname-$_sudover"
+  make DESTDIR="$pkgdir" install
+
+  install -dm755 "$pkgdir/usr/local/etc/pam.d/"
+  install -m644 "$srcdir/sudo.pam" "$pkgdir/usr/local/etc/pam.d/sudo.default"
+
+  mv "$pkgdir/usr/local/etc/sudoers" "$pkgdir/usr/local/etc/sudoers.sample"
+
+  install -dm755 "$pkgdir/usr/local/share/licenses/sudo/"
+  install -m644 doc/LICENSE "$pkgdir/usr/local/share/licenses/sudo/LICENSE"
+}
+
+# vim:set ts=2 sw=2 et:
