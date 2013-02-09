@@ -15,6 +15,7 @@ optdepends=('texlive-core:      needed for dvipdf'
 url="http://www.ghostscript.com/"
 options=('!makeflags')
 source=(http://downloads.ghostscript.com/public/ghostscript-${pkgver}.tar.bz2)
+md5sums=('46f9ebe40dc52755287b30704270db11')
 
 build() {
   cd ${srcdir}/ghostscript-${pkgver}
