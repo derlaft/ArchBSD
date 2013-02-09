@@ -9,7 +9,7 @@ pkgrel=1
 arch=(i686 x86_64)
 license=('GPL')
 #makedepends=('libjpeg' 'cairo' 'fontconfig' 'openjpeg' 'gtk2' 'qt' 'pkgconf' 'lcms' 'gobject-introspection' 'icu')
-makedepends=('libjpeg' 'fontconfig' 'gtk2' 'pkgconf' 'lcms' 'gobject-introspection' 'icu')
+makedepends=('libjpeg' 'cairo' 'fontconfig' 'gtk2' 'pkgconf' 'lcms' 'gobject-introspection' 'icu')
 options=('!emptydirs')
 url="http://poppler.freedesktop.org/"
 _testtag=0d2bfd4af4c76a3bac27ccaff793d9129df7b57a
@@ -20,7 +20,9 @@ md5sums=('c7038be37a7d446544e83a7df3c26196'
 
 build() {
   cd "${srcdir}/${pkgbase}-${pkgver}"
-  sed -i -e '/AC_PATH_XTRA/d' configure.ac
+  sed -i '' -e '/AC_PATH_XTRA/d' configure.ac
+# using undocumented AC_CONFIG_HEADER, since AC_CONFIG_HEADERS (note: plural) has different usage
+  sed -i '' -e 's/AM_CONFIG_HEADER/AC_CONFIG_HEADER/' configure.ac
 
   autoreconf -fi
 
@@ -33,9 +35,8 @@ build() {
       --enable-libjpeg --enable-zlib \
       --enable-poppler-glib \
       --disable-gtk-test \
-      --with-html-dir=/usr/local/share/doc/poppler
-
-# FIXME: --enable-cairo-output  -- circular dependency - enable later
+      --with-html-dir=/usr/local/share/doc/poppler \
+      --enable-cairo-output
 # FIXME: needs qt4 (obviously) --enable-poppler-qt4 \
 
 # ltverhack:
