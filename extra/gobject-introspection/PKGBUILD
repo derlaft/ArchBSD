@@ -33,7 +33,7 @@ build() {
   patch -p0 -i "${srcdir}/patch-configure"
   patch -p0 -i "${srcdir}/patch-tests_Makefile.in"
   #PYTHON=/usr/local/bin/python2 ./configure --prefix=/usr/local --disable-static --enable-doctool
-  PYTHON=/usr/local/bin/python2 ./configure --prefix=/usr/local --mandir=/usr/local/man
+  PYTHON=/usr/local/bin/python2 ./configure --prefix=/usr/local --mandir=/usr/local/man --disable-tests
   gmake
 }
 
