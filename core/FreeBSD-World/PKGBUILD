@@ -23,13 +23,17 @@ options=('docs')
 build() {
 
 # Building
+unset LDFLAGS
+unset CXXFLAGS
+unset makeflags
+unset m4
 
 cd /usr/src
-if [[ "$ARCH" == "x86_64" ]]; then
+if [[ "$CARCH" == "x86_64" ]]; then
 		make TARGET=amd64 clean
-		make buildworld TARGET=amd64 DESTDIR="$pkgdir" SRCONF=${srcdir}/src.conf || (echo buildworld failed... && return 1)
+		make TARGET=amd64 buildworld|| (echo buildworld failed... && return 1)
 else
-                make TARGET=i386 DESTDIR="$pkgdir" buildworld || (echo buildworld failed... && return 1)
+                make TARGET=i386 buildworld || (echo buildworld failed... && return 1)
 
 fi
 }
