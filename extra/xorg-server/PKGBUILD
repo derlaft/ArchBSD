@@ -215,11 +215,11 @@ package_xorg-server-devel() {
   cd "${srcdir}/${pkgbase}-${pkgver}"
   make DESTDIR="${pkgdir}" install
 
-  rm -rf "${pkgdir}/usrlocal/bin"
-  rm -rf "${pkgdir}/usrlocal/man"
-  rm -rf "${pkgdir}/usrlocal/share/doc"
-  rm -rf "${pkgdir}/usrlocal/share/X11"
-  rm -rf "${pkgdir}/usrlocal/lib/xorg"
+  rm -rf "${pkgdir}/usr/local/bin"
+  rm -rf "${pkgdir}/usr/local/man"
+  rm -rf "${pkgdir}/usr/local/share/doc"
+  rm -rf "${pkgdir}/usr/local/share/X11"
+  rm -rf "${pkgdir}/usr/local/lib/xorg"
   rm -rf "${pkgdir}/var"
 
   install -m755 -d "${pkgdir}/usr/local/share/licenses/xorg-server-devel"
