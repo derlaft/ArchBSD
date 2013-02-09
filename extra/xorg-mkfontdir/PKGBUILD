@@ -1,8 +1,8 @@
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
 pkgname=xorg-mkfontdir
-_pkgname=mkfontdir
-pkgver=1.0.6
+pkgver=1.0.7
 pkgrel=1
-category=x11-fonts
 pkgdesc="Create an index of X font files in a directory"
 arch=(any)
 url="http://xorg.freedesktop.org/"
@@ -10,19 +10,18 @@ license=('custom')
 depends=('xorg-mkfontscale')
 makedepends=('xorg-util-macros')
 groups=('xorg' 'xorg-apps')
+source=(http://xorg.freedesktop.org/archive/individual/app/mkfontdir-${pkgver}.tar.bz2)
+sha1sums=('3c06dad8a5fbf7362b51fb7d6b1ab805eba40336')
 
 build() {
-
-  cd "$portsdir/$category/$_pkgname"
-  make clean
+  cd "${srcdir}/mkfontdir-${pkgver}"
+  ./configure --prefix=/usr/local
   make
-  make deinstall
-  make package PACKAGES="$srcdir"
 }
 
 package() {
-  cd $pkgdir
-  tar xpf "${srcdir}/${category}/${_pkgname}-${pkgver}.txz"
+  cd "${srcdir}/mkfontdir-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  install -m755 -d "${pkgdir}/usr/local/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/local/share/licenses/${pkgname}/"
 }
-
-
