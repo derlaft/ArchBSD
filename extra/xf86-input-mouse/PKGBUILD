@@ -8,7 +8,6 @@ pkgdesc="X.org mouse input driver"
 arch=(i686 x86_64)
 license=('custom')
 url="http://xorg.freedesktop.org/"
-depends=('glibc')
 makedepends=('xorg-server-devel' 'X-ABI-XINPUT_VERSION=18' 'resourceproto' 'scrnsaverproto')
 conflicts=('xorg-server<1.13.0' 'X-ABI-XINPUT_VERSION<18' 'X-ABI-XINPUT_VERSION>=19')
 options=('!libtool')
