@@ -1,24 +1,35 @@
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
 pkgname=pango
 pkgver=1.28.4
 pkgrel=1
-category=x11-toolkits
 pkgdesc="A library for layout and rendering of text"
 arch=('i686' 'x86_64')
 license=('LGPL')
-depends=('cairo' 'gobject-introspection' 'libxft' 'xorg-fonts-truetype')
-makedepends=('fontconfig' 'cairo' 'libxft' 'libthai' 'gobject-introspection')
+depends=('libthai' 'cairo' 'libxft' 'harfbuzz')
+makedepends=('harfbuzz' 'fontconfig' 'cairo' 'libxft' 'libthai' 'gobject-introspection')
 options=('!libtool')
+install=pango.install
+source=(http://download.gnome.org/sources/${pkgname}/${pkgver:0:4}/${pkgname}-${pkgver}.tar.gz)
+url="http://www.pango.org/"
+sha256sums=('b342f9df956a84678611d1704b6ae689267e3bb8b385baa6578522e549716b80')
 
 build() {
-  cd "${portsdir}/${category}/${pkgname}"
-  make clean
-  make
-  make deinstall
-  make package PACKAGES="${srcdir}"
+  cd ${pkgname}-${pkgver}
+
+  ./configure --prefix=/usr --sysconfdir=/etc \
+      --localstatedir=/var --with-included-modules=basic-fc \
+      --enable-static \
+      --with-html-dir=/usr/local/share/doc
+  gmake
 }
 
 package() {
-  cd "${pkgdir}"
-  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_${pkgrel}.txz"
-}
+  cd ${pkgname}-${pkgver}
+  gmake -j1 DESTDIR="${pkgdir}" install
+  install -m755 -d "${pkgdir}/usr/local/etc/pango"
 
+  install -dm755 "${pkgdir}/usr/local/libdata"
+  mv "${pkgdir}/usr/local/lib/pkgconfig" \
+     "${pkgdir}/usr/local/libdata/pkgconfig"
+}
