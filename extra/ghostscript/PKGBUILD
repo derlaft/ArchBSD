@@ -8,8 +8,9 @@ pkgdesc="An interpreter for the PostScript language"
 arch=('i686' 'x86_64')
 license=('GPL3' 'custom')
 #depends=('libxt' 'libcups' 'fontconfig' 'jasper' 'libpng>=1.5.7' 'libjpeg' 'libtiff>=4.0.0' 'lcms') # 'lcms2' won't get used) # move in libpaper from community?
-depends=('libxt' 'libcups' 'fontconfig' 'libpng>=1.5.7' 'libjpeg' 'libtiff>=4.0.0' 'lcms' 'lcms2')
-makedepends=('gtk2') # 'gnutls')
+#depends=('libxt' 'libcups' 'fontconfig' 'libpng>=1.5.7' 'libjpeg' 'libtiff>=4.0.0' 'lcms' 'lcms2')
+depends=('libxt' 'fontconfig' 'libpng>=1.5.7' 'libjpeg' 'libtiff>=4.0.0' 'lcms' 'lcms2')
+#makedepends=('gtk2') # 'gnutls')
 optdepends=('texlive-core:      needed for dvipdf'
             'gtk2:              needed for gsx')
 url="http://www.ghostscript.com/"
@@ -49,6 +50,7 @@ build() {
 
   # Build IJS
   cd ${srcdir}/ghostscript-${pkgver}/ijs
+  sed -i '' -e 's@AM_PROG_CC_STDC@AC_PROG_CC_STDC@g' configure.ac
   ./autogen.sh
   ./configure --prefix=/usr/local --enable-shared --disable-static
   gmake
