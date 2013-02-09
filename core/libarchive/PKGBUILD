@@ -46,6 +46,10 @@ package() {
   cd "$srcdir/$pkgname-$pkgver"
   make DESTDIR="$pkgdir" install
 
+  install -dm755 "${pkgdir}/usr/local/libdata"
+  mv "${pkgdir}/usr/local/lib/pkgconfig" \
+     "${pkgdir}/usr/local/libdata/pkgconfig"
+
   install -d -m755 "$pkgdir"/usr/local/share/licenses/libarchive/COPYING
   install    -m644 COPYING "$pkgdir"/usr/local/share/licenses/libarchive/COPYING
 }

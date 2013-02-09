@@ -78,4 +78,8 @@ package() {
   # install IJS
   cd ${srcdir}/ghostscript-${pkgver}/ijs
   gmake DESTDIR=${pkgdir} install
+
+  install -dm755 "${pkgdir}/usr/local/libdata"
+  mv "${pkgdir}/usr/local/lib/pkgconfig" \
+     "${pkgdir}/usr/local/libdata/pkgconfig"
 }
