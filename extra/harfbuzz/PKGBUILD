@@ -1,0 +1,35 @@
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
+pkgname=harfbuzz
+pkgver=0.9.9
+pkgrel=3
+pkgdesc="OpenType text shaping engine."
+arch=('i686' 'x86_64')
+url="http://www.freedesktop.org/wiki/Software/HarfBuzz"
+license=('MIT')
+depends=('icu' 'glib2' 'freetype2' 'graphite>=1.2.0')
+makedepends=('icu' 'glib2' 'freetype2')
+optdepends=('cairo: hb-view program')
+options=(!libtool)
+source=(http://www.freedesktop.org/software/harfbuzz/release/${pkgname}-${pkgver}.tar.bz2)
+sha256sums=('3d8dd4ebbc38da011485ef181f8ff072b4b0d7e305bbda19b355f217d25169cf')
+
+build() {
+  cd ${pkgname}-${pkgver}
+
+  ./configure --prefix=/usr/local
+  gmake
+}
+
+package() {
+  cd ${pkgname}-${pkgver}
+  gmake DESTDIR="${pkgdir}" install
+
+  install -dm755 "${pkgdir}/usr/local/libdata"
+  mv "${pkgdir}/usr/local/lib/pkgconfig" \
+     "${pkgdir}/usr/local/libdata/pkgconfig"
+
+  install -dm755 "${pkgdir}/usr/local/share/licenses/harfbuzz/"
+  install -m644 COPYING "${pkgdir}/usr/local/share/licenses/harfbuzz/COPYING"
+}
