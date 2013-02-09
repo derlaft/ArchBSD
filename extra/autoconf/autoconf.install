@@ -1,4 +1,4 @@
-infodir=usr/local/share/info
+infodir=usr/local/info
 infofile=autoconf.info.gz
 
 post_install() {

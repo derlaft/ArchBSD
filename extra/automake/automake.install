@@ -1,4 +1,4 @@
-infodir=usr/local/share/info
+infodir=usr/local/info
 filelist="automake.info automake.info-1 automake.info-2"
 
 post_install() {
