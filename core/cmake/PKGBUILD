@@ -52,11 +52,10 @@ build() {
   sed -i '' -e 's,/usr/include,/usr/local/include,' Modules/FindDCMTK.cmake
   find . -name "*.bak" -delete -o -name "*.orig" -delete
 
-  ./bootstrap --prefix=/usr/local \
+  ./configure --prefix=/usr/local \
     --mandir=/man \
     --docdir=/doc/cmake \
-    --datadir=/share \
-    --system-libs
+    --datadir=/share
 
 # Disabled for now
 #    --qt-gui \

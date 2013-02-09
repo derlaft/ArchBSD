@@ -26,7 +26,9 @@ build() {
 	-DCMAKE_BUILD_TYPE:STRING=Release \
 	-DGRAPHITE2_COMPARE_RENDERER=OFF
   make
-  make docs
+
+# problem with xmllint
+#  make docs
 }
 
 check() {
