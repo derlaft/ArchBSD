@@ -1,3 +1,0 @@
-post_install() {
-    mkdir -p /var/lib/xkb
-}
