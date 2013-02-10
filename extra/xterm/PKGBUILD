@@ -22,7 +22,7 @@ build() {
       --enable-256-color \
       --enable-wide-chars \
       --enable-luit \
-      --with-pcre
+      --with-pcre \
       --with-app-defaults=/usr/local/share/X11/app-defaults/ \
       --with-x \
       --disable-full-tgetent \
