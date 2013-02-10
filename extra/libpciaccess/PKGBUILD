@@ -11,21 +11,14 @@ url="http://xorg.freedesktop.org/"
 depends=('pciids')
 makedepends=('pkgconf' 'xorg-util-macros')
 source=(${url}/releases/individual/lib/${pkgname}-${pkgver}.tar.bz2
-        patch-src-common_init.c
         patch-src-freebsd_pci.c
-        patch-src-pciaccess_private.h
         )
 md5sums=('399a419ac6a54f0fc07c69c9bdf452dc'
-         '612da088062606ccd3be6b88da813bac'
-         'e3a226f4f99dbcc7ef11267ac12a49c4'
-         'fcf90a9811e06be52da385603ac53648')
+         'b4563d78950b7ed10144ef92d05c6ccb')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  for i in patch-src-common_init.c patch-src-freebsd_pci.c patch-src-pciaccess_private.h
-  do
-    patch -p0 -i "${srcdir}/$i"
-  done
+  patch -p0 -i "${srcdir}/patch-src-freebsd_pci.c"
   ./configure --prefix=/usr/local --sysconfdir=/usr/local/etc \
               --with-pciids-path=/usr/local/share/pciids
   make
