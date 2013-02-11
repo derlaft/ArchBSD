@@ -1,13 +1,13 @@
-Status as of: Fri Feb  8 22:20:49 CET 2013
+Status as of: Mon Feb 11 01:07:13 CET 2013
 
 There are:
 0 [core]  Ports-Packages out of       32 total
                  Done:  100%
-40 [extra] Ports-Packages out of      180 total
-                 Done:  78%
-That's a total of 40 Ports-PKGBUILDs which need to be converted on this branch.
-There are a total of 212 packages.
-The total conversion progress is: 82%
+26 [extra] Ports-Packages out of      188 total
+                 Done:  87%
+That's a total of 26 Ports-PKGBUILDs which need to be converted on this branch.
+There are a total of 220 packages.
+The total conversion progress is: 89%
 
 Here's the TODO:
     
@@ -16,7 +16,6 @@ Here's the TODO:
     extra/hal
     extra/irssi
     extra/libpthread-stubs
-    extra/libthai
     extra/links
     extra/lxappearence
     extra/lxde-common
@@ -29,26 +28,13 @@ Here's the TODO:
     extra/makedepends
     extra/menu-cache
     extra/mkfontscale
-    extra/pango
     extra/polkit
     extra/rxvt-unicode
     extra/slim
     extra/vte
-    extra/xf86-input-keyboard
-    extra/xf86-input-mouse
-    extra/xf86-video-vesa
     extra/xf86-video-vmware
-    extra/xkeyboard-config
-    extra/xorg-font-utils
-    extra/xorg-fonts-alias
-    extra/xorg-fonts-misc
     extra/xorg-macros
-    extra/xorg-mkfontdir
-    extra/xorg-mkfontscale
-    extra/xorg-server
-    extra/xorg-setxkbmap
     extra/xorg-xauth
     extra/xorg-xinit
-    extra/xorg-xkbcomp
     extra/xrdb
     extra/zsh
