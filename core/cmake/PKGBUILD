@@ -55,7 +55,8 @@ build() {
   ./configure --prefix=/usr/local \
     --mandir=/man \
     --docdir=/doc/cmake \
-    --datadir=/share
+    --datadir=/share \
+    --system-libs
 
 # Disabled for now
 #    --qt-gui \
