@@ -33,8 +33,6 @@ build() {
   -DUNICODE_WCHAR -DUTF8_MAYBE_NATIVE -DNO_LCHMOD -DDATE_FORMAT=DF_YMD \
   -DUSE_BZIP2 -DNATIVE"
 
-  sed -i '' -e "/MANDIR =/s#)/#)/share/#" unix/Makefile
-
   # make -- from Debian
   make -f unix/Makefile LOCAL_UNZIP="$CFLAGS" prefix=/usr/local LF2="" \
   D_USE_BZ2=-DUSE_BZIP2 L_BZ2=-lbz2 unzips
