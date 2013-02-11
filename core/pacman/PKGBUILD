@@ -67,11 +67,11 @@ package() {
   esac
   install -m644 $srcdir/makepkg.conf $pkgdir/usr/local/etc/
   # set things correctly in the default conf file
-  sed -i '' -e "s|@CARCH[@]|$mycarch|g" \
+  sed -i '' -e "s|@CARCH@|$mycarch|g" \
       $pkgdir/usr/local/etc/makepkg.conf
-  sed -i '' -e "s|@CHOST[@]|$mychost|g" \
+  sed -i '' -e "s|@CHOST@|$mychost|g" \
       $pkgdir/usr/local/etc/makepkg.conf
-  sed -i '' -e "s|@CARCHFLAGS[@]|$myflags|g" \
+  sed -i '' -e "s|@CARCHFLAGS@|$myflags|g" \
       $pkgdir/usr/local/etc/makepkg.conf
 
   install -dm750 "${pkgdir}/usr/local/share/pacman"
