@@ -14,7 +14,7 @@ source=(http://people.freedesktop.org/~aplattner/vdpau/${pkgname}-${pkgver}.tar.
 makedepends=('libx11')
 sha1sums=('255c9bddbfa5575ab08e91dd1e315a693256a7dc'
           'f99b42ac4fb5318724382c2d8956a5cc7699a89f')
-install=libvdpau.install
+backup=('/usr/local/etc/vdpau_wrapper.cfg')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
