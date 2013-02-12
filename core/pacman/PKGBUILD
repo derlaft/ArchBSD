@@ -39,8 +39,10 @@ build() {
   ./configure --prefix=/usr/local --sysconfdir=/usr/local/etc \
     --localstatedir=/var --disable-doc LDFLAGS="-L/usr/local/lib" \
    CPPFLAGS="-I/usr/local/include -I/usr/local/include/curl -I/usr/local/include/gpgme"
-        sed -i ' ' -e 's|m4|gm4|' scripts/Makefile.in
-	sed -i ' ' -e 's|statusfile=$(mktemp)|statusfile=$(mktemp $RANDOM)|' scripts/makepkg.sh.in
+
+  sed -i ' ' -e '/m4.*-P/ s/m4/gm4/' scripts/Makefile
+  sed -i ' ' -e 's|statusfile=$(mktemp)|statusfile=$(mktemp $RANDOM)|' scripts/makepkg.sh.in
+  
   gmake
 }
 
