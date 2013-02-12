@@ -17,12 +17,13 @@ md5sums=('8cb9c412e5f2d96bc6f459aa8c6282a1'
          'e22107a919e707e6ca82163109c12031')
 
 ncurses_configure() {
+# --disable-home-terminfo
   ../${pkgname}-${pkgver}/configure \
         --prefix=/usr/local --mandir=/usr/local/man \
         --with-install-prefix=${pkgdir} \
         --datadir=/usr/local/share/misc --disable-overwrite \
         --enable-termcap --enable-bsdpad --enable-getcap \
-        --enable-colorfgbg --disable-home-terminfo \
+        --enable-colorfgbg \
         --with-pkg-config=no \
         --includedir=/usr/local/include/ncurses \
         --with-shared \
