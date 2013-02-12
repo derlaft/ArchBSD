@@ -33,5 +33,5 @@ package() {
   mv "${pkgdir}/usr/local/lib/pkgconfig" \
      "${pkgdir}/usr/local/libdata/pkgconfig"
 # ports does it
-  ln -s /usr/local/libXau.so.6 "${pkgdir}/usr/local/lib/libXau.so.0"
+  ln -s libXau.so.6 "${pkgdir}/usr/local/lib/libXau.so.0"
 }
