@@ -13,7 +13,8 @@ source=(ftp://ftp.gnu.org/pub/gnu/${pkgname}/${pkgname}-${pkgver}.tar.gz{,.sig}
         patch-c++-clang
 )
 md5sums=('8cb9c412e5f2d96bc6f459aa8c6282a1'
-         '014ffdbbfec6d41a9a89d6cbe6434638')
+         '014ffdbbfec6d41a9a89d6cbe6434638'
+         'e22107a919e707e6ca82163109c12031')
 
 ncurses_configure() {
   ../${pkgname}-${pkgver}/configure \
@@ -45,19 +46,19 @@ build() {
 
   cd ${srcdir}/ncursesw-build
   ncurses_configure --enable-widec --enable-ext-colors
-  make
+  gmake
 
   # libncurses.so.5 for external binary support 
   cd ${srcdir}/ncurses-build
   CONFIGURE_ARGS=""
   [ $CARCH = "x86_64" ] && CONFIGURE_ARGS="${CONFIGURE_ARGS} --with-chtype=long"
   ncurses_configure $CONFIGURE_ARGS
-  make
+  gmake
 }
 
 package() {
   cd ${srcdir}/ncursesw-build
-  make install
+  gmake install
 
   # Fool packages looking to link to non-wide-character ncurses libraries
   for lib in ncurses form panel menu; do
