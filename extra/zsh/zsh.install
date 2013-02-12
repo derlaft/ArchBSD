@@ -1,15 +1,22 @@
+infodir=usr/share/info
+filelist=(zsh.info zsh.info-1 zsh.info-2 zsh.info-3 zsh.info-4 zsh.info-5 zsh.info-6)
+
 post_install() {
-    echo "Updating /etc/shells"; cp etc/shells etc/shells.bak; (grep -v usr/local/bin/zsh etc/shells.bak; echo /usr/local/bin/zsh) >etc/shells; rm -f etc/shells.bak
-    cp etc/shells etc/shells.bak; (grep -v /usr/local/bin/rzsh etc/shells.bak; echo /usr/local/bin/rzsh) >etc/shells; rm -f etc/shells.bak
-    mkdir -p usr/local/share/zsh/site-functions 2> /dev/null || true
+	grep -q '/bin/zsh' etc/shells || echo '/bin/zsh' >> etc/shells
+	[ -x usr/bin/install-info ] || return 0
+	for file in ${filelist[@]}; do
+	    install-info $infodir/$file.gz $infodir/dir 2> /dev/null
+	done
 }
 
 post_upgrade() {
 	post_install
 }
+
 pre_remove() {
-    echo "Updating /etc/shells"; cp etc/shells etc/shells.bak; (grep -v usr/local/bin/zsh etc/shells.bak) >etc/shells; rm -f etc/shells.bak
-    cp etc/shells etc/shells.bak; (grep -v usr/local/bin/rzsh etc/shells.bak) >etc/shells; rm -f etc/shells.bak
+	sed -i '/^\/bin\/zsh/d' etc/shells
+	[ -x usr/bin/install-info ] || return 0
+	for file in ${filelist[@]}; do
+	    install-info --delete $infodir/$file.gz $infodir/dir 2> /dev/null
+	done
 }
-
-
