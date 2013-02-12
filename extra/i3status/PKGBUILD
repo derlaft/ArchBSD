@@ -12,7 +12,6 @@ depends=('confuse' 'yajl')
 makedepends=('asciidoc')
 backup=('usr/local/etc/i3status.conf')
 options=('docs')
-install=i3status.install
 source=("http://i3.zekjur.net/i3status/$pkgname-$pkgver.tar.bz2"
         patch-src__print_volume.c
 )
@@ -37,9 +36,6 @@ package() {
         PREFIX=/usr/local SYSCONFDIR=/usr/local/etc
   install -dm755 ${pkgdir}/usr/local/share/licenses/${pkgname}/
   install -m644 LICENSE ${pkgdir}/usr/local/share/licenses/${pkgname}/LICENSE
-
-  mv "${pkgdir}/usr/local/etc/i3status.conf" \
-     "${pkgdir}/usr/local/etc/i3status.conf.sample"
 
   gmake clean
 }
