@@ -30,7 +30,7 @@ build() {
     #For some reason it fails to build the binaries for FreeBSD:
     #Thsi fixes the 'exec format error' on boot
     patch -p1 < "${srcdir}/openrc.patch"
-    gsed -i 's/os-${OS}/os-FreeBSD/g' mk/os.mk
+    sed -i '' -e 's|os-${OS}|os-FreeBSD|' mk/os.mk
     gmake "${_makeargs}"
 }
 
