@@ -46,7 +46,7 @@ Once the devices are partitioned and mounted it is now time to install the ArchB
 
 	SETTING UP ArchBSD:
 
-	pacstrap /mountpont base 
+	pacstrap /mountpoint base 
 
 	genfstap -d -p /mnt /mnt/etc/fstab
 
