@@ -18,6 +18,7 @@ md5sums=('8cb9c412e5f2d96bc6f459aa8c6282a1'
 
 ncurses_configure() {
 # --disable-home-terminfo
+# --disable-root-environ
   ../${pkgname}-${pkgver}/configure \
         --prefix=/usr/local --mandir=/usr/local/man \
         --with-install-prefix=${pkgdir} \
@@ -28,7 +29,7 @@ ncurses_configure() {
         --includedir=/usr/local/include/ncurses \
         --with-shared \
         --without-curses-h --with-termlib --program-prefix= \
-        --enable-rpath --disable-root-environ \
+        --enable-rpath \
         --with-manpage-format=gzip --srcdir=../${pkgname}-${pkgver} \
         $@
 }
