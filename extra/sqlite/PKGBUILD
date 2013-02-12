@@ -33,7 +33,7 @@ build() {
   sed -i '' -e 's|^\(pkgconfigdir = \).*$|\1${prefix}/libdata/pkgconfig|' Makefile.in
   ./configure --prefix=/usr/local \
 	--enable-static
-  make
+  gmake
   
   # build the tcl extension    
   cd "$srcdir"/sqlite-autoconf-$_amalgamationver/tea
@@ -41,7 +41,7 @@ build() {
 	--with-system-sqlite \
 	--with-tclinclude=/usr/local/include/tcl8.6 \
 	--with-tcl=/usr/local/lib/tcl8.6
-  make
+  gmake
 
 }
 
