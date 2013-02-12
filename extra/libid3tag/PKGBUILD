@@ -32,6 +32,7 @@ build() {
     patch -p0 -i "${srcdir}/$i"
   done
 
+  CFLAGS="${CFLAGS} -fPIC" \
   ./configure --prefix=/usr/local
   make
   CONFIG_FILES=id3tag.pc CONFIG_HEADERS= sh ./config.status
