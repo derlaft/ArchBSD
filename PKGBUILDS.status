@@ -1,20 +1,18 @@
-Status as of: Tue Feb 12 15:28:07 CET 2013
+Status as of: Wed Feb 13 23:13:57 GMT 2013
 
 There are:
 0 [core]  Ports-Packages out of       32 total
                  Done:  100%
-21 [extra] Ports-Packages out of      197 total
-                 Done:  90%
-That's a total of 21 Ports-PKGBUILDs which need to be converted on this branch.
-There are a total of 229 packages.
-The total conversion progress is: 91%
+16 [extra] Ports-Packages out of      209 total
+                 Done:  93%
+That's a total of 16 Ports-PKGBUILDs which need to be converted on this branch.
+There are a total of 241 packages.
+The total conversion progress is: 94%
 
 Here's the TODO:
     
     extra/consolekit
-    extra/dwm
     extra/hal
-    extra/irssi
     extra/libpthread-stubs
     extra/links
     extra/lxappearence
@@ -27,9 +25,6 @@ Here's the TODO:
     extra/lxterminal
     extra/menu-cache
     extra/polkit
-    extra/rxvt-unicode
     extra/slim
     extra/vte
     extra/xf86-video-vmware
-    extra/xrdb
-    extra/zsh
