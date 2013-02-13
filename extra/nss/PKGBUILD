@@ -141,6 +141,9 @@ msg "nss-config"
 	  -e "s,@MOD_MAJOR_VERSION@,${NSS_VMAJOR},g" \
 	  -e "s,@MOD_MINOR_VERSION@,${NSS_VMINOR},g" \
 	  -e "s,@MOD_PATCH_VERSION@,${NSS_VPATCH},g" \
+	  -e "s,@MAJOR@,${NSS_VMAJOR},g" \
+	  -e "s,@MINOR@,${NSS_VMINOR},g" \
+	  -e "s,@PATCH@,${NSS_VPATCH},g" \
 	  "${srcdir}/nss-config.in" > "${pkgdir}/usr/local/bin/nss-config"
   chmod 755 "${pkgdir}/usr/local/bin/nss-config"
 
