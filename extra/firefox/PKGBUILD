@@ -10,9 +10,9 @@ arch=('i686' 'x86_64')
 license=('MPL' 'GPL' 'LGPL')
 depends=('gtk2' 'libxt' 'startup-notification' 'mime-types'
          'libnotify' 'desktop-file-utils' 'hicolor-icon-theme'
-         'libvpx' 'libevent' 'nss>=3.14.1' 'hunspell' 'sqlite')
+         'libvpx' 'libevent' 'nss>=3.14.1.1.93-2' 'hunspell' 'sqlite')
 depends=('gtk2' 'libxt' 'startup-notification' 'mime-types'
-         'libvpx' 'libevent' 'nss>=3.14.1' 'hunspell' 'sqlite')
+         'libvpx' 'libevent' 'nss>=3.14.1.1.93-2' 'hunspell' 'sqlite')
 makedepends=('unzip' 'zip' 'python2' 'yasm' 'mesa'
              'autoconf2.13' 'libidl2' 'xorg-server-xvfb' 'imake')
 optdepends=('networkmanager: Location detection via available WiFi networks')
