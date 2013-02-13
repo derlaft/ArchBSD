@@ -1,28 +1,47 @@
 pkgname=irssi
 pkgver=0.8.15
-pkgrel=5
-category=irc
+pkgrel=6
 pkgdesc="Modular text mode IRC client with Perl scripting"
 arch=('i686' 'x86_64')
 url="http://irssi.org/"
 license=('GPL')
-depends=('perl' 'glib' 'ncurses' 'pcre')
+depends=('glib2')
 optdepends=('perl-libwww: for the scriptassist script')
-backup=('etc/irssi.conf')
+backup=('usr/local/etc/irssi.conf')
+source=("http://irssi.org/files/${pkgname}-${pkgver}.tar.bz2"
+	patch-Makefile.in
+	patch-core-network_openssl_c
+	patch-perl-Makefile)
+
+options=('!libtool')
+md5sums=('1dcb3f511b88df94b0c996f36668c7da'
+         'e8e34bdbd1d916dfa7f538aa2d378d6d'
+         'ca477f9dc89c901b1a76e65c4ade02b7'
+         'fdaca824f278a8ef0c367eeb4bbd7183')
 
 build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  
   unset LDFLAGS
-  cd "$portsdir/$category/$pkgname"
 
-  make clean
-  make
-  make deinstall
-  make package PACKAGES="$srcdir"
+  patch -p0 -i ${srcdir}/patch-Makefile.in
+  patch -p0 -i ${srcdir}/patch-core-network_openssl_c
+  patch -p0 -i ${srcdir}/patch-perl-Makefile
+
+  ./configure --prefix=/usr/local \
+              --enable-ipv6 \
+	      --with-proxy \
+	      --sysconfdir=/usr/local/etc
+
+  sed -i ''  -e 's|/usr|/usr/local|' -e 's|/etc|/usr/local&|' \
+                ${srcdir}/${pkgname}-${pkgver}/docs/irssi.1
+
+  cp irssi.conf irssi.conf.sample
+  gmake
 }
 
 package() {
-  cd $pkgdir
-  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_${pkgrel}.txz"
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  make DESTDIR="${pkgdir}" install 
 }
-
-
