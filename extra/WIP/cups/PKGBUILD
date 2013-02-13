@@ -1,4 +1,3 @@
-# $Id: PKGBUILD 166183 2012-09-05 08:15:25Z andyrtr $
 # Maintainer: Andreas Radke <andyrtr@archlinux.org>
 
 pkgbase="cups"
@@ -15,16 +14,28 @@ source=(ftp://ftp.easysw.com/pub/cups/${pkgver}/cups-${pkgver}-source.tar.bz2
         cups-no-export-ssllibs.patch
         cups-no-gcrypt.patch
         cups-no-gzip-man.patch
-        cups cups.logrotate cups.pam
+        cups.logrotate cups.pam
         cupsd-conf-remove-obsolete-browse-directives.patch
         recognize-remote-cups-queue-via-dnssd-uri.patch
         usb-backend-reset-after-job-only-for-specific-devices.patch
-        patch-Makefile patch-conf-Makefile patch-configure patch-cups.pam
+        patch-conf-Makefile patch-configure patch-cups.pam
 )
+md5sums=('87ade07e3d1efd03c9c3add949cf9c00' '9b8467a1e51d360096b70e2c3c081e6c'
+         '3733c23e77eb503bd94cc368e02830dc' '90c30380d4c8cd48a908cfdadae1ea24'
+         'f861b18f4446c43918c8643dcbbd7f6d' '96f82c38f3f540b53f3e5144900acf17'
+         '6bef262b5081051e88cd2ae94fed1867' 'dcef8dd5614461166cada8a706eebb49'
+         '0779ef8ba1d724ebb3b9bf360deba52b'
+         '4b6e3f84afd79a27e684ce205435a465' 'c2db88eae4fe61346ba50254f39a14e0'
+         'a1a50f06dc2cb5567301ec0f2ae12aa2')
 #options=('!emptydirs')
 
 build() {
   cd ${srcdir}/${pkgbase}-${pkgver}
+
+  for i in patch-conf-Makefile patch-configure patch-cups.pam
+  do
+    patch -p0 -i "${srcdir}/$i"
+  done
 
   # Do not export SSL libs in cups-config
   patch -Np1 -i "${srcdir}/cups-no-export-ssllibs.patch"
@@ -47,9 +58,19 @@ build() {
   aclocal -I config-scripts
   autoconf -I config-scripts
 
-  CFLAGS="-fPIC" \
-  LDFLAGS="-fPIC" \
-  ./configure --prefix=/usr/local --sysconfdir=/etc --localstatedir=/var \
+  case "$CARCH" in
+    amd64|x86_64)
+      sed -i '' -e 's|@PIEFLAGS@||' \
+                -e '/SILENT/d' \
+                Makedefs.in
+      sed -i '' -e 's|-lpthreads.*;|-pthread;|g' \
+                -e 's|/private/etc/pam.d|/usr/local/etc/pam.d|' \
+                -e 's|-D_LARGEFILE64_SOURCE||g' \
+                configure
+      ;;
+  esac
+
+  ./configure --prefix=/usr/local --sysconfdir=/usr/local/etc --localstatedir=/var \
      --libdir=/usr/local/lib \
      --with-docdir=/usr/local/share/doc/cups \
      --with-cups-user=cups \
@@ -75,43 +96,41 @@ check() {
   #httpAddrGetList(workstation64): FAIL
   #1 TESTS FAILED!
   #make[1]: *** [testhttp] Error 1
-  gmake -k check || /bin/true
+  gmake -k check || true
 }
 
 package_libcups() {
 pkgdesc="The CUPS Printing System - client libraries and headers"
-depends=('gnutls>=2.8.3' 'libtiff>=4.0.0' 'libpng>=1.5.7' 'krb5' 'avahi')
-backup=(etc/cups/client.conf)
+#depends=('gnutls>=2.8.3' 'libtiff>=4.0.0' 'libpng>=1.5.7' 'krb5' 'avahi')
+depends=('libtiff>=4.0.0' 'libpng>=1.5.7')
+backup=(usr/local/etc/cups/client.conf)
 
   cd ${srcdir}/${pkgbase}-${pkgver}
   gmake BUILDROOT=${pkgdir} install-headers install-libs
   # put this into the libs pkg to make other software find the libs(no pkg-config file included)
-  mkdir -p ${pkgdir}/usr/bin 
-  install -m755 ${srcdir}/${pkgbase}-${pkgver}/cups-config ${pkgdir}/usr/bin/cups-config
+  mkdir -p ${pkgdir}/usr/local/bin 
+  install -m755 ${srcdir}/${pkgbase}-${pkgver}/cups-config ${pkgdir}/usr/local/bin/cups-config
   
   # install client.conf man page and config file
-  install -dm755 ${pkgdir}/usr/share/man/man5
-  #install -Dm644  ${srcdir}/${pkgbase}-${pkgver}/man/client.conf.5.gz ${pkgdir}/usr/share/man/man5/
-  install -Dm644  ${srcdir}/${pkgbase}-${pkgver}/man/client.conf.5 ${pkgdir}/usr/share/man/man5/
-  install -dm755 ${pkgdir}/etc/cups
-  touch ${pkgdir}/etc/cups/client.conf
-  echo "# see 'man client.conf'" >> ${pkgdir}/etc/cups/client.conf
-  echo "ServerName /var/run/cups/cups.sock #  alternative: ServerName hostname-or-ip-address[:port] of a remote server" >> ${pkgdir}/etc/cups/client.conf
-  chgrp lp ${pkgdir}/etc/cups/client.conf
+  install -dm755 ${pkgdir}/usr/local/man/man5/
+  install -m644  ${srcdir}/${pkgbase}-${pkgver}/man/client.conf.5 ${pkgdir}/usr/local/man/man5/
+  install -dm755 ${pkgdir}/usr/local/etc/cups
+  touch ${pkgdir}/usr/local/etc/cups/client.conf
+  echo "# see 'man client.conf'" >> ${pkgdir}/usr/local/etc/cups/client.conf
+  echo "ServerName /var/run/cups/cups.sock #  alternative: ServerName hostname-or-ip-address[:port] of a remote server" >> ${pkgdir}/usr/local/etc/cups/client.conf
+  #chgrp lp ${pkgdir}/usr/local/etc/cups/client.conf
 }
 
 package_cups() {
 pkgdesc="The CUPS Printing System - daemon package"
 install=cups.install
-backup=(etc/cups/cupsd.conf
-        etc/cups/snmp.conf
-        etc/cups/printers.conf
-        etc/cups/classes.conf
-        etc/cups/subscriptions.conf
-        etc/dbus-1/system.d/cups.conf
-        etc/logrotate.d/cups
-        etc/pam.d/cups
-        etc/xinetd.d/cups-lpd)
+backup=(usr/local/etc/cups/cupsd.conf
+        usr/local/etc/cups/snmp.conf
+        usr/local/etc/cups/printers.conf
+        usr/local/etc/cups/classes.conf
+        usr/local/etc/cups/subscriptions.conf
+        usr/local/etc/logrotate.d/cups
+        usr/local/etc/pam.d/cups)
 depends=("libcups>=${pkgver}" 'cups-filters' 'dbus-core')
 optdepends=('xdg-utils: xdg .desktop file support')
 
@@ -119,42 +138,43 @@ optdepends=('xdg-utils: xdg .desktop file support')
   gmake BUILDROOT=${pkgdir} install-data install-exec
 
   # this one we ship in the libcups pkg
-  rm -f ${pkgdir}/usr/bin/cups-config
+  rm -f ${pkgdir}/usr/local/bin/cups-config
 
   # kill the sysv stuff
-  rm -rf ${pkgdir}/etc/rc*.d
-  rm -rf ${pkgdir}/etc/init.d
-  install -D -m755 ../cups ${pkgdir}/etc/rc.d/cupsd
-  install -D -m644 ../cups.logrotate ${pkgdir}/etc/logrotate.d/cups
-  install -D -m644 ../cups.pam ${pkgdir}/etc/pam.d/cups
+  rm -rf ${pkgdir}/usr/local/etc/rc*.d
+  rm -rf ${pkgdir}/usr/local/etc/init.d
+  install -dm755 ${pkgdir}/usr/local/etc/logrotate.d/
+  install -m644 ../cups.logrotate ${pkgdir}/usr/local/etc/logrotate.d/cups
+  install -dm755 ${pkgdir}/usr/local/etc/pam.d/
+  install -m644 ../cups.pam ${pkgdir}/usr/local/etc/pam.d/cups
   
   # fix perms on /var/spool and /etc
   chmod 755 ${pkgdir}/var/spool
-  chmod 755 ${pkgdir}/etc
+  chmod 755 ${pkgdir}/usr/local/etc
 
   # install ssl directory where to store the certs, solves some samba issues
-  install -dm700 -g lp ${pkgdir}/etc/cups/ssl
+  install -dm700 ${pkgdir}/usr/local/etc/cups/ssl
   # remove directory from package, we create it in cups rc.d file
   rm -rf ${pkgdir}/var/run
 
   # install some more configuration files that will get filled by cupsd
-  touch ${pkgdir}/etc/cups/printers.conf
-  touch ${pkgdir}/etc/cups/classes.conf
-  touch ${pkgdir}/etc/cups/subscriptions.conf 
-  chgrp lp ${pkgdir}/etc/cups/{printers.conf,classes.conf,subscriptions.conf}
+  touch ${pkgdir}/usr/local/etc/cups/printers.conf
+  touch ${pkgdir}/usr/local/etc/cups/classes.conf
+  touch ${pkgdir}/usr/local/etc/cups/subscriptions.conf 
+  #chgrp lp ${pkgdir}/etc/cups/{printers.conf,classes.conf,subscriptions.conf}
   
   # fix .desktop file
-  sed -i 's|^Exec=htmlview http://localhost:631/|Exec=xdg-open http://localhost:631/|g' ${pkgdir}/usr/share/applications/cups.desktop
+  sed -i '' -e 's|^Exec=htmlview http://localhost:631/|Exec=xdg-open http://localhost:631/|g' ${pkgdir}/usr/local/share/applications/cups.desktop
   
   # compress some driver files, adopted from Fedora
-  find ${pkgdir}/usr/share/cups/model -name "*.ppd" | xargs gzip -n9f
+  find ${pkgdir}/usr/local/share/cups/model -name "*.ppd" | xargs gzip -n9f
   
   # remove client.conf man page
-  rm -f ${pkgdir}/usr/share/man/man5/client.conf.5
+  rm -f ${pkgdir}/usr/local/man/man5/client.conf.5
   
   # remove files now part of cups-filters
-  rm -v ${pkgdir}/usr/share/cups/banners/*
-  rm -v ${pkgdir}/usr/share/cups/data/testprint
+  rm -v ${pkgdir}/usr/local/share/cups/banners/*
+  rm -v ${pkgdir}/usr/local/share/cups/data/testprint
   # comment out all conversion rules which use any of the removed filters
-  perl -p -i -e 's:^(.*\s+bannertops\s*)$:#\1:' /usr/share/cups/mime/mime.convs
+  perl -p -i -e 's:^(.*\s+bannertops\s*)$:#\1:' /usr/local/share/cups/mime/mime.convs
 }
