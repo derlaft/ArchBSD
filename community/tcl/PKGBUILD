@@ -18,7 +18,7 @@ source=(http://downloads.sourceforge.net/sourceforge/tcl/tcl${pkgver}-src.tar.gz
         )
 md5sums=('573aa5fe678e9185ef2b3c56b24658d3'
          'f77c48c806c1a5a911e18f4cd84acfa1'
-         '18476ea992babe29b85fd4fc82fb3fe7'
+         'cc71fd336b2ab67b139939468995a455'
          'c4e644d81362205d7b67209e7ec168db')
 
 build() {

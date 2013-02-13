@@ -1,13 +1,13 @@
-Status as of: Mon Feb 11 01:31:00 CET 2013
+Status as of: Tue Feb 12 15:28:07 CET 2013
 
 There are:
 0 [core]  Ports-Packages out of       32 total
                  Done:  100%
-23 [extra] Ports-Packages out of      185 total
-                 Done:  88%
-That's a total of 23 Ports-PKGBUILDs which need to be converted on this branch.
-There are a total of 217 packages.
-The total conversion progress is: 90%
+21 [extra] Ports-Packages out of      197 total
+                 Done:  90%
+That's a total of 21 Ports-PKGBUILDs which need to be converted on this branch.
+There are a total of 229 packages.
+The total conversion progress is: 91%
 
 Here's the TODO:
     
@@ -31,7 +31,5 @@ Here's the TODO:
     extra/slim
     extra/vte
     extra/xf86-video-vmware
-    extra/xorg-xauth
-    extra/xorg-xinit
     extra/xrdb
     extra/zsh

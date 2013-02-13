@@ -26,6 +26,10 @@ package() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   gmake DESTDIR="${pkgdir}" docsdir=/usr/local/share/doc/giblib install
 
+  install -dm755 "${pkgdir}/usr/local/libdata"
+  mv "${pkgdir}/usr/local/lib/pkgconfig" \
+     "${pkgdir}/usr/local/libdata/pkgconfig"
+
   # Install custom license
   install -dm755 "${pkgdir}/usr/local/share/licenses/${pkgname}"
   install -m644 COPYING "${pkgdir}/usr/local/share/licenses/${pkgname}/LICENSE"

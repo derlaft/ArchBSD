@@ -1,33 +1,52 @@
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Contributor: Alexander Baldeck <alexander@archlinux.org>
+
 pkgname=xorg-xinit
-_pkgname=xinit
 pkgver=1.3.2
-pkgrel=1
-category=x11
+pkgrel=3
 pkgdesc="X.Org initialisation program "
 arch=('i686' 'x86_64')
 license=('custom')
 url="http://xorg.freedesktop.org/"
-depends=('libx11')
+depends=('libx11' 'xorg-xauth')
 makedepends=('xorg-util-macros')
 optdepends=('xorg-twm' 'xterm')
-backup=('etc/skel/.xinitrc'
-        'etc/skel/.xsession'
-        'etc/X11/xinit/xserverrc'
-        'etc/X11/xinit/xinitrc')
-groups=(xorg)
+backup=('usr/local/etc/skel/.xinitrc'
+        'usr/local/etc/skel/.xsession'
+        'usr/local/etc/X11/xinit/xserverrc'
+        'usr/local/etc/X11/xinit/xinitrc')
+source=(${url}/releases/individual/app/xinit-${pkgver}.tar.bz2
+        fs25361.patch
+        xinitrc
+        xsession
+        xserverrc)
+options=(!emptydirs)
+md5sums=('9c0943cbd83e489ad1b05221b97efd44'
+         '73a597d3fb7f5b9487318ac8cfd4bedf'
+         '3b72899c006fd390aa311682605a4869'
+         '88dd606706c6d5f0fef0e006badb9764'
+         '4e61b4f3fdf3e838430b07b8fa8d736e')
 
 build() {
+  cd "${srcdir}/xinit-${pkgver}"
+  patch -Np1 -i "${srcdir}/fs25361.patch"
 
-  cd "$portsdir/$category/$_pkgname"
-  make clean
+  sed -i '' -e 's/test.*-traditional.*;/true;/' configure
+  sed -i '' -e 's|hexdump|/usr/bin/hexdump|' startx.cpp
+
+  sed -i -e 's/XSLASHGLOB.sh/XSLASHGLOB/' xinitrc.cpp
+  ./configure --prefix=/usr/local --with-xinitdir=/usr/local/etc/X11/xinit
   make
-  make deinstall
-  make package PACKAGES="$srcdir"
 }
 
 package() {
-  cd $pkgdir
-  tar xpf "${srcdir}/${category}/${_pkgname}-${pkgver},${pkgrel}.txz"
+  cd "${srcdir}/xinit-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+
+  install -m755 -d "${pkgdir}/usr/local/etc/skel"
+  install -m644 "${srcdir}/xinitrc" "${pkgdir}/usr/local/etc/skel/.xinitrc"
+  install -m644 "${srcdir}/xsession" "${pkgdir}/usr/local/etc/skel/.xsession"
+  install -m644 "${srcdir}/xserverrc" "${pkgdir}/usr/local/etc/X11/xinit/xserverrc"
+  install -m755 -d "${pkgdir}/usr/local/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/local/share/licenses/${pkgname}/"
 }
-
-

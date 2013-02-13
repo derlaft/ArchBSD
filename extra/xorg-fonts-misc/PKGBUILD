@@ -41,7 +41,8 @@ build() {
     if [ -d "${dir}" ]; then
       pushd "${dir}"
       ./configure --prefix=/usr/local \
-          --with-fontdir=/usr/local/lib/X11/fonts/misc
+          --with-fontdir=/usr/local/lib/X11/fonts/misc \
+          --with-fontrootdir=/usr/local/lib/X11/fonts
       make
       popd
     fi

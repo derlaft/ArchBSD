@@ -37,8 +37,11 @@ build() {
   cp "${srcdir}/quantize.c" lib/
 
   sed -i '' -e '/AC_PATH_XTRA/d' configure.ac
-#  libtoolize -f
-#  autoreconf
+  sed -i '' -e 's/AM_CONFIG_HEADER/AC_CONFIG_HEADER/' configure.ac
+#docbooks seem to have some issues atm
+  sed -i '' -e '/SUBDIRS =/ s/ doc//' Makefile.am
+  libtoolize -f
+  autoreconf
   ./configure --prefix=/usr/local --disable-static
   gmake
 

@@ -1,33 +1,105 @@
+# Maintainer: Sébastien Luttringer <seblu@aur.archlinux.org>
+# Contributor: Angel Velasquez <angvp@archlinux.org>
+# Contributor: tobias <tobias@archlinux.org>
+# Contributor: dibblethewrecker dibblethewrecker.at.jiwe.dot.org
+
 pkgname=rxvt-unicode
 pkgver=9.16
 pkgrel=1
-category=x11
 pkgdesc='An unicode enabled rxvt-clone terminal emulator (urxvt)'
 arch=('i686' 'x86_64')
 url='http://software.schmorp.de/pkg/rxvt-unicode.html'
 license=('GPL')
-depends=('gdk-pixbuf' 'libxft' 'libxpm' 'ncurses')
-source=('urxvt.desktop')
-md5sums=('88d8786d74b819450adf722180db09fd')
-install=urxvt.install
-build() {
+depends=('libxft' 'gdk-pixbuf2' 'perl' 'startup-notification')
+optdepends=('gtk2-perl: to use the urxvt-tabbed')
+source=(
+  "http://dist.schmorp.de/rxvt-unicode/$pkgname-$pkgver.tar.bz2"
+  'urxvt.desktop'
+  'urxvtc.desktop'
+  'urxvt-tabbed.desktop'
+  patch-doc-Makefile.in
+  patch-doc-urxvtcd.1.man
+  patch-src-Makefile.in
+  patch-src-urxvtcd
+  patch-src__command.C
+  patch-src__gentables
+  patch-src_gencompose
+  patch-src_genlinedraw
+  patch-src_perl_kuake
+)
+md5sums=('2e2942e8367624affebc0568e3671b66'
+         '88d8786d74b819450adf722180db09fd'
+         'bebf5b6b399b74b557fcedbdb47cc387'
+         '2604896bb107fbb5511bfd6f46d65894'
+         'a2cfbbd893dd529ddc172cbe71cd5440'
+         '1db224a25dff69f463c816cf65df71ce'
+         '4a741e847551d3bed8e7b7a238405689'
+         '9f7fd353fa84779f90f7b83a902c09a2'
+         '21383c23bcc22ff3ff9d00e5182e359b'
+         'f694e633066779a378db5e6b80031872'
+         '06f3901bdba06ac51d3a5869ad633164'
+         '0b39fc806ea900c7bf83fa66a9c83485'
+         '821d498653c760793d3fbeef5f36da15')
 
-  cd "$portsdir/$category/$pkgname"
-  make clean
+build() {
+  cd $pkgname-$pkgver
+  for i in patch-doc-Makefile.in patch-doc-urxvtcd.1.man patch-src-Makefile.in \
+           patch-src-urxvtcd patch-src__command.C patch-src__gentables \
+           patch-src_gencompose patch-src_genlinedraw patch-src_perl_kuake
+  do
+    patch -p0 -i "${srcdir}/$i"
+  done
+
+  LIBS="-lstdc++ -lutil" \
+  CPPFLAGS="${CPPFLAGS} -I/usr/local/include" \
+  ./configure \
+    --prefix=/usr/local \
+    --with-terminfo=/usr/local/share/misc/terminfo.db \
+    --enable-everything \
+    --enable-256-color \
+    --enable-combining \
+    --enable-fading \
+    --enable-font-styles \
+    --enable-iso14755 \
+    --enable-keepscrolling \
+    --enable-lastlog \
+    --enable-mousewheel \
+    --enable-next-scroll \
+    --enable-perl \
+    --enable-pixbuf \
+    --enable-pointer-blank \
+    --enable-rxvt-scroll \
+    --enable-selectionscrolling \
+    --enable-slipwheeling \
+    --enable-smart-resize \
+    --enable-startup-notification \
+    --enable-transparency \
+    --enable-unicode3 \
+    --enable-utmp \
+    --enable-wtmp \
+    --enable-xft \
+    --enable-xim \
+    --enable-xterm-scroll \
+    --disable-frills
   make
-  make deinstall
-  make package PACKAGES="$srcdir"
 }
 
 package() {
-  cd $pkgdir
-  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
-  cd ${srcdir}
-  for _f in urxvt; do
-        install -m644 -d "$pkgdir/usr/local/share/applications/"
-	install -m644 $_f.desktop "$pkgdir/usr/local/share/applications/$_f.desktop"
+  pushd $pkgname-$pkgver
+  # workaround terminfo installation
+  export TERMINFO="$pkgdir/usr/local/share/misc/terminfo.db"
+  install -d "$TERMINFO"
+  make DESTDIR="$pkgdir" install
+  # install the tabbing wrapper ( requires gtk2-perl! )
+  sed -i '' -e 's/\"rxvt\"/"urxvt"/' doc/rxvt-tabbed
+  install -dm755 "$pkgdir/usr/local/bin/"
+  install -m755 doc/rxvt-tabbed "$pkgdir/usr/local/bin/urxvt-tabbed"
+  popd
+  # install freedesktop menu
+  install -dm755 "$pkgdir/usr/local/share/applications/"
+  for _f in urxvt urxvtc urxvt-tabbed; do
+    install -m644 $_f.desktop "$pkgdir/usr/local/share/applications/$_f.desktop"
   done
-
 }
 
-
+# vim:set ts=2 sw=2 ft=sh et:

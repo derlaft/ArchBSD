@@ -34,15 +34,24 @@ build() {
   [ $CARCH = "x86_64" ] && EXTRAOPTS="--disable-amd64"
 
   # Configure and Build
+  CPPFLAGS="-I/usr/local/include" \
+  LDFLAGS="-L/usr/local/lib" \
   ./configure --prefix=/usr/local/ \
-              --sysconfdir=/usrlocal/etc/imlib2 \
-              --x-libraries=/usr/local/lib $EXTRAOPTS
+              --sysconfdir=/usr/local/etc/imlib2 \
+              --x-libraries=/usr/local/lib $EXTRAOPTS \
+              --with-tiff=/usr/local \
+              --with-jpeg=/usr/local \
+              --with-id3=/usr/local
   make
 }
 
 package() {
   cd "$srcdir/$pkgname-$pkgver"
   make DESTDIR="$pkgdir" install
+
+  install -dm755 "${pkgdir}/usr/local/libdata"
+  mv "${pkgdir}/usr/local/lib/pkgconfig" \
+     "${pkgdir}/usr/local/libdata/pkgconfig"
 
   # Install License
   install -dm755 "$pkgdir/usr/local/share/licenses/$pkgname/"

@@ -1,0 +1,67 @@
+# Maintainer: Thorsten Töpper <atsutane-tu@freethoughts.de>
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
+pkgname=i3-wm
+_pkgsourcename=i3
+pkgver=4.4
+pkgrel=2
+pkgdesc="An improved dynamic tiling window manager"
+arch=('i686' 'x86_64')
+url="http://i3wm.org/"
+license=('BSD')
+replaces=("i3" "i3bar")
+groups=("i3")
+depends=('libxcursor' 'xcb-util-keysyms' 'xcb-util-wm' 'libev' 'yajl' 'startup-notification' 'pango')
+makedepends=('bison')
+optdepends=('dmenu: As menu.'
+            'i3lock: For locking your screen.'
+            'i3status: To display systeminformation with a bar.'
+            'perl: To migrate your configuration to v4 format.')
+options=('docs' '!strip')
+source=("http://i3wm.org/downloads/${_pkgsourcename}-${pkgver}.tar.bz2")
+md5sums=('fa2b8aae3d2e10c5ee480bd370366f5b')
+
+backup=('usr/local/etc/i3/config')
+
+build() {
+  cd "$srcdir/$_pkgsourcename-$pkgver"
+
+  cp i3.config config.sample
+  cp i3.config.keycodes config.keycodes
+  
+	sed -i '' -e 's|/etc|/usr/local/etc|g' src/config.c
+	sed -i '' -e 's|/usr/|/usr/local/|g' config.sample
+	sed -i '' -e 's|/usr/|/usr/local/|g' config.keycodes
+	sed -i '' -e 's|PREFIX|/usr/local//|g' man/Makefile
+	sed -i '' -e 's|/usr/|/usr/local/|g' man/i3.1
+	sed -i '' -e 's|/usr/|/usr/local/|g' man/i3-msg.1
+	sed -i '' -e 's|/usr/|/usr/local/|g' man/i3-input.1
+	sed -i '' -e 's|.SILENT||g' common.mk
+	sed -i '' -e 's|-Iinclude|-Iinclude -Isrc|g' \
+			  -e 's|flex|/usr/local/bin/flex|g' \
+			  common.mk
+  # In order to avoid problems with bison use only a single process
+  MAKEFLAGS="-j1"
+  gmake -j1 \
+  PREFIX=/usr/local SYSCONFDIR=/usr/local/etc
+}
+
+package() {
+  cd "$srcdir/$_pkgsourcename-$pkgver"
+
+  gmake DESTDIR="$pkgdir/" install \
+  PREFIX=/usr/local SYSCONFDIR=/usr/local/etc
+  
+  install -dm755 ${pkgdir}/usr/local/man/man1
+  for i in i3 i3bar i3-config-wizard i3-input i3-msg i3-migrate-config-to-v4 i3-nagbar i3-dmenu-desktop i3-dump-log i3-sensible-{editor,pager,terminal}
+  do
+    install -m644 man/${i}.1 "${pkgdir}/usr/local/man/man1/${i}.1"
+  done
+
+  install -dm755 ${pkgdir}/usr/local/share/licenses/${pkgname}/
+  install -m644 LICENSE ${pkgdir}/usr/local/share/licenses/${pkgname}/LICENSE
+  
+  gmake clean
+}
+
+# vim:set ts=2 sw=2 et:
