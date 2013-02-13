@@ -67,10 +67,10 @@ build() {
   make
 }
 
-check() {
-  cd ${srcdir}/${pkgname}-$_basever
-  make check
-}
+#check() {
+#  cd ${srcdir}/${pkgname}-$_basever
+#  make check
+#}
 
 package() {
   cd ${srcdir}/${pkgname}-$_basever

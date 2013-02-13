@@ -30,8 +30,7 @@ unset m4
 
 cd /usr/src
 if [[ "$CARCH" == "x86_64" ]]; then
-		make TARGET=amd64 clean
-		make TARGET=amd64 buildworld|| (echo buildworld failed... && return 1)
+		make NOCLEAN TARGET=amd64 buildworld|| (echo buildworld failed... && return 1)
 else
                 make TARGET=i386 buildworld || (echo buildworld failed... && return 1)
 

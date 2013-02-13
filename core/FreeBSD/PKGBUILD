@@ -1,0 +1,129 @@
+pkgname=('freebsd-world' 'freebsd-kernel' 'freebsd-source')
+pkgver=20130213
+pkgrel=1
+arch=('i686' 'x86_64')
+url="https://www.freebsd.org"
+license=('BSD')
+source=('ARCHBSD_i686'
+	'ARCHBSD_i686.patch'
+	'ARCHBSD_x86_64'
+	'ARCHBSD_x86_64.patch'
+	'loader.conf'
+	'sysctl.conf'
+	'src.conf'
+	'beastie.4th'
+	'brand.4th')
+
+md5sums=('1da3141782687c8d455b63ae747d6c32'
+         'a5ecdc82304d6ff426fdb4182f9adc10'
+         '92f91f5796ed8e59c666a7b4909d454b'
+         '9ab0e68675bab4a90a07dc7f0ae19d79'
+         'd9387be7af3cc48ffc7b9da6bb0bb250'
+         'ccdc27d9269f497b67b9abed4ddea14a'
+         '920ec7eb5ef71c8356e6cef8a191c66d'
+         '0e9495f2a632d85404634fdbc2eb0850'
+         'c3146af4b1ba8467d6b27a1fc22e322e')
+
+_gitroot="git://github.com/freebsd/freebsd.git"
+_gitname="freebsd"
+
+build() {
+  cd "${srcdir}"
+  msg "Connecting to GIT server...."
+ 
+  if [ -d ${_gitname} ] ; then
+    cd ${_gitname} && git pull origin
+    msg "The local files are updated."
+  else
+    git clone --depth=1 -b stable/9 ${_gitroot} ${_gitname}
+  fi
+ 
+  export MAKEOBJDIRPREFIX="$srcdir/obj"
+}
+
+package_freebsd-kernel() {
+  pkgdesc="FreeBSD kernel package"
+  pkgver=9.1
+  groups=('base')
+  options=('!strip')
+
+  cd ${srcdir}/${_gitname}
+  unset LDFLAGS LD RANLIB ld
+  unset make m4
+  if [[ "$CARCH" == "x86_64" ]]; then
+	patch ${srcdir}/${_gitname}/sys/amd64/amd64/identcpu.c  $srcdir/ARCHBSD_x86_64.patch
+        make TARGET=amd64 KERNCONF=${srcdir}/ARCHBSD_x86_64 buildkernel|| (echo buildkernel failed... && return 1)
+  else
+        patch ${srcdir}/${_gitname}/sys/i386/i386/identcpu.c $srcdir/ARCHBSD_i686.patch
+        make TARGET=i386 KERNCONF=${srcdir}/ARCHBSD_i686 buildkernel|| (echo buildkernel failed... && return 1)
+
+  fi
+
+  if [[ "$CARCH" == "x86_64" ]]; then
+	make TARGET=amd64 KERNCONF=${srcdir}/ARCHBSD_x86_64 DESTDIR=${pkgdir} installkernel || (echo installkernel failed... && return 1)
+  else
+        make TARGET=i386 KERNCONF=${srcdir}/ARCHBSD_i686 DESTDIR=${pkgdir} installkernel || (echo buildkernel failed... && return 1)
+  fi
+
+}
+
+package_freebsd-world() {
+  pkgdesc="FreeBSD base package"
+  pkgver=9.1
+  groups=('base')
+
+  unset LDFLAGS
+  unset CXXFLAGS
+  unset CFLAGS
+  unset makeflags
+  unset m4
+  unset LD RANLIB ld
+  unset makeflags m4
+  
+  if [[ "$CARCH" == "x86_64" ]]; then
+	#Build fails when compiling without GCC in the below directory
+	#Fix is to make this first
+#	cd ${srcdir}/${_gitname}/sys/boot
+#	make
+	cd ${srcdir}/${_gitname}
+	make -j4 NOCLEAN=YES TARGET=amd64 buildworld
+  else
+	make TARGET=i386 buildworld || (echo buildworld failed... && return 1)
+  fi
+
+  if [[ "$CARCH" == "x86_64" ]]; then
+        make TARGET=amd64 DESTDIR="$pkgdir"  SRCONF=${srcdir}/src.conf installworld distribution || (echo buildworld failed... && return 1)
+  else
+        make TARGET=i386 DESTDIR="$pkgdir" SRCONF=${srcdir}/src.conf install distribution || (echo buildworld failed... && return 1)
+  fi
+
+#remove rc tools for openrc
+  rm -rf ${pkgdir}/etc/rc*
+  rm -rf ${pkgdir}/usr/share/man/man8/rc.8.gz
+
+#install some files
+  install -m644 $srcdir/loader.conf ${pkgdir}/boot/
+  install -m644 $srcdir/sysctl.conf ${pkgdir}/etc/
+  install -m644 $srcdir/beastie.4th ${pkgdir}/boot/
+  install -m644 $srcdir/brand.4th ${pkgdir}/boot/
+
+backup=('boot/device.hints'
+	'boot/loader.conf')
+
+cd "$pkgdir"
+
+for f in `find -E etc -type f ! -regex ".*periodic.*|.*mtree.*|.*defaults.*|.*README|.*Makefile"` `find root var -type f`; do
+	backup=(${backup[@]} "${f}")
+done
+
+
+}
+
+package_freebsd-source() {
+  pkgdesc="FreeBSD source matching FreeBSD kernel"
+  
+  rm -rf ${srcdir}/${_gitname}/.git
+  install -dm755 ${pkgdir}/usr/src/
+  cp -R ${srcdir}/${_gitname}/* ${pkgdir}/usr/src/
+}
+
