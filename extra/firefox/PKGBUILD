@@ -1,0 +1,171 @@
+# $Id: PKGBUILD 175530 2013-01-19 07:31:00Z heftig $
+# Maintainer : Ionut Biru <ibiru@archlinux.org>
+# Contributor: Jakub Schmidtke <sjakub@gmail.com>
+
+pkgname=firefox
+pkgver=18.0.2
+pkgrel=1
+pkgdesc="Standalone web browser from mozilla.org"
+arch=('i686' 'x86_64')
+license=('MPL' 'GPL' 'LGPL')
+depends=('gtk2' 'libxt' 'startup-notification' 'mime-types'
+         'libnotify' 'desktop-file-utils' 'hicolor-icon-theme'
+         'libvpx' 'libevent' 'nss>=3.14.1' 'hunspell' 'sqlite')
+depends=('gtk2' 'libxt' 'startup-notification' 'mime-types'
+         'libvpx' 'libevent' 'nss>=3.14.1' 'hunspell' 'sqlite')
+makedepends=('unzip' 'zip' 'python2' 'yasm' 'mesa'
+             'autoconf2.13' 'libidl2' 'xorg-server-xvfb' 'imake')
+optdepends=('networkmanager: Location detection via available WiFi networks')
+url="http://www.mozilla.org/projects/firefox"
+install=firefox.install
+options=(!emptydirs)
+source=(https://ftp.mozilla.org/pub/mozilla.org/firefox/releases/$pkgver/source/firefox-$pkgver.source.tar.bz2
+        mozconfig firefox.desktop vendor.js
+patch-alsapulse patch-browser-app-nsBrowserApp.cpp patch-bug685258 patch-bug722975 patch-bug732340 patch-bug778078 patch-bug781457 patch-bug783463 patch-bug783505 patch-bug787804 patch-bug788955 patch-bug791305 patch-bug798354 patch-bug800401 patch-bug806139 patch-bug807492 patch-bug815025 patch-bug817481 patch-bug826985 patch-bug828003 patch-build-pgo-profileserver.py patch-clang32-libc++-visibility-hack patch-config-baseconfig.mk patch-content-base-src-nsTextFragmentImpl.h patch-content-media-nsAudioStream.cpp patch-extensions-spellcheck-hunspell-src-mozHunspell.cpp patch-ipc-chromium-Makefile.in patch-ipc-chromium-src-base-message_pump_libevent.cc patch-ipc-chromium-src-base-platform_thread_posix.cc patch-js-src-js-confdefs.h.in patch-js-src-methodjit-MethodJIT.cpp patch-media-libsydneyaudio-src-sydney_audio_oss.c patch-media-webrtc-trunk-src-modules-audio_device-main-source-linux-latebindingsymboltable_linux.cc patch-media-webrtc-trunk-src-system_wrappers-source-spreadsortlib-spreadsort.hpp patch-media-webrtc-trunk-src-system_wrappers-source-thread_posix.cc patch-media-webrtc-trunk-testing-gtest-include-gtest-internal-gtest-port.h patch-python-psutil-psutil-_psutil_bsd.c patch-security_manager_ssl_src_nsNSSComponent.cpp patch-toolkit_mozapps_installer_packager_mk patch-toolkit_xre_Makefile.in patch-xpcom-base-AvailableMemoryTracker.cpp patch-z-bug762445 patch-z-bug815916
+)
+
+build() {
+  cd mozilla-release
+
+#  export CC=gcc
+#  export CPP=cpp
+#  export CXX=g++
+
+  cp ../mozconfig .mozconfig
+  for i in patch-alsapulse patch-browser-app-nsBrowserApp.cpp patch-bug685258 patch-bug722975 \
+  	       patch-bug732340 patch-bug778078 patch-bug781457 patch-bug783463 patch-bug783505 \
+  	       patch-bug787804 patch-bug788955 patch-bug791305 patch-bug798354 patch-bug800401 \
+  	       patch-bug806139 patch-bug807492 patch-bug815025 patch-bug817481 patch-bug826985 \
+  	       patch-bug828003 patch-build-pgo-profileserver.py patch-clang32-libc++-visibility-hack \
+  	       patch-config-baseconfig.mk patch-content-base-src-nsTextFragmentImpl.h patch-content-media-nsAudioStream.cpp \
+  	       patch-extensions-spellcheck-hunspell-src-mozHunspell.cpp patch-ipc-chromium-Makefile.in \
+  	       patch-ipc-chromium-src-base-message_pump_libevent.cc patch-ipc-chromium-src-base-platform_thread_posix.cc \
+  	       patch-js-src-js-confdefs.h.in patch-js-src-methodjit-MethodJIT.cpp patch-media-libsydneyaudio-src-sydney_audio_oss.c \
+  	       patch-media-webrtc-trunk-src-modules-audio_device-main-source-linux-latebindingsymboltable_linux.cc \
+  	       patch-media-webrtc-trunk-src-system_wrappers-source-spreadsortlib-spreadsort.hpp \
+  	       patch-media-webrtc-trunk-src-system_wrappers-source-thread_posix.cc \
+  	       patch-media-webrtc-trunk-testing-gtest-include-gtest-internal-gtest-port.h patch-python-psutil-psutil-_psutil_bsd.c \
+  	       patch-security_manager_ssl_src_nsNSSComponent.cpp patch-toolkit_mozapps_installer_packager_mk patch-toolkit_xre_Makefile.in \
+  	       patch-xpcom-base-AvailableMemoryTracker.cpp patch-z-bug762445 patch-z-bug815916
+  do
+  	msg "Patch $i"
+    patch -p0 -i "${srcdir}/$i"
+  done
+  msg "Patching done"
+
+  msg "sed 1"
+  sed -i '' -e '/MOZPNG/s/=[0-9]*/=10511/' configure.in
+  msg "sed 2"
+  sed -i '' -e 's|%%LOCALBASE%%|/usr/local|g' browser/app/nsBrowserApp.cpp
+  msg "preparing"
+
+  # Fix PRE_RELEASE_SUFFIX
+  sed -i '' -e '/^PRE_RELEASE_SUFFIX := ""/s/ ""//' \
+    browser/base/Makefile.in
+
+  # WebRTC build tries to execute "python" and expects Python 2
+  # Workaround taken from chromium PKGBUILD
+  mkdir -p "$srcdir/python2-path"
+  ln -sf /usr/local/bin/python2 "$srcdir/python2-path/python"
+  export PATH="$srcdir/python2-path:$PATH"
+
+  export LDFLAGS="$LDFLAGS -L/usr/local/lib -Wl,-rpath,/usr/local/lib/firefox"
+  export PYTHON="/usr/local/bin/python2"
+  export MOZ_MAKE_FLAGS="$MAKEFLAGS"
+  unset MAKEFLAGS
+
+  # Enable PGO
+# Actually disable until our clang gets libprofile_rt
+#  export MOZ_PGO=0
+#  export DISPLAY=:99
+#  Xvfb -nolisten tcp -extension GLX -screen 0 1280x1024x24 $DISPLAY &
+  _fail=0
+
+  #gmake -f client.mk build || _fail=1
+  export CPPFLAGS="${CPPFLAGS} -I/usr/local/include"
+  msg "running autoconf"
+  autoconf-2.13
+  cd js/src && autoconf-2.13
+  cd ../..
+  msg "configuring..."
+#  ./configure --prefix=/usr/local --target=${CHOST} \
+#              --libdir=/usr/local/lib --sysconfdir=/usr/local/etc \
+#              --disable-webrtc --disable-necko-wifi \
+#              --enable-applications=browser \
+#              --disable-crashreporter \
+#              --disable-updater \
+#              --disable-tests \
+#              --disable-installer \
+#              --enable-startup-notification \
+#              --with-pthreads \
+#              --enable-system-pixman \
+#              --enable-system-ffi \
+#              --enable-system-sqlite \
+#              --enable-system-hunspell \
+#              --with-system-libvpx \
+#              --with-system-libevent \
+#              --with-system-png \
+#              --with-system-bz2 \
+#              --with-system-zlib \
+#              --with-system-jpeg \
+#              --with-system-nss \
+#              --with-system-nspr
+
+  gmake -f client.mk build || _fail=1
+
+#  kill $! || true
+  return $_fail
+}
+
+package() {
+  cd mozilla-release
+  #gmake -j1 -f client.mk DESTDIR="$pkgdir" install
+  gmake DESTDIR="$pkgdir" install
+
+  install -Dm644 ../vendor.js "$pkgdir/usr/local/lib/firefox/defaults/preferences/vendor.js"
+
+  for i in 16 22 24 32 48 256; do
+      install -Dm644 browser/branding/official/default$i.png \
+        "$pkgdir/usr/local/share/icons/hicolor/${i}x${i}/apps/firefox.png"
+  done
+
+  install -dm755 "$pkgdir/usr/local/share/applications/"
+  install -m644 ../firefox.desktop \
+    "$pkgdir/usr/local/share/applications/firefox.desktop"
+
+  # Use system-provided dictionaries
+  rm -rf "$pkgdir"/usr/lib/firefox/{dictionaries,hyphenation}
+  ln -s /usr/share/hunspell "$pkgdir/usr/local/lib/firefox/dictionaries"
+  ln -s /usr/share/hyphen "$pkgdir/usr/local/lib/firefox/hyphenation"
+
+  # We don't want the development stuff
+  rm -r "$pkgdir"/usr/local/{include,lib/firefox-devel,share/idl}
+
+  #workaround for now
+  #https://bugzilla.mozilla.org/show_bug.cgi?id=658850
+  ln -sf firefox "$pkgdir/usr/local/lib/firefox/firefox-bin"
+}
+md5sums=('a7a20f52a3ffdd8d2fafa8a1a1db49c7' '701ba879ce239185e43ba496ad2bfb6b'
+         '6174396b4788deffa399db3f6f010a94' '0d053487907de4376d67d8f499c5502b'
+         '058b3c7f66b9604ea61340403e50d014' 'de4c18257bec4c38dbb5fd7158e75951'
+         '86c94e5639fabda8522457790deb9274' '87d9839cc325c2506e70221fef2216c8'
+         '2795adc6985e0d20d7f4986e675acd18' 'dd9e7f4228e819a957e7b94ebea23130'
+         'b80adef0a8da7cc13ee490ebccdd3c5d' '45ecf83ecba252a5753601294574bb9e'
+         '2872fdd11f19487a49461bfd1e8ef685' 'fbd98db4c41ae39c57591dc9127b4d8f'
+         '06103ac6a2f1240d4e9459f611378af2' '2b87e42a3d9fefa812f9d2799d61afd6'
+         '2d33656d252feb6b46de0d32c488a8b6' '500ea0efe987e6ea5cf06fb5b61d3c9f'
+         'b86240158749dbf4203665d42589f0d7' '4e830eccb18b80b9e1e424de726754bf'
+         '75c2af195b658e17842212f7d4641f65' '7d6cfc0c8182e800b220ee050c92d4f1'
+         'cad17740341920fc093f9747ed0b98ad' 'd98180ccfd802513756307362a7d3f81'
+         'ff8b2616b55bfe9dbe7cea1e22c840a4' 'b6fcd64840088c25e51746c9f9c4681c'
+         'e718c4c8f84d9ac847a6d0b75a650c03' 'd645df1148032165ac0f729fa9893b78'
+         '36201e32b050ea5836e218815d96aaa0' '0a056ef938303f0deffe0cecf617fcbd'
+         'c28d236c34f994f0acbd15224072df9b' '361dace86cf8afaf874cf5c121debcc6'
+         '0ec2104747da1243fca1c74ff6f456f8' '99c6e6bd50cfdca5a7fbbca1460da490'
+         '274f4b93fb0f65792aefca3fe2bb2905' 'a4e2412316aed1ee683f22a8aeb59c6d'
+         '84cfd29fe9803e17f022f41d1bb6bb68' 'f884a772ea15df5066517308d33cdb09'
+         'ae4425b905e9b002abf8bed4e62f2d7f' 'b59a5f9544e3d9bc213e4d96777a2b25'
+         '2e6d7ce94a7645bf8d3b1428327445e8' '0f507094a1ed60e7cb2e721bce78d813'
+         'ef23be40121ebb95970cdea623bffc13' 'cf7230ffe380e8f9748fd78d976f3f19'
+         '18acb54ea80ec50847708f0bd1c75c2a' '8c9485396d952fce05aa4d6beee4f9e4'
+         '9e4dd1fa0512b52ed406cf57d124a130')
