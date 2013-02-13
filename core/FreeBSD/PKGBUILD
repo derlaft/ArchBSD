@@ -72,6 +72,7 @@ package_freebsd-world() {
   pkgver=9.1
   groups=('base')
 
+  cd ${srcdir}/${_gitname}
   unset LDFLAGS
   unset CXXFLAGS
   unset CFLAGS
@@ -81,11 +82,6 @@ package_freebsd-world() {
   unset makeflags m4
   
   if [[ "$CARCH" == "x86_64" ]]; then
-	#Build fails when compiling without GCC in the below directory
-	#Fix is to make this first
-#	cd ${srcdir}/${_gitname}/sys/boot
-#	make
-	cd ${srcdir}/${_gitname}
 	make -j4 NOCLEAN=YES TARGET=amd64 buildworld
   else
 	make TARGET=i386 buildworld || (echo buildworld failed... && return 1)
