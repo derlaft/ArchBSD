@@ -29,7 +29,7 @@ post_install() {
   	usr/sbin/pw groupadd git
   fi
   if ! getent passwd git >/dev/null; then
-  	usr/sbin/pw useradd git -g git -d / -s /bin/bash -c 'git daemon user'
+  	usr/sbin/pw useradd git -g git -d / -s /bin/sh -c 'git daemon user'
   fi
 
   grep -qs "^/$GITSHELL\$" 'etc/shells' || add_shell "$GITSHELL"
