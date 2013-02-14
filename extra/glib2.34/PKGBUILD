@@ -1,0 +1,137 @@
+# $Id: PKGBUILD 172097 2012-11-28 10:31:12Z jgc $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
+pkgname=glib2
+pkgver=2.34.3
+pkgrel=1
+pkgdesc="Common C routines used by GTK+ and other libs"
+url="http://www.gtk.org/"
+arch=(i686 x86_64)
+license=('LGPL')
+depends=('pcre' 'libffi' 'python2' 'pkgconf')
+makedepends=('pkg-config' 'python2' 'libxslt' 'docbook-xml')
+optdepends=('python2: for gdbus-codegen')
+options=('!libtool' '!docs' '!emptydirs')
+install=glib2.install
+source=(http://ftp.gnome.org/pub/GNOME/sources/glib/${pkgver%.*}/glib-$pkgver.tar.xz
+	extra-patch-glib_Makefile.in
+	extra-patch-glib_gunicollate.c
+	patch-config.h.in
+	patch-configure
+	patch-docs_reference_Makefile.in
+	patch-gio_fam_Makefile.in
+	patch-gio_glib-compile-schemas.c
+	patch-gio_gunixmount.c
+	patch-gio_gunixmounts.c
+	patch-gio_gunixvolume.c
+	patch-gio_tests_gdbus-peer.c
+	patch-gio_tests_include.c
+	patch-gio_xdgmime_xdgmime.c
+	patch-gio_xdgmime_xdgmimecache.h
+	patch-glib-2.0.pc.in
+	patch-glib-libcharset-Makefile.in
+	patch-glib_Makefile.in
+	patch-glib_deprecated_gthread.h
+	patch-glib_gthread-posix.c
+	patch-glib_gutils.c
+	patch-glib_tests_gdatetime.c
+	patch-glib_tests_utils.c
+	patch-gmodule-gmodule-dl.c
+	patch-gobject_Makefile.in
+        )
+sha256sums=('855fcbf87cb93065b488358e351774d8a39177281023bae58c286f41612658a7'
+            '20ec1bbeac11f08b68d82a2d74de33e8405e17ac0d72923651a8b844a49a4c74'
+            'e0da8725639b06345a95b85de9a4169998ccb89e78a7fc27e03e62c318d80246'
+            '9b3e795e34f15d621a822bc46f47b1022f798fff1d577dab60a839918f4e6a26'
+            'bbf1dad779e08de52d0ec26ddb35345b21f43d42e8badadce874178080c72b9e'
+            '718fdd920f7e54337daa7377c58e6e3e9474c15712805bd1d1db1c00252b2e67'
+            '260f0f9277ccbc58e57014aac9c31944dfd417533268ea0d723f81d4b541c5e7'
+            '8cfa6420effb49b3a4a70c7aaa2285dc9754d342c3890f24e3dd8ae41999a1a2'
+            '8b7dedc4953dd3fe3e05e64307903f59c28a39f617950cf66b337492d87c5b42'
+            '4c555d45eefb4f83e859a57e3b2f4d1e509201d87f551b914aced9ccb13b543a'
+            'a700fe182cd60a226e0baea003302fd7851bc69abb23379fd99821b722712f04'
+            '6b207bbd9155b5012ba644d374ee65bb54171c806fee8786ded51694ca3f08e3'
+            '470a05c1313bb001e40c1abef4a69825f64b7c40afe3ee13b083b3fce7f54abb'
+            'b0768aa990688492df0a6c7544d2c9e40cbb7453eb22fcb1376a027397526178'
+            'e74504a5b30451215a1259017a907e5e2ec729c33fe06985fb51a5288c6299c1'
+            '6577fd0697673ad67994aa1b5fa742db9583cdd197a3fffa600b4ade821780ee'
+            '9fe652723a3350c0cf7ed531c55d5a6b43e173ee4d8e6a729ff29033e6f3375b'
+            'f65127f0b04d950556af6d532312f63e113d62499abb73d3fd106659b62fba57'
+            '96bc69e3b6d0b508971da116f779a28f2360036eff62c89a1169deaebe63e51b'
+            '3ff007ba023e7f9aefe921f88adf5c31f528a0db3002605d5e9d70fb7efd445b'
+            'fd7948ddc82123e367a79a4cbdff50cb88cbe5858563cfb96be28e14da26df6b'
+            'bc63aa9253deb6b2e38c6b08f848ed8380263e651e27a97b418c49af61cc0c71'
+            '404a6f3838bdab8257ee137d7770d9e2d63bc342228a2a882793253859434a3c'
+            '52f3628550410b355b29ecce0564b86587490c42b53dc222d786436a782bf8d0'
+            'e50ad7a1e2861c14d4e25fe477d1a176aae9b72adbf1f0e74ae45d8928ffcf39')
+build() {
+  cd glib-$pkgver
+  
+  unset CC CXX CPP
+
+  for i in extra-patch-glib_Makefile.in \
+	extra-patch-glib_gunicollate.c \
+	patch-configure \
+	patch-config.h.in \
+	patch-docs_reference_Makefile.in \
+	patch-gio_fam_Makefile.in \
+	patch-gio_glib-compile-schemas.c \
+	patch-gio_gunixmount.c \
+	patch-gio_gunixmounts.c \
+	patch-gio_gunixvolume.c \
+	patch-gio_tests_gdbus-peer.c \
+	patch-gio_tests_include.c \
+	patch-gio_xdgmime_xdgmime.c \
+	patch-gio_xdgmime_xdgmimecache.h \
+	patch-glib-2.0.pc.in \
+	patch-glib-libcharset-Makefile.in \
+	patch-glib_Makefile.in \
+	patch-glib_deprecated_gthread.h \
+	patch-glib_gthread-posix.c \
+	patch-glib_gutils.c \
+	patch-glib_tests_gdatetime.c \
+	patch-glib_tests_utils.c \
+	patch-gmodule-gmodule-dl.c \
+	patch-gobject_Makefile.in
+  do
+    patch -p0 -i "${srcdir}/$i"
+  done
+
+  sed -i '' -e 's|/usr/share/locale/locale|/usr/local/share/locale/locale|g' \
+        glib/gutils.c
+  sed -i '' -e 's|/lib/dbus/machine-id|/db/dbus/machine-id|g' \
+    gio/gdbusaddress.c gio/gdbusprivate.c \
+    po/*.po
+  sed -i '' -e 's|inotify_support=yes|inotify_support=no| ; s|#define HAVE_SYS_INOTIFY_H 1||' configure
+
+  PYTHON=/usr/local/bin/python2 ./configure --prefix=/usr/local --libdir=/usr/local/lib \
+      --sysconfdir=/usr/local/etc \
+      --enable-static --enable-shared --with-libiconv=gnu \
+      --disable-gtk-doc --with-html-dir=/usr/local/share/doc \
+      --disable-man --without-xml-catalog \
+      --disable-dtrace \
+      --with-pcre=system \
+      --disable-fam \
+      --target=$CHOST \
+      PTHREAD_CFLAGS="-pthread" \
+      PTHREAD_LIBS="-pthread" \
+      LDFLAGS="-L/usr/local/lib -lintl" \
+      CFLAGS="-I/usr/local/include" \
+      CPPFLAGS="-I/usr/local/include"
+
+  gmake
+}
+
+package() {
+  cd glib-$pkgver
+  gmake completiondir=/usr/local/etc/bash-completion.d DESTDIR="$pkgdir" install
+
+  for _i in "$pkgdir/usr/local/etc/bash-completion.d/"*; do
+      chmod -x "$_i"
+  done
+# our package doesn't create this
+  # sed -i '' -e "s|#!/usr/bin/env python|#!/usr/bin/env python2|" "$pkgdir"/usr/local/bin/gdbus-codegen
+
+  install -dm755 "${pkgdir}/usr/local/libdata"
+  mv "${pkgdir}/usr/local/lib/pkgconfig" "${pkgdir}/usr/local/libdata/pkgconfig"
+}
