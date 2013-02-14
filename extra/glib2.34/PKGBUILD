@@ -104,6 +104,20 @@ build() {
     po/*.po
   sed -i '' -e 's|inotify_support=yes|inotify_support=no| ; s|#define HAVE_SYS_INOTIFY_H 1||' configure
 
+  find  ${srcdir}/glib-$pkgver -name "makefile.in*" -type f | xargs sed -i '' \
+                                -e 's|[(]libdir[)]/locale|(prefix)/share/locale|g' \
+                                -e ' s|[(]libdir[)]/pkgconfig|(prefix)/libdata/pkgconfig|g' \
+                                -e 's|{libdir}/pkgconfig|(prefix)/libdata/pkgconfig|g' \
+                                -e 's|[(]datadir[)]/pkgconfig|(prefix)/libdata/pkgconfig|g' \
+                                -e 's|[(]prefix[)]/lib/pkgconfig|(prefix)/libdata/pkgconfig|g' \
+                                -e 's|[$$][(]localstatedir[)]/scrollkeeper|/var/db/rarian|g' \
+                                -e 's|[(]libdir[)]/bonobo/servers|(prefix)/libdata/bonobo/servers|g' 
+
+  for i in ltmain.sh libtool; do
+  sed -i '' -e '/freebsd-elf)/,/;;/ s|major="\.$current"|major=.18|' \
+              -e '/freebsd-elf)/,/;;/ s|versuffix="\.$current"|versuffix="$major"|' \
+        $i
+  done
   PYTHON=/usr/local/bin/python2 ./configure --prefix=/usr/local --libdir=/usr/local/lib \
       --sysconfdir=/usr/local/etc \
       --enable-static --enable-shared --with-libiconv=gnu \
