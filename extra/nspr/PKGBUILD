@@ -68,6 +68,7 @@ build() {
       --enable-optimize \
       --with-pthreads \
       --disable-debug ${confflags} \
+      --disable-static \
       $CHOST
   gmake
 }
