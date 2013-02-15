@@ -32,8 +32,8 @@ build() {
 #  export CXX=g++
 
   cp ../mozconfig .mozconfig
-  for i in firefox-install-dir.patch \
-           patch-alsapulse patch-browser-app-nsBrowserApp.cpp patch-bug685258 patch-bug722975 \
+  patch -p1 -i "${srcdir}/firefox-install-dir.patch"
+  for i in patch-alsapulse patch-browser-app-nsBrowserApp.cpp patch-bug685258 patch-bug722975 \
            patch-bug732340 patch-bug778078 patch-bug781457 patch-bug783463 patch-bug783505 \
            patch-bug787804 patch-bug788955 patch-bug791305 patch-bug798354 patch-bug800401 \
            patch-bug806139 patch-bug807492 patch-bug815025 patch-bug817481 patch-bug826985 \
