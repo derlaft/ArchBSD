@@ -21,7 +21,7 @@ install=firefox.install
 options=(!emptydirs)
 source=(https://ftp.mozilla.org/pub/mozilla.org/firefox/releases/$pkgver/source/firefox-$pkgver.source.tar.bz2
         mozconfig firefox.desktop vendor.js
-patch-alsapulse patch-browser-app-nsBrowserApp.cpp patch-bug685258 patch-bug722975 patch-bug732340 patch-bug778078 patch-bug781457 patch-bug783463 patch-bug783505 patch-bug787804 patch-bug788955 patch-bug791305 patch-bug798354 patch-bug800401 patch-bug806139 patch-bug807492 patch-bug815025 patch-bug817481 patch-bug826985 patch-bug828003 patch-build-pgo-profileserver.py patch-clang32-libc++-visibility-hack patch-config-baseconfig.mk patch-content-base-src-nsTextFragmentImpl.h patch-content-media-nsAudioStream.cpp patch-extensions-spellcheck-hunspell-src-mozHunspell.cpp patch-ipc-chromium-Makefile.in patch-ipc-chromium-src-base-message_pump_libevent.cc patch-ipc-chromium-src-base-platform_thread_posix.cc patch-js-src-js-confdefs.h.in patch-js-src-methodjit-MethodJIT.cpp patch-media-libsydneyaudio-src-sydney_audio_oss.c patch-media-webrtc-trunk-src-modules-audio_device-main-source-linux-latebindingsymboltable_linux.cc patch-media-webrtc-trunk-src-system_wrappers-source-spreadsortlib-spreadsort.hpp patch-media-webrtc-trunk-src-system_wrappers-source-thread_posix.cc patch-media-webrtc-trunk-testing-gtest-include-gtest-internal-gtest-port.h patch-python-psutil-psutil-_psutil_bsd.c patch-security_manager_ssl_src_nsNSSComponent.cpp patch-toolkit_mozapps_installer_packager_mk patch-toolkit_xre_Makefile.in patch-xpcom-base-AvailableMemoryTracker.cpp patch-z-bug762445 patch-z-bug815916
+patch-alsapulse patch-browser-app-nsBrowserApp.cpp patch-bug685258 patch-bug722975 patch-bug732340 patch-bug778078 patch-bug781457 patch-bug783463 patch-bug783505 patch-bug787804 patch-bug788955 patch-bug791305 patch-bug798354 patch-bug800401 patch-bug806139 patch-bug807492 patch-bug815025 patch-bug817481 patch-bug826985 patch-bug828003 patch-build-pgo-profileserver.py patch-clang32-libc++-visibility-hack patch-content-base-src-nsTextFragmentImpl.h patch-content-media-nsAudioStream.cpp patch-extensions-spellcheck-hunspell-src-mozHunspell.cpp patch-ipc-chromium-Makefile.in patch-ipc-chromium-src-base-message_pump_libevent.cc patch-ipc-chromium-src-base-platform_thread_posix.cc patch-js-src-js-confdefs.h.in patch-js-src-methodjit-MethodJIT.cpp patch-media-libsydneyaudio-src-sydney_audio_oss.c patch-media-webrtc-trunk-src-modules-audio_device-main-source-linux-latebindingsymboltable_linux.cc patch-media-webrtc-trunk-src-system_wrappers-source-spreadsortlib-spreadsort.hpp patch-media-webrtc-trunk-src-system_wrappers-source-thread_posix.cc patch-media-webrtc-trunk-testing-gtest-include-gtest-internal-gtest-port.h patch-python-psutil-psutil-_psutil_bsd.c patch-security_manager_ssl_src_nsNSSComponent.cpp patch-toolkit_mozapps_installer_packager_mk patch-toolkit_xre_Makefile.in patch-xpcom-base-AvailableMemoryTracker.cpp patch-z-bug762445 patch-z-bug815916
 )
 
 build() {
@@ -33,22 +33,22 @@ build() {
 
   cp ../mozconfig .mozconfig
   for i in patch-alsapulse patch-browser-app-nsBrowserApp.cpp patch-bug685258 patch-bug722975 \
-  	       patch-bug732340 patch-bug778078 patch-bug781457 patch-bug783463 patch-bug783505 \
-  	       patch-bug787804 patch-bug788955 patch-bug791305 patch-bug798354 patch-bug800401 \
-  	       patch-bug806139 patch-bug807492 patch-bug815025 patch-bug817481 patch-bug826985 \
-  	       patch-bug828003 patch-build-pgo-profileserver.py patch-clang32-libc++-visibility-hack \
-  	       patch-config-baseconfig.mk patch-content-base-src-nsTextFragmentImpl.h patch-content-media-nsAudioStream.cpp \
-  	       patch-extensions-spellcheck-hunspell-src-mozHunspell.cpp patch-ipc-chromium-Makefile.in \
-  	       patch-ipc-chromium-src-base-message_pump_libevent.cc patch-ipc-chromium-src-base-platform_thread_posix.cc \
-  	       patch-js-src-js-confdefs.h.in patch-js-src-methodjit-MethodJIT.cpp patch-media-libsydneyaudio-src-sydney_audio_oss.c \
-  	       patch-media-webrtc-trunk-src-modules-audio_device-main-source-linux-latebindingsymboltable_linux.cc \
-  	       patch-media-webrtc-trunk-src-system_wrappers-source-spreadsortlib-spreadsort.hpp \
-  	       patch-media-webrtc-trunk-src-system_wrappers-source-thread_posix.cc \
-  	       patch-media-webrtc-trunk-testing-gtest-include-gtest-internal-gtest-port.h patch-python-psutil-psutil-_psutil_bsd.c \
-  	       patch-security_manager_ssl_src_nsNSSComponent.cpp patch-toolkit_mozapps_installer_packager_mk patch-toolkit_xre_Makefile.in \
-  	       patch-xpcom-base-AvailableMemoryTracker.cpp patch-z-bug762445 patch-z-bug815916
+           patch-bug732340 patch-bug778078 patch-bug781457 patch-bug783463 patch-bug783505 \
+           patch-bug787804 patch-bug788955 patch-bug791305 patch-bug798354 patch-bug800401 \
+           patch-bug806139 patch-bug807492 patch-bug815025 patch-bug817481 patch-bug826985 \
+           patch-bug828003 patch-build-pgo-profileserver.py patch-clang32-libc++-visibility-hack \
+           patch-content-base-src-nsTextFragmentImpl.h patch-content-media-nsAudioStream.cpp \
+           patch-extensions-spellcheck-hunspell-src-mozHunspell.cpp patch-ipc-chromium-Makefile.in \
+           patch-ipc-chromium-src-base-message_pump_libevent.cc patch-ipc-chromium-src-base-platform_thread_posix.cc \
+           patch-js-src-js-confdefs.h.in patch-js-src-methodjit-MethodJIT.cpp patch-media-libsydneyaudio-src-sydney_audio_oss.c \
+           patch-media-webrtc-trunk-src-modules-audio_device-main-source-linux-latebindingsymboltable_linux.cc \
+           patch-media-webrtc-trunk-src-system_wrappers-source-spreadsortlib-spreadsort.hpp \
+           patch-media-webrtc-trunk-src-system_wrappers-source-thread_posix.cc \
+           patch-media-webrtc-trunk-testing-gtest-include-gtest-internal-gtest-port.h patch-python-psutil-psutil-_psutil_bsd.c \
+           patch-security_manager_ssl_src_nsNSSComponent.cpp patch-toolkit_mozapps_installer_packager_mk patch-toolkit_xre_Makefile.in \
+           patch-xpcom-base-AvailableMemoryTracker.cpp patch-z-bug762445 patch-z-bug815916
   do
-  	msg "Patch $i"
+    msg "Patch $i"
     patch -p0 -i "${srcdir}/$i"
   done
   msg "Patching done"
