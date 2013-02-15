@@ -10,9 +10,9 @@ arch=('i686' 'x86_64')
 license=('MPL' 'GPL' 'LGPL')
 depends=('gtk2' 'libxt' 'startup-notification' 'mime-types'
          'libnotify' 'desktop-file-utils' 'hicolor-icon-theme'
-         'libvpx' 'libevent' 'nss>=3.14.1.1.93-3' 'hunspell' 'sqlite')
+         'libvpx' 'libevent' 'nss>=3.14.1.1.93-4' 'hunspell' 'sqlite')
 depends=('gtk2' 'libxt' 'startup-notification' 'mime-types'
-         'libvpx' 'libevent' 'nss>=3.14.1.1.93-3' 'hunspell' 'sqlite')
+         'libvpx' 'libevent' 'nss>=3.14.1.1.93-4' 'hunspell' 'sqlite')
 # nspr can be removed soon, added it because 4.9.4 rel 2 was required for linking since rel 1 lacked some symlinks
 makedepends=('unzip' 'zip' 'python2' 'yasm' 'mesa'
              'autoconf2.13' 'libidl2' 'xorg-server-xvfb' 'imake' 'nspr>=4.9.4-2')
@@ -70,7 +70,7 @@ build() {
   ln -sf /usr/local/bin/python2 "$srcdir/python2-path/python"
   export PATH="$srcdir/python2-path:$PATH"
 
-  export LDFLAGS="$LDFLAGS -L/usr/local/lib -Wl,-rpath,/usr/local/lib/firefox"
+  export LDFLAGS="$LDFLAGS -L/usr/local/lib -Wl,-rpath,/usr/local/lib/firefox `pkg-config --libs nss`"
   export PYTHON="/usr/local/bin/python2"
   export MOZ_MAKE_FLAGS="$MAKEFLAGS"
   unset MAKEFLAGS
