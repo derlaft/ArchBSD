@@ -141,7 +141,7 @@ package() {
   ln -s /usr/share/hyphen "$pkgdir/usr/local/lib/firefox/hyphenation"
 
   # We don't want the development stuff
-  rm -r "$pkgdir"/usr/local/{include,lib/firefox-devel,share/idl}
+  #rm -r "$pkgdir"/usr/local/{include,lib/firefox-devel,share/idl}
 
   #workaround for now
   #https://bugzilla.mozilla.org/show_bug.cgi?id=658850
