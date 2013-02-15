@@ -13,8 +13,9 @@ depends=('gtk2' 'libxt' 'startup-notification' 'mime-types'
          'libvpx' 'libevent' 'nss>=3.14.1.1.93-2' 'hunspell' 'sqlite')
 depends=('gtk2' 'libxt' 'startup-notification' 'mime-types'
          'libvpx' 'libevent' 'nss>=3.14.1.1.93-2' 'hunspell' 'sqlite')
+# nspr can be removed soon, added it because 4.9.4 rel 2 was required for linking since rel 1 lacked some symlinks
 makedepends=('unzip' 'zip' 'python2' 'yasm' 'mesa'
-             'autoconf2.13' 'libidl2' 'xorg-server-xvfb' 'imake')
+             'autoconf2.13' 'libidl2' 'xorg-server-xvfb' 'imake' 'nspr>=4.9.4-2')
 optdepends=('networkmanager: Location detection via available WiFi networks')
 url="http://www.mozilla.org/projects/firefox"
 install=firefox.install
@@ -119,8 +120,7 @@ build() {
 
 package() {
   cd mozilla-release
-  #gmake -j1 -f client.mk DESTDIR="$pkgdir" install
-  gmake DESTDIR="$pkgdir" install
+  gmake -j1 -f client.mk DESTDIR="$pkgdir" install
 
   install -Dm644 ../vendor.js "$pkgdir/usr/local/lib/firefox/defaults/preferences/vendor.js"
 
