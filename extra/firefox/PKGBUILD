@@ -1,4 +1,3 @@
-# $Id: PKGBUILD 175530 2013-01-19 07:31:00Z heftig $
 # Maintainer : Ionut Biru <ibiru@archlinux.org>
 # Contributor: Jakub Schmidtke <sjakub@gmail.com>
 
@@ -70,7 +69,7 @@ build() {
   ln -sf /usr/local/bin/python2 "$srcdir/python2-path/python"
   export PATH="$srcdir/python2-path:$PATH"
 
-  export LDFLAGS="$LDFLAGS -L/usr/local/lib -Wl,-rpath,/usr/local/lib/firefox `pkg-config --libs nss`"
+  export LDFLAGS="$LDFLAGS -L/usr/local/lib -Wl,-rpath,/usr/local/lib/firefox"
   export PYTHON="/usr/local/bin/python2"
   export MOZ_MAKE_FLAGS="$MAKEFLAGS"
   unset MAKEFLAGS
@@ -122,10 +121,12 @@ package() {
   cd mozilla-release
   gmake -j1 -f client.mk DESTDIR="$pkgdir" install
 
-  install -Dm644 ../vendor.js "$pkgdir/usr/local/lib/firefox/defaults/preferences/vendor.js"
+  install -dm755 "$pkgdir/usr/local/lib/firefox/defaults/preferences/"
+  install -m644 ../vendor.js "$pkgdir/usr/local/lib/firefox/defaults/preferences/vendor.js"
 
   for i in 16 22 24 32 48 256; do
-      install -Dm644 browser/branding/official/default$i.png \
+      install -dm755 "$pkgdir/usr/local/share/icons/hicolor/${i}x${i}/apps/"
+      install -m644 browser/branding/official/default$i.png \
         "$pkgdir/usr/local/share/icons/hicolor/${i}x${i}/apps/firefox.png"
   done
 
@@ -145,7 +146,7 @@ package() {
   #https://bugzilla.mozilla.org/show_bug.cgi?id=658850
   ln -sf firefox "$pkgdir/usr/local/lib/firefox/firefox-bin"
 }
-md5sums=('a7a20f52a3ffdd8d2fafa8a1a1db49c7' '701ba879ce239185e43ba496ad2bfb6b'
+md5sums=('a7a20f52a3ffdd8d2fafa8a1a1db49c7' 'a152683a43b3ab4e8e5a4f57a852f40e'
          '5f420c2c401bf0e4f464eed99535a573' '0d053487907de4376d67d8f499c5502b'
          '058b3c7f66b9604ea61340403e50d014' 'de4c18257bec4c38dbb5fd7158e75951'
          '86c94e5639fabda8522457790deb9274' '87d9839cc325c2506e70221fef2216c8'
