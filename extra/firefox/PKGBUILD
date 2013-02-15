@@ -27,9 +27,9 @@ patch-alsapulse patch-browser-app-nsBrowserApp.cpp patch-bug685258 patch-bug7229
 build() {
   cd mozilla-release
 
-#  export CC=gcc
-#  export CPP=cpp
-#  export CXX=g++
+  export CC=gcc
+  export CPP=cpp
+  export CXX=g++
 
   cp ../mozconfig .mozconfig
   patch -p1 -i "${srcdir}/firefox-install-dir.patch"
