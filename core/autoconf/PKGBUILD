@@ -30,17 +30,17 @@ build() {
   AWK=/usr/bin/awk \
   ac_cv_prog_TEST_EMACS=no \
   ./configure --prefix=/usr/local --without-lispdir
-  make
+  gmake
 }
 
 check() {
   cd ${srcdir}/${pkgname}-${pkgver}
-  make check
+  gmake check
 }
 
 package() {
   cd ${srcdir}/${pkgname}-${pkgver}
-  make DESTDIR=${pkgdir} install
+  gmake DESTDIR=${pkgdir} install
 
   # license exception
   install -dm755 $pkgdir/usr/local/share/licenses/autoconf/
