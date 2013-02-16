@@ -14,7 +14,7 @@ md5sums=('9d40dba6fb8cb58dacb433fc7bcaafca'
 
 build() {
   cd "${srcdir}/font-alias-${pkgver}"
-  ./configure --prefix=/usr/local --with-fontrootdir=/usr/local/lib/X11/fonts
+  ./configure --prefix=/usr/local --with-fontrootdir=/usr/local/share/fonts
   make
 }
 

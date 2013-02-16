@@ -69,7 +69,7 @@ build() {
   CXXFLAGS="${CXXFLAGS} -I/usr/local/include" \
   LDFLAGS="${LDFLAGS} -L/usr/local/lib" \
 # disabling dmx - depends on some linux-specific headers
-  export FONTROOTDIR=/usr/local/lib/X11/fonts
+  export FONTROOTDIR=/usr/local/share/fonts
   ./configure --prefix=/usr/local \
       --sysconfdir=/usr/local/etc/X11 \
       --with-xkb-path=/usr/local/share/X11/xkb \

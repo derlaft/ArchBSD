@@ -27,8 +27,8 @@ build() {
     if [ -d "${dir}" ]; then
       pushd ${dir}
       ./configure --prefix=/usr \
-          --with-fontrootdir=/usr/local/lib/X11/fonts \
-          --with-fontdir=/usr/local/lib/X11/fonts/100dpi
+          --with-fontrootdir=/usr/local/share/fonts \
+          --with-fontdir=/usr/local/share/fonts/100dpi
       make
       popd
     fi
@@ -46,5 +46,5 @@ package() {
       popd
     fi
   done
-  rm -f "${pkgdir}"/usr/local/lib/X11/fonts/100dpi/fonts.*
+  rm -f "${pkgdir}"/usr/local/share/fonts/100dpi/fonts.*
 }

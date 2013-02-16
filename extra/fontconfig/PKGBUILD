@@ -28,6 +28,7 @@ build() {
   libtoolize -f
   autoreconf -fi
 
+  export FONTROOTDIR=/usr/local/share/fonts
   ./configure --prefix=/usr/local \
     --sysconfdir=/usr/local/etc \
     --with-templatedir=/usr/local/etc/fonts/conf.avail \
@@ -37,7 +38,7 @@ build() {
     --localstatedir=/var \
     --disable-static \
     --with-default-fonts=/usr/local/share/fonts \
-    --with-add-fonts=/usr/local/lib/X11/fonts \
+    --with-add-fonts=$FONTROOTDIR \
     --with-cache-dir=/var/db/fontconfig \
     --disable-docs
 

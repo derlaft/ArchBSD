@@ -17,10 +17,10 @@ md5sums=('8b601e91725b6d69141b0fcf527948c0')
 
 package() {
   install -dm755 "${pkgdir}"/usr/local/etc/fonts/conf.avail
-  install -dm755 "${pkgdir}"/usr/local/lib/X11/fonts/dejavu
+  install -dm755 "${pkgdir}"/usr/local/share/fonts/dejavu
 
   cd "${srcdir}"/dejavu-fonts-ttf-${pkgver}
-  install -m644 ttf/*.ttf "${pkgdir}"/usr/local/lib/X11/fonts/dejavu/
+  install -m644 ttf/*.ttf "${pkgdir}"/usr/local/share/fonts/dejavu/
   install -m644 fontconfig/*.conf "${pkgdir}"/usr/local/etc/fonts/conf.avail/
 
   install -dm755 "${pkgdir}"/usr/local/share/licenses/${pkgname}/
