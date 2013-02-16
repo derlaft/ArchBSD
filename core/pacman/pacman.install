@@ -12,6 +12,5 @@ _check_pubring() {
     echo " >>> See: https://www.archlinux.org/news/having-pacman-verify-packages"
 }
 
-post_upgrade
 post_install
 _check_pubring

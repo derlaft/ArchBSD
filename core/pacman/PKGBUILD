@@ -1,6 +1,6 @@
 pkgname=pacman
 pkgver=4.0.3
-pkgrel=6
+pkgrel=7
 pkgdesc="A library-based package manager with dependency support"
 arch=('i686' 'x86_64')
 url="http://www.archlinux.org/pacman/"
@@ -75,6 +75,6 @@ package() {
   sed -i '' -e "s|@CARCHFLAGS@|$myflags|g" \
       $pkgdir/usr/local/etc/makepkg.conf
 
-  install -dm750 "${pkgdir}/usr/local/share/pacman"
+  install -dm755 "${pkgdir}/usr/local/share/pacman"
   install -m644 "${srcdir}/makepkg.site" "${pkgdir}/usr/local/share/pacman/makepkg.site"
 }

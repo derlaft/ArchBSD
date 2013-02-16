@@ -6,7 +6,7 @@
 
 pkgname=db
 pkgver=5.3.21
-pkgrel=1
+pkgrel=2
 pkgdesc="The Berkeley DB embedded database system"
 arch=('i686' 'x86_64')
 url="http://www.oracle.com/technology/software/products/berkeley-db/index.html"
@@ -32,13 +32,14 @@ build() {
     --enable-shared --enable-static --enable-cxx --enable-dbm \
     --enable-stl --disable-tcl
 
-  make LIBSO_LIBS=-lpthread
+  gmake LIBSO_LIBS=-lpthread
 }
 
 package() {
   cd "${srcdir}"/$pkgname-${pkgver}/build_unix
   sed -i '' -e '/^library_install:/s/install_docs//p' Makefile
-  make DESTDIR="${pkgdir}" install
+  unset MAKEFLAGS
+  gmake DESTDIR="${pkgdir}" install -j1
   install -dm755 "${pkgdir}"/usr/local/share/licenses/${pkgname}
   install -m644 "${srcdir}"/${pkgname}-${pkgver}/LICENSE \
     "${pkgdir}"/usr/local/share/licenses/${pkgname}/LICENSE
