@@ -1,0 +1,40 @@
+# Maintainer: Ionut Biru <ibiru@archlinux.org>
+
+pkgname=at-spi2-atk
+pkgver=2.6.2
+pkgrel=1
+pkgdesc="A GTK+ module that bridges ATK to D-Bus at-spi"
+arch=('i686' 'x86_64')
+url="http://www.gnome.org"
+license=('GPL2')
+depends=('at-spi2-core' 'libx11' 'atk') # 'dconf'
+makedepends=('intltool')
+install=at-spi2-atk.install
+options=('!libtool')
+source=(http://download.gnome.org/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz
+        patch-atk-adaptor_accessible-cache.c)
+sha256sums=('496c8432e8ab82735145f9af5d45209e9b708bf3c94e527ee091d08641a9bcfa'
+            'c57d3b5eb52fed1911ef6e7e372eb05db2c728a6a5548cdab405bea708b8c0f1')
+
+build() {
+  cd $pkgname-$pkgver
+  patch -p0 -i "$srcdir"/patch-atk-adaptor_accessible-cache.c
+
+  sed -i '' -e '/AC_PATH_XTRA/d' configure.ac
+  autoreconf --force --install
+
+  ./configure --prefix=/usr/local --sysconfdir=/usr/local/etc \
+    --disable-schemas-compile
+  gmake
+}
+
+package() {
+  cd $pkgname-$pkgver
+  gmake DESTDIR="$pkgdir" install
+
+  install -dm755 "${pkgdir}/usr/local/libdata"
+  mv "${pkgdir}/usr/local/lib/pkgconfig" \
+     "${pkgdir}/usr/local/libdata/pkgconfig"
+}
+
+# vim:set ts=2 sw=2 et:
