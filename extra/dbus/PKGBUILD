@@ -5,7 +5,7 @@
 #
 pkgname=dbus
 pkgver=1.6.8
-pkgrel=6
+pkgrel=7
 pkgdesc="Freedesktop.org message bus system"
 url="http://www.freedesktop.org/Software/dbus"
 arch=(i686 x86_64)
@@ -78,8 +78,8 @@ package(){
 
   rm -rf "$pkgdir/var/run"
 
-  install -m755 -d "$pkgdir/etc/init.d/"
-  install -m755 ../dbus "$pkgdir/etc/init.d/dbus"
+  install -m755 -d "$pkgdir/usr/local/etc/init.d/"
+  install -m755 ../dbus "$pkgdir/usr/local/etc/init.d/dbus"
 
   install -dm755 "$pkgdir/usr/share/licenses/dbus/"
   install -m644 COPYING "$pkgdir/usr/share/licenses/dbus/COPYING"
