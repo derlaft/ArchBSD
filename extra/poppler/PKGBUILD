@@ -5,7 +5,7 @@ pkgbase=poppler
 #pkgname=('poppler' 'poppler-glib' 'poppler-qt')
 pkgname=('poppler' 'poppler-glib')
 pkgver=0.22.1
-pkgrel=1
+pkgrel=2
 arch=(i686 x86_64)
 license=('GPL')
 #makedepends=('libjpeg' 'cairo' 'fontconfig' 'openjpeg' 'gtk2' 'qt' 'pkgconf' 'lcms' 'gobject-introspection' 'icu')
@@ -15,7 +15,7 @@ url="http://poppler.freedesktop.org/"
 _testtag=0d2bfd4af4c76a3bac27ccaff793d9129df7b57a
 source=(http://poppler.freedesktop.org/${pkgbase}-${pkgver}.tar.gz
         http://cgit.freedesktop.org/poppler/test/snapshot/test-${_testtag}.tar.bz2)
-md5sums=('c7038be37a7d446544e83a7df3c26196'
+md5sums=('50c259fdda538c1ba94b62aa25f7ec87'
          '9dc64c254a31e570507bdd4ad4ba629a')
 
 build() {
@@ -77,7 +77,7 @@ package_poppler() {
 
 package_poppler-glib() {
   pkgdesc="Poppler glib bindings"
-  depends=("poppler=${pkgver}" 'glib2')
+  depends=("poppler=${pkgver}" 'glib2>=2.34.3')
 
   cd "${srcdir}/${pkgbase}-${pkgver}/poppler"
   gmake DESTDIR="${pkgdir}" install-libLTLIBRARIES

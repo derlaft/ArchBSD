@@ -4,12 +4,12 @@
 
 pkgname=cairo
 pkgver=1.12.10
-pkgrel=2
+pkgrel=3
 pkgdesc="Cairo vector graphics library"
 arch=(i686 x86_64)
 license=('LGPL' 'MPL')
 url="http://cairographics.org/"
-depends=('libpng' 'libxrender' 'libxext' 'fontconfig' 'pixman>=0.28.0' 'glib2')
+depends=('libpng' 'libxrender' 'libxext' 'fontconfig' 'pixman>=0.28.0' 'glib2>=2.34.3')
 #makedepends=('librsvg' 'poppler-glib' 'libspectre' 'gtk-doc') # 'libdrm')
 makedepends=('librsvg' 'poppler-glib' 'libspectre' 'glproto') # 'libdrm')
 optdepends=('xcb-util: for XCB backend') # really needed?
