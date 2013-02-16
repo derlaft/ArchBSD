@@ -19,7 +19,7 @@ build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
 
   sh ./configure --prefix=/usr/local \
-              --x11dir=/usr/local/lib/X11/fonts/terminus-font \
+              --x11dir=/usr/local/share/fonts/terminus-font \
               --psfdir=/removed
   gmake
 }
