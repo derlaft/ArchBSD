@@ -31,6 +31,7 @@ package() {
   mv "${pkgdir}/usr/local/lib/pkgconfig" "${pkgdir}/usr/local/libdata/pkgconfig"
 
   cd "${pkgdir}/usr/local/lib"
-  ln -sf libatk-1.0.so.10 libatk-1.0.so.0
-  ln -sf libatk-1.0.so.10 libatk-1.0.so
+  ln -sf libatk-1.0.so.20609 libatk-1.0.so.10
+  ln -sf libatk-1.0.so.20609 libatk-1.0.so.0
+  ln -sf libatk-1.0.so.20609 libatk-1.0.so
 }
