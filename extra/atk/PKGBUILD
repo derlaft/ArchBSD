@@ -4,11 +4,11 @@
 
 pkgname=atk
 pkgver=2.0.1
-pkgrel=1
+pkgrel=2
 pkgdesc="A library providing a set of interfaces for accessibility"
 arch=(i686 x86_64)
 license=('LGPL')
-depends=('glib2')
+depends=('glib2>=2.34.3')
 makedepends=('gobject-introspection')
 # NOTE: if you remove !libtool, you need to fix the ltverhack
 options=('!libtool' '!docs')
