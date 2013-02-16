@@ -2,7 +2,7 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=libffi
-pkgver=3.0.9
+pkgver=3.0.11
 pkgrel=1
 pkgdesc="A portable, high level programming interface to various calling conventions"
 arch=('i686' 'x86_64')
@@ -12,13 +12,11 @@ license=('MIT')
 checkdepends=('dejagnu')
 install=libffi.install
 source=(ftp://sourceware.org/pub/libffi/libffi-${pkgver}.tar.gz
-        patch-configure
-	patch-src_arm_sysv.S)
+        patch-configure)
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   patch -p0 -i "${srcdir}/patch-configure"
-  patch -p0 -i "${srcdir}/patch-src_arm_sysv.S"
   ./configure --prefix=/usr/local --mandir=/usr/local/man --infodir=/usr/local/info
   make
 }
@@ -42,6 +40,5 @@ package() {
   install -d -m755 "${pkgdir}/usr/local/share/licenses/${pkgname}"
   install    -m644 LICENSE "${pkgdir}/usr/local/share/licenses/${pkgname}/LICENSE"
 }
-md5sums=('1f300a7a7f975d4046f51c3022fa5ff1'
-         '9e3d64d600cd9686faaf8b3a7a3c18c5'
-         '39bec3dabfc8bc98e4c3724e1cc08077')
+md5sums=('f69b9693227d976835b4857b1ba7d0e3'
+         'b54a39b42ac952323cc5b47ce64c2d47')
