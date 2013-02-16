@@ -1,6 +1,6 @@
 pkgname=libxcb
 pkgver=1.9
-pkgrel=1
+pkgrel=2
 pkgdesc="X11 client-side library"
 arch=(i686 x86_64)
 url="http://xcb.freedesktop.org/"
@@ -21,11 +21,13 @@ build() {
   patch -p0 -i "$srcdir/patch-tests-check_public.c"
 
   PYTHON=/usr/local/bin/python2
+  export FONTROOTDIR=/usr/local/lib/X11/fonts
   ./autogen.sh --prefix=/usr/local \
     --enable-xinput \
     --enable-xkb \
     --disable-static \
-    --without-doxygen --disable-build-docs
+    --without-doxygen --disable-build-docs \
+    --with-fontrootdir=$FONTROOTDIR
   make
 }
 

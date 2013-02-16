@@ -14,8 +14,10 @@ sha1sums=('0bf3cb8aa192ab96bbaf384d1a4a00d15a40171e')
 
 build() {
   cd "${srcdir}/libXfont-${pkgver}"
+  export FONTROOTDIR=/usr/local/lib/X11/fonts
   ./configure --prefix=/usr/local --sysconfdir=/usr/local/etc \
-              --without-xmlto --disable-devel-docs
+              --without-xmlto --disable-devel-docs \
+              --with-fontrootdir=/usr/local/lib/X11/fonts
   make
 }
 

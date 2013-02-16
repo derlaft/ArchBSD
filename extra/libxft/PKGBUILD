@@ -14,7 +14,9 @@ sha256sums=('7fce32b92dcb7b2869bed567af2abc7bbad0d5d6fcf471b8a3e137964a31bbbd')
 
 build() {
   cd "${srcdir}/libXft-${pkgver}"
-  ./configure --prefix=/usr/local --sysconfdir=/usr/local/etc
+  export FONTROOTDIR=/usr/local/lib/X11/fonts
+  ./configure --prefix=/usr/local --sysconfdir=/usr/local/etc \
+              --with-fontrootdir=/usr/local/lib/X11/fonts
   make
 }
 
