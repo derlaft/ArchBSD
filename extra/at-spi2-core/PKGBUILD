@@ -10,11 +10,14 @@ license=('GPL2')
 depends=('dbus-core' 'glib2' 'libxtst')
 makedepends=('intltool' 'gobject-introspection')
 options=('!libtool')
-source=(http://download.gnome.org/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
+source=(http://download.gnome.org/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz
+        patch-atspi_Makefile.in)
 sha256sums=('fc4487ae46e847cfd057b329b852cf99923772ecd2ddc29f29670c9f2b15d0ea')
 
 build() {
   cd $pkgname-$pkgver
+
+  patch -p0 -i "$srcdir"/patch-atspi_Makefile.in
 
   sed -i -e '/AC_PATH_XTRA/d' configure.ac
   autoreconf --force --install
@@ -36,3 +39,5 @@ package() {
 }
 
 # vim:set ts=2 sw=2 et:
+sha256sums=('fc4487ae46e847cfd057b329b852cf99923772ecd2ddc29f29670c9f2b15d0ea'
+            '3d456e335e7d3f5c2b3297640a6c81e341da802e0ccf947cc7b6ea62bc2f6057')

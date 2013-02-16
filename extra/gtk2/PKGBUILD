@@ -1,7 +1,7 @@
 pkgbase=gtk2
 pkgname=('gtk2' 'gtk-update-icon-cache')
 pkgver=2.24.14
-pkgrel=1
+pkgrel=2
 arch=('i686' 'x86_64')
 url="http://www.gtk.org/"
 makedepends=('atk' 'pango' 'libxcursor' 'libxinerama' 'libxrandr' 'libxi' 'libxcomposite' 'libxdamage'
