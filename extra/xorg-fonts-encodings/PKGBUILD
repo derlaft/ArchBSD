@@ -2,7 +2,7 @@
 
 pkgname=xorg-fonts-encodings
 pkgver=1.0.4
-pkgrel=3
+pkgrel=4
 pkgdesc="X.org font encoding files"
 arch=(any)
 url="http://xorg.freedesktop.org/"
@@ -15,7 +15,8 @@ sha1sums=('24ace2470403f85a0d393769204029bd8247992a')
 
 build() {
   cd "${srcdir}/encodings-${pkgver}"
-  ./configure --prefix=/usr/local
+  export FONTROOTDIR=/usr/local/lib/X11/fonts
+  ./configure --prefix=/usr/local --with-fontrootdir=/usr/local/lib/X11/fonts
   make
 }
 
