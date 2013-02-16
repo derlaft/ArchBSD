@@ -1,6 +1,6 @@
 pkgname=openrc
 pkgver=0.11.8
-pkgrel=2
+pkgrel=3
 pkgdesc='Dependency based init system that works with sysvinit.'
 arch=('i686' 'x86_64')
 groups=('base')
@@ -11,11 +11,13 @@ backup=(etc/inittab
         etc/rc.conf
         etc/conf.d/{bootmisc,consolefont,dmesg,fsck,hostname,hwclock,keymaps}
         etc/conf.d/{killprocs,localmount,modules,netmount,network,staticroute}
-        etc/conf.d/{tmpfiles,urandom})
+        etc/conf.d/{tmpfiles,urandom,ntp-client,sshd})
 source=(http://dev.gentoo.org/~williamh/dist/$pkgname-$pkgver.tar.bz2
 	'openrc.patch'
-	'conf.d-sshd'
-	'init.d-sshd'
+	{init,conf}.d-sshd
+	{init,conf}.d-modules
+	{init,conf}.d-ntp-client
+	init.d-cron
 )
 md5sums=('d896371d533a22de4cf57c7371c4d6e8'
          '2ea45acde0757636ca4f0265121174d6'
@@ -41,7 +43,17 @@ package() {
 
     install -dm755 "${pkgdir}/etc/init.d"
     install -dm755 "${pkgdir}/etc/conf.d"
-    install -m755 "${srcdir}/init.d-sshd" "${pkgdir}/etc/init.d/sshd"
-    install -m644 "${srcdir}/conf.d-sshd" "${pkgdir}/etc/conf.d/sshd"
-}
 
+    # Services with both init.d and conf.d files
+    for i in sshd modules ntp-client
+    do
+        install -m755 "${srcdir}/init.d-$i" "${pkgdir}/etc/init.d/$i"
+        install -m644 "${srcdir}/conf.d-$i" "${pkgdir}/etc/conf.d/$i"
+    done
+
+    # For which there is no conf.d
+    for i in cron
+    do
+        install -m755 "${srcdir}/init.d-$i" "${pkgdir}/etc/init.d/$i"
+    done
+}
