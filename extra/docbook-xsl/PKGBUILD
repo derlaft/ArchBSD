@@ -14,11 +14,11 @@ package() {
 
 	_pkgroot=${pkgdir}/usr/local/share/xml/docbook/xsl-stylesheets-${pkgver}
 
-        install -m755 -d ${_pkgroot}
+	install -m755 -d ${_pkgroot}
 	install -m644 VERSION VERSION.xsl ${_pkgroot}
 
 	for fn in assembly common eclipse epub epub3 fo highlighting html htmlhelp javahelp lib \
-                  manpages params profiling roundtrip template website xhtml xhtml-1_1 xhtml5; do
+	          manpages params profiling roundtrip template website xhtml xhtml-1_1 xhtml5; do
 		install -m755 -d ${_pkgroot}/${fn}
 		install -m644 ${fn}/*.{xml,xsl,dtd,ent} ${_pkgroot}/${fn} || true  # ignore missing files
 	done
