@@ -2,26 +2,20 @@
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=gdk-pixbuf2
-pkgver=2.24.1
+pkgver=2.26.5
 pkgrel=1
 pkgdesc="An image loading library"
 arch=('i686' 'x86_64')
 url="http://www.gtk.org/"
 license=('LGPL2.1')
-depends=('glib2' 'libpng' 'libtiff' 'libjpeg' 'libx11')
+depends=('glib2>=2.34.3' 'libpng' 'libtiff' 'libjpeg' 'libx11')
 makedepends=('gobject-introspection')
 #options=('!libtool')
 install=gdk-pixbuf2.install
-source=(http://download.gnome.org/sources/gdk-pixbuf/${pkgver%.*}/gdk-pixbuf-$pkgver.tar.xz
-        patch-gdk-pixbuf_io-xbm.c)
-sha256sums=('7a6c3550426f38f6b0eeeb49295654d9e706ce8f1786a4d0932f9d2c0d0bc500'
-            '5c16e7f6f11b275f7ed5e9a5a4dff351e1cf1586a18dda066f0886b7a4a71c39')
+source=(http://download.gnome.org/sources/gdk-pixbuf/${pkgver%.*}/gdk-pixbuf-$pkgver.tar.xz)
 
 build() {
   cd gdk-pixbuf-$pkgver
-
-# NOTE: THIS patch is already added to 2.26.* - when updating (which requires a glib2 update) remove this
-  patch -p0 -i "$srcdir"/patch-gdk-pixbuf_io-xbm.c
 
   ./configure --prefix=/usr/local \
     --without-libjasper \
@@ -47,3 +41,4 @@ package() {
 }
 
 # vim:set ts=2 sw=2 et:
+md5sums=('339329e6d619ee3e1cb93979111b04c0')
