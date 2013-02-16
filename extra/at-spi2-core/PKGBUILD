@@ -1,0 +1,38 @@
+# Maintainer: Ionut Biru <ibiru@archlinux.org>
+
+pkgname=at-spi2-core
+pkgver=2.6.3
+pkgrel=1
+pkgdesc="Protocol definitions and daemon for D-Bus at-spi"
+arch=('i686' 'x86_64')
+url="http://www.gnome.org"
+license=('GPL2')
+depends=('dbus-core' 'glib2' 'libxtst')
+makedepends=('intltool' 'gobject-introspection')
+options=('!libtool')
+source=(http://download.gnome.org/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
+sha256sums=('fc4487ae46e847cfd057b329b852cf99923772ecd2ddc29f29670c9f2b15d0ea')
+
+build() {
+  cd $pkgname-$pkgver
+
+  sed -i -e '/AC_PATH_XTRA/d' configure.ac
+  autoreconf --force --install
+
+  CPPFLAGS="$CPPFLAGS -I/usr/local/include" \
+  LDFLAGS="$LDFLAGS -L/usr/local/lib" \
+  ./configure --prefix=/usr/local --sysconfdir=/usr/local/etc \
+    --libexecdir=/usr/local/lib/at-spi2-core --disable-xevie
+  gmake
+}
+
+package() {
+  cd $pkgname-$pkgver
+  gmake DESTDIR="$pkgdir" install
+
+  install -dm755 "${pkgdir}/usr/local/libdata"
+  mv "${pkgdir}/usr/local/lib/pkgconfig" \
+     "${pkgdir}/usr/local/libdata/pkgconfig"
+}
+
+# vim:set ts=2 sw=2 et:
