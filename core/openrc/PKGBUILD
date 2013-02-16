@@ -21,8 +21,13 @@ source=(http://dev.gentoo.org/~williamh/dist/$pkgname-$pkgver.tar.bz2
 )
 md5sums=('d896371d533a22de4cf57c7371c4d6e8'
          '2ea45acde0757636ca4f0265121174d6'
+         '29f5aaefd9fc245a61535a19bab75b30'
          'b35e9f3829f4cfca07168fcba98749c7'
-         '29f5aaefd9fc245a61535a19bab75b30')
+         '82a9ad9fd7d59c9bb911a5c80b403f90'
+         '0e7438caba45a532c4470a507451158e'
+         '120a8d041c92838a1bd1c1db805f3346'
+         '5527c30b1f101bfe27b061d2a8d4dacb'
+         'd0e6c4d30a5b789fe36ab20f50517698')
 
 
 _makeargs=(BRANDING='Arch BSD')
