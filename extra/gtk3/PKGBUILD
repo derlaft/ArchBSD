@@ -1,0 +1,72 @@
+# Maintainer: Ionut Biru <ibiru@archlinux.org>
+
+pkgname=gtk3
+pkgver=3.6.4
+pkgrel=1
+pkgdesc="GObject-based multi-platform GUI toolkit (v3)"
+arch=('i686' 'x86_64')
+url="http://www.gtk.org/"
+install=gtk3.install
+#depends=('atk>=2.6.0' 'cairo' 'gtk-update-icon-cache' 'libcups' 'libxcursor' 'libxinerama' 'libxrandr' 'libxi' 'libxcomposite' 'libxdamage' 'pango>=1.30.0' 'shared-mime-info' 'colord' 'at-spi2-atk')
+depends=('atk>=2.6.0' 'cairo' 'gtk-update-icon-cache' 'libxcursor' 'libxinerama' 'libxrandr' 'libxi' 'libxcomposite' 'libxdamage' 'pango>=1.30.0' 'shared-mime-info' 'at-spi2-atk')
+makedepends=('gobject-introspection')
+options=('!libtool')
+backup=(etc/gtk-3.0/settings.ini)
+license=('LGPL')
+source=(http://ftp.gnome.org/pub/gnome/sources/gtk+/${pkgver%.*}/gtk+-$pkgver.tar.xz
+        settings.ini
+        patch-Makefile.in
+        patch-docs_Makefile.in
+        patch-docs_reference_Makefile.in
+        patch-docs_reference_gtk_Makefile.in
+        patch-gtk_gtkbuilderparser.c
+        patch-gtk_updateiconcache.c
+        )
+md5sums=('123d3dc6fc659539a308017934235b3e'
+         '085ece008fa3a0b7a72e9fe3dda3631a'
+         '907d57ec1abc65a453939fb4c799ae02'
+         '2538cf0cd9166b591fb3204d7b72e22f'
+         'a062091b4809d23da031a6b3d878b0d6'
+         'bee72f40f175b1345fa2e0231bc7b5a9'
+         'cfa7f90b097e5893865c2a45e227b1b5'
+         'b859b1a2fe7d1606b9d237e5addafcc3')
+
+build() {
+    cd "gtk+-$pkgver"
+    for i in patch-Makefile.in patch-docs_Makefile.in \
+             patch-docs_reference_Makefile.in \
+             patch-docs_reference_gtk_Makefile.in \
+             patch-gtk_gtkbuilderparser.c \
+             patch-gtk_updateiconcache.c
+    do
+        patch -p0 -i "${srcdir}/$i"
+    done
+
+    find . -name "Makefile.in" | xargs grep -l lgmodule | \
+        xargs sed -i '' -e 's|-lgmodule|@GMODULE_LIBS@|g'
+    sed -i '' -e 's|[{]libdir[}]/locale|{datadir}/locale|g' configure
+    sed -i '' -e 's|@LN_S@|ln -sf|' gtk/Makefile.in
+    sed -i '' -e 's|file,cups|file,cups,lpr|' \
+        gtk/Makefile.in
+
+    CXX=/bin/false ./configure --prefix=/usr/local \
+        --sysconfdir=/usr/local/etc \
+        --localstatedir=/var \
+        --enable-gtk2-dependency \
+        --disable-schemas-compile \
+        --disable-packagekit
+
+    gmake
+}
+
+package() {
+    cd "gtk+-$pkgver"
+    gmake DESTDIR="$pkgdir" install
+
+    install -dm755 "${pkgdir}/usr/local/libdata"
+    mv "${pkgdir}/usr/local/lib/pkgconfig" \
+       "${pkgdir}/usr/local/libdata/pkgconfig"
+
+    install -dm755 "$pkgdir/usr/local/etc/gtk-3.0/"
+    install -m644 "$srcdir/settings.ini" "$pkgdir/usr/local/etc/gtk-3.0/settings.ini"
+}
