@@ -28,3 +28,17 @@
  do :
    as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
  ac_fn_c_check_func "$LINENO" "$ac_func" "$as_ac_var"
+@@ -27107,8 +27110,11 @@
+ #  b) FreeBSD doesn't do this either.
+ #
+ case $host in
+-  *-*-freebsd*|*-*-linux*)
+-    G_THREAD_LIBS_FOR_GTHREAD="`echo $G_THREAD_LIBS | sed s/-pthread/-pthread/`"
++  *-*-linux*)
++    G_THREAD_LIBS_FOR_GTHREAD="`echo $G_THREAD_LIBS | sed s/-pthread/-lpthread/`"
++    ;;
++  *-*-freebsd*)
++    G_THREAD_LIBS_FOR_GTHREAD="-pthread"
+     ;;
+   *-*-openbsd*)
+     LDFLAGS="$LDFLAGS -pthread"
