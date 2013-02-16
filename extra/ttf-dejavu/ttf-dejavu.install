@@ -18,10 +18,10 @@ post_install() {
   on_configs ln_config
   cd "$old"
   fc-cache -fs
-  mkfontscale usr/local/lib/X11/fonts/dejavu
-  mkfontdir usr/local/lib/X11/fonts/dejavu
+  mkfontscale usr/local/share/fonts/dejavu
+  mkfontdir usr/local/share/fonts/dejavu
   echo ">>> To enable the DejaVu font familty add"
-  echo "    FontPath \"/usr/local/lib/X11/fonts/dejavu\""
+  echo "    FontPath \"/usr/local/share/fonts/dejavu\""
   echo ">>> to the \"Files\" section in your xorg.conf"
 }
 
@@ -38,10 +38,10 @@ post_upgrade() {
     fi
   done
   fc-cache -fs
-  mkfontscale usr/local/lib/X11/fonts/dejavu
-  mkfontdir usr/local/lib/X11/fonts/dejavu
+  mkfontscale usr/local/share/fonts/dejavu
+  mkfontdir usr/local/share/fonts/dejavu
   echo ">>> To enable the DejaVu font familty add"
-  echo "    FontPath \"/usr/local/lib/X11/fonts/dejavu\""
+  echo "    FontPath \"/usr/local/share/fonts/dejavu\""
   echo ">>> to the \"Files\" section in your xorg.conf"
 }
 
@@ -65,6 +65,6 @@ post_remove() {
   on_configs rm -f
   cd "$old"
   fc-cache -fs
-  mkfontscale usr/local/lib/X11/fonts/dejavu
-  mkfontdir usr/local/lib/X11/fonts/dejavu
+  mkfontscale usr/local/share/fonts/dejavu
+  mkfontdir usr/local/share/fonts/dejavu
 }
