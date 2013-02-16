@@ -33,9 +33,8 @@
  #
  case $host in
 -  *-*-freebsd*|*-*-linux*)
--    G_THREAD_LIBS_FOR_GTHREAD="`echo $G_THREAD_LIBS | sed s/-pthread/-pthread/`"
 +  *-*-linux*)
-+    G_THREAD_LIBS_FOR_GTHREAD="`echo $G_THREAD_LIBS | sed s/-pthread/-lpthread/`"
+     G_THREAD_LIBS_FOR_GTHREAD="`echo $G_THREAD_LIBS | sed s/-pthread/-lpthread/`"
 +    ;;
 +  *-*-freebsd*)
 +    G_THREAD_LIBS_FOR_GTHREAD="-pthread"

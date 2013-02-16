@@ -9,7 +9,7 @@ url="http://www.gtk.org/"
 arch=(i686 x86_64)
 license=('LGPL')
 depends=('pcre' 'libffi' 'python2' 'pkgconf')
-makedepends=('pkg-config' 'python2' 'libxslt' 'docbook-xml')
+makedepends=('pkg-config' 'python2' 'libxslt' 'docbook-xml' 'gsed')
 optdepends=('python2: for gdbus-codegen')
 options=('!libtool' '!docs' '!emptydirs')
 install=glib2.install
@@ -41,9 +41,9 @@ source=(http://ftp.gnome.org/pub/GNOME/sources/glib/${pkgver%.*}/glib-$pkgver.ta
         )
 sha256sums=('855fcbf87cb93065b488358e351774d8a39177281023bae58c286f41612658a7'
             '20ec1bbeac11f08b68d82a2d74de33e8405e17ac0d72923651a8b844a49a4c74'
-            'e0da8725639b06345a95b85de9a4169998ccb89e78a7fc27e03e62c318d80246'
+            '088c051287f3dd79dcccc68cebbe139b946878e9796450831963064c084b6bcd'
             '9b3e795e34f15d621a822bc46f47b1022f798fff1d577dab60a839918f4e6a26'
-            'bbf1dad779e08de52d0ec26ddb35345b21f43d42e8badadce874178080c72b9e'
+            '420161c28434820129a09c9648f1f4934849c92ca1531876bc61633e8cb56abf'
             '718fdd920f7e54337daa7377c58e6e3e9474c15712805bd1d1db1c00252b2e67'
             '260f0f9277ccbc58e57014aac9c31944dfd417533268ea0d723f81d4b541c5e7'
             '8cfa6420effb49b3a4a70c7aaa2285dc9754d342c3890f24e3dd8ae41999a1a2'
@@ -64,13 +64,14 @@ sha256sums=('855fcbf87cb93065b488358e351774d8a39177281023bae58c286f41612658a7'
             '404a6f3838bdab8257ee137d7770d9e2d63bc342228a2a882793253859434a3c'
             '52f3628550410b355b29ecce0564b86587490c42b53dc222d786436a782bf8d0'
             'e50ad7a1e2861c14d4e25fe477d1a176aae9b72adbf1f0e74ae45d8928ffcf39')
+
 build() {
   cd glib-$pkgver
   
   unset CC CXX CPP
 
   for i in extra-patch-glib_Makefile.in \
-	extra-patch-glib_gunicollate.c \
+  	extra-patch-glib_gunicollate.c \
 	patch-configure \
 	patch-config.h.in \
 	patch-docs_reference_Makefile.in \
@@ -110,14 +111,9 @@ build() {
                                 -e 's|{libdir}/pkgconfig|(prefix)/libdata/pkgconfig|g' \
                                 -e 's|[(]datadir[)]/pkgconfig|(prefix)/libdata/pkgconfig|g' \
                                 -e 's|[(]prefix[)]/lib/pkgconfig|(prefix)/libdata/pkgconfig|g' \
-                                -e 's|[$$][(]localstatedir[)]/scrollkeeper|/var/db/rarian|g' \
+                                -e 's|[$][(]localstatedir[)]/scrollkeeper|/var/db/rarian|g' \
                                 -e 's|[(]libdir[)]/bonobo/servers|(prefix)/libdata/bonobo/servers|g' 
 
-  for i in ltmain.sh libtool; do
-  sed -i '' -e '/freebsd-elf)/,/;;/ s|major="\.$current"|major=.18|' \
-              -e '/freebsd-elf)/,/;;/ s|versuffix="\.$current"|versuffix="$major"|' \
-        $i
-  done
   PYTHON=/usr/local/bin/python2 ./configure --prefix=/usr/local --libdir=/usr/local/lib \
       --sysconfdir=/usr/local/etc \
       --enable-static --enable-shared --with-libiconv=gnu \
@@ -132,6 +128,11 @@ build() {
       LDFLAGS="-L/usr/local/lib -lintl" \
       CFLAGS="-I/usr/local/include" \
       CPPFLAGS="-I/usr/local/include"
+
+  sed -i '' -e '/freebsd-elf)/,/;;/ s|major="\.$current"|major=.18|' \
+            -e '/freebsd-elf)/,/;;/ s|versuffix="\.$current"|versuffix="$major"|' \
+            ltmain.sh libtool
+
 
   gmake
 }

@@ -1,12 +1,13 @@
 --- glib/gunicollate.c.orig	2012-03-12 00:42:42.000000000 +0000
 +++ glib/gunicollate.c	2012-09-27 15:11:08.000000000 +0000
-@@ -26,6 +26,10 @@
+@@ -26,6 +26,11 @@
  #include <wchar.h>
  #endif
  
 +#include <unicode/umachine.h>
 +#include <unicode/ustring.h>
 +#include <unicode/ucol.h>
++#include "gthread.h"
 +
  #ifdef HAVE_CARBON
  #include <CoreServices/CoreServices.h>
