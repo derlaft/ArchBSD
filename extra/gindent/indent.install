@@ -1,4 +1,4 @@
-info_dir=usr/local/share/info
+info_dir=usr/local/info
 info_file=indent.info.gz
 
 post_install() {
