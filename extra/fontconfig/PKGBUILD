@@ -1,9 +1,8 @@
-# $Id: PKGBUILD 175209 2013-01-16 17:39:36Z andyrtr $
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=fontconfig
 pkgver=2.10.2
-pkgrel=2
+pkgrel=3
 pkgdesc="A library for configuring and customizing font access"
 arch=(i686 x86_64)
 url="http://www.fontconfig.org/release/"
@@ -35,11 +34,10 @@ build() {
     --with-xmldir=/usr/local/etc/fonts \
     --with-expat-lib=/usr/local/lib \
     --with-expat-includes=/usr/local/include \
-    --with-confdir=/usr/local/etc/fonts \
     --localstatedir=/var \
     --disable-static \
     --with-default-fonts=/usr/local/share/fonts \
-    --with-add-fonts=/usr/local/share/fonts \
+    --with-add-fonts=/usr/local/lib/X11/fonts \
     --with-cache-dir=/var/db/fontconfig \
     --disable-docs
 
