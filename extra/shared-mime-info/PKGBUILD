@@ -3,11 +3,11 @@
 
 pkgname=shared-mime-info
 pkgver=1.0
-pkgrel=3
+pkgrel=4
 pkgdesc="Freedesktop.org Shared MIME Info"
 arch=('i686' 'x86_64')
 license=('GPL')
-depends=('glib2' 'libxml2')
+depends=('glib2>=2.34.3' 'libxml2')
 makedepends=('intltool' 'pkgconf')
 install=shared-mime-info.install
 url="http://freedesktop.org/Software/shared-mime-info"
