@@ -2,28 +2,25 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=gobject-introspection
-#pkgver=1.34.2
-#pkgrel=1
-pkgver=0.10.8
-pkgrel=3
+pkgver=1.34.1
+pkgrel=1
 pkgdesc="Introspection system for GObject-based libraries"
 url="https://live.gnome.org/GObjectIntrospection"
 arch=('x86_64' 'i686')
 license=('LGPL' 'GPL')
-depends=('glib2' 'python2' 'libffi>=3.0.11')
+depends=('glib2>=2.34.3' 'python2' 'libffi>=3.0.11')
 #depends=('glib2' 'python2')
 #'python2-mako')
 #makedepends=('cairo')
 #options=('!libtool')
-###source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver::4}/$pkgname-$pkgver.tar.xz
-source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver::4}/$pkgname-$pkgver.tar.bz2
+source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver::4}/$pkgname-$pkgver.tar.xz
         patch-Makefile.in
         patch-configure
         patch-tests_Makefile.in
         )
-sha256sums=('5b1387ff37f03db880a2b1cbd6c6b6dfb923a29468d4d8367c458abf7704c61e'
-            '3e5447dd211aaccb172949f6e2cdf6b92b583e40c08786b0283752f2fdcfcf05'
-            'ea98438320cb92134c3cba636bf298abe1702e99df31cca8a35aa5046b839b5d'
+sha256sums=('bf40470c863dbb292ec52d1e84495e9334ea954e3a0ee59d6ff5f8161ea53abd'
+            'f156cd0ea0f28da740618b43e2692e38086a18b656d6d8428da11b55cc0ebf5e'
+            'a8569cdb605150e192dc34e8e04c277743ba8decdf9b8242e1d9dc7f83b45c91'
             'c538801f104d18d185e0712083cee1614dfe839142ec15183f7c3a7cb1b06a4b')
 
 build() {
@@ -32,7 +29,6 @@ build() {
   patch -p0 -i "${srcdir}/patch-Makefile.in"
   patch -p0 -i "${srcdir}/patch-configure"
   patch -p0 -i "${srcdir}/patch-tests_Makefile.in"
-  #PYTHON=/usr/local/bin/python2 ./configure --prefix=/usr/local --disable-static --enable-doctool
   PYTHON=/usr/local/bin/python2 ./configure --prefix=/usr/local --mandir=/usr/local/man --disable-tests
   gmake
 }
