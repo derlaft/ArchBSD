@@ -1,10 +1,9 @@
-# $Id: PKGBUILD 169846 2012-10-30 22:23:52Z heftig $
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=atk
-pkgver=2.0.1
-pkgrel=2
+pkgver=2.6.0
+pkgrel=1
 pkgdesc="A library providing a set of interfaces for accessibility"
 arch=(i686 x86_64)
 license=('LGPL')
@@ -14,14 +13,11 @@ makedepends=('gobject-introspection')
 options=('!libtool' '!docs')
 source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
 url='http://www.gtk.org/'
-# 2.6.0:
-#sha256sums=('eff663f90847620bb68c9c2cbaaf7f45e2ff44163b9ab3f10d15be763680491f')
-sha256sums=('4588867bb9eb788b2cf3399d3a2d5e4898193a9027436f6cffc9c18a627452a1')
+sha256sums=('eff663f90847620bb68c9c2cbaaf7f45e2ff44163b9ab3f10d15be763680491f')
 
 build() {
   cd "$pkgname-$pkgver"
   ./configure --prefix=/usr/local --enable-static \
-              --disable-gtk-doc \
               --with-html-dir=/usr/local/share/doc
               # the glib-test uses variables from the glib-library but doesn -lglib
   gmake
