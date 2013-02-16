@@ -3,7 +3,7 @@
 
 pkgname=intltool
 pkgver=0.50.2
-pkgrel=1
+pkgrel=2
 pkgdesc="The internationalization tool collection"
 arch=('any')
 url="https://edge.launchpad.net/intltool"
@@ -27,6 +27,6 @@ check() {
 package() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   gmake DESTDIR="${pkgdir}" install
-  install -d -m755 "${pkgdir}/usr/share/doc/${pkgname}"
-  install    -m644 doc/I18N-HOWTO "${pkgdir}/usr/share/doc/${pkgname}/I18N-HOWTO"
+  install -d -m755 "${pkgdir}/usr/local/share/doc/${pkgname}"
+  install    -m644 doc/I18N-HOWTO "${pkgdir}/usr/local/share/doc/${pkgname}/I18N-HOWTO"
 }
