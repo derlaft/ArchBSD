@@ -1,4 +1,3 @@
-# $Id: PKGBUILD 175920 2013-01-25 01:06:49Z bisson $
 # Maintainer: Tobias Powalowski <tpowa@archlinux.org>
 # Contributor: Roman Kyrylych <roman@archlinux.org>
 # Contributor: Sarah Hay <sarah@archlinux.org>
@@ -6,7 +5,7 @@
 
 pkgname=gpgme
 pkgver=1.3.2
-pkgrel=6
+pkgrel=7
 pkgdesc="A C wrapper library for GnuPG"
 arch=('i686' 'x86_64')
 url="http://www.gnupg.org/related_software/gpgme/"
@@ -37,7 +36,7 @@ build() {
   sed -i '' -e 's|^clfilesdir.*|clfilesdir=$\(libdir\)/common-lisp/gpgme|g' \
                 lang/cl/Makefile.in
 
-  ./configure --prefix=/usr/local --disable-static \
+  ./configure --prefix=/usr/local --enable-static \
               --includedir=/usr/local/include/gpgme \
               --with-g13=no \
               --with-gpg=/usr/local/bin/gpg2 \
