@@ -1,7 +1,7 @@
 _pkgname=pacman
 pkgname=pacman-static
 pkgver=4.0.3
-pkgrel=6
+pkgrel=7
 pkgdesc="A library-based package manager with dependency support"
 arch=('i686' 'x86_64')
 url="http://www.archlinux.org/pacman/"
