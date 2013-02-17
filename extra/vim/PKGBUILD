@@ -5,7 +5,6 @@
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgbase=vim
-# gvim for now disabled
 pkgname=('vim' 'gvim' 'vim-runtime')
 _topver=7.3
 _patchlevel=754
@@ -17,6 +16,7 @@ arch=('i686' 'x86_64')
 license=('custom:vim')
 url="http://www.vim.org"
 #makedepends=('gpm' 'python2' 'ruby' 'libxt' 'desktop-file-utils' 'gtk2' 'lua')
+makedepends=('python2' 'libxt' 'desktop-file-utils' 'gtk2' 'gsed')
 source=("ftp://ftp.archlinux.org/other/vim/vim-${pkgver}.tar.xz"
         "ftp://ftp.archlinux.org/other/vim/vim-${pkgver}.tar.xz.sig"
         'pythoncomplete.vim::http://www.vim.org/scripts/download_script.php?src_id=10872'
@@ -156,6 +156,8 @@ package_gvim() {
   pkgdesc='Vi Improved, a highly configurable, improved version of the vi text editor (with advanced features, such as a GUI)'
   depends=("vim-runtime=${pkgver}-${pkgrel}" 'ruby' 'libxt'
            'desktop-file-utils' 'gtk2' 'lua' 'python2')
+  depends=("vim-runtime=${pkgver}-${pkgrel}" 'libxt'
+           'desktop-file-utils' 'gtk2' 'python2')
   provides=("vim=${pkgver}-${pkgrel}")
   conflicts=('vim')
   install=gvim.install
@@ -210,7 +212,7 @@ package_vim-runtime() {
   # patch filetype.vim for better handling of pacman related files
   sed -i '' -e "s/rpmsave/pacsave/;s/rpmnew/pacnew/;s/,\*\.ebuild/\0,PKGBUILD*,*.install/" \
     "${pkgdir}"/usr/local/share/vim/${_versiondir}/filetype.vim
-  sed -i '' -e "/find the end/,+3{s/changelog_date_entry_search/changelog_date_end_entry_search/}" \
+  gsed -i  -e "/find the end/,+3{s/changelog_date_entry_search/changelog_date_end_entry_search/}" \
     "${pkgdir}"/usr/local/share/vim/${_versiondir}/ftplugin/changelog.vim
 
   # make Aaron happy
