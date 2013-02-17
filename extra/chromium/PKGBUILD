@@ -1,0 +1,290 @@
+# Maintainer: Evangelos Foutras <evangelos@foutrelis.com>
+# Contributor: Pierre Schmitz <pierre@archlinux.de>
+# Contributor: Jan "heftig" Steffens <jan.steffens@gmail.com>
+# Contributor: Daniel J Griffiths <ghost1227@archlinux.us>
+
+pkgname=chromium
+pkgver=24.0.1312.57
+pkgrel=2
+pkgdesc="The open-source project behind Google Chrome, an attempt at creating a safer, faster, and more stable browser"
+arch=('i686' 'x86_64')
+url="http://www.chromium.org/"
+license=('BSD')
+depends=('gtk2' 'nss' 'xdg-utils' 'libevent' 'libxss'
+         'libgcrypt' 'ttf-font' 'dbus' 'desktop-file-utils'
+         'hicolor-icon-theme' 'libexecinfo'
+         'bash')
+makedepends=('python2' 'perl' 'gperf' 'yasm' 'mesa' 'libgnome-keyring'
+             'flock' 'v4l-compat>=1.0.20110603')
+optdepends=('kdebase-kdialog: needed for file dialogs in KDE')
+backup=('usr/local/etc/chromium/default')
+install=chromium.install
+port_patches=(
+        patch-base__base.gyp patch-base__debug__stack_trace_posix.cc patch-base__sys_byteorder.h
+        patch-base__sys_info_freebsd.cc patch-base__sys_info_posix.cc patch-build__build_config.h
+        patch-build__common.gypi patch-build__linux__python_arch.sh patch-chrome__app__chrome_main_delegate.cc
+        patch-chrome__browser__about_flags.cc patch-chrome__browser__browser_about_handler.cc
+        patch-chrome__browser__chrome_browser_main.cc patch-chrome__browser__chrome_browser_main_posix.cc
+        patch-chrome__browser__chrome_content_browser_client.cc
+        patch-chrome__browser__component_updater__component_updater_configurator.cc
+        patch-chrome__browser__memory_details.cc patch-chrome__browser__net__connection_tester.cc
+        patch-chrome__browser__process_singleton.h patch-chrome__browser__ui__webui__about_ui.cc
+        patch-chrome__browser__ui__webui__chrome_web_ui_controller_factory.cc patch-chrome__chrome_browser.gypi
+        patch-chrome__chrome_tests.gypi patch-chrome__common__child_process_logging.h
+        patch-chrome__common__chrome_notification_types.h patch-chrome__common__chrome_paths.cc
+        patch-chrome__common__url_constants.cc patch-chrome__common__url_constants.h
+        patch-chrome__renderer__pepper__ppb_pdf_impl.cc patch-chrome__test__base__in_process_browser_test.cc
+        patch-chrome__test__base__testing_browser_process.h patch-chrome__test__ui__ui_test.cc
+        patch-chrome__tools__build__linux__sed.sh patch-content__app__content_main_runner.cc
+        patch-content__browser__browser_main_loop.cc patch-content__browser__child_process_launcher.cc
+        patch-content__browser__geolocation__empty_device_data_provider.cc patch-content__browser__geolocation__location_provider.cc
+        patch-content__browser__geolocation__wifi_data_provider_freebsd.cc patch-content__browser__geolocation__wifi_data_provider_freebsd.h
+        patch-content__browser__gpu__gpu_blacklist.cc patch-content__browser__gpu__gpu_blacklist_unittest.cc
+        patch-content__browser__web_contents__web_contents_impl.cc patch-content__common__set_process_title_linux.cc
+        patch-content__common__set_process_title_linux.h patch-content__content_browser.gypi
+        patch-content__content_common.gypi patch-content__content_gpu.gypi patch-content__content_tests.gypi
+        patch-content__plugin__plugin_main_linux.cc patch-content__public__test__browser_test_base.cc
+        patch-content__renderer__render_process_impl.cc patch-content__renderer__renderer_main_platform_delegate_linux.cc
+        patch-content__renderer__renderer_webkitplatformsupport_impl.cc patch-content__test__layout_browsertest.cc
+        patch-ipc__ipc_channel_posix.cc patch-media__audio__audio_input_volume_unittest.cc
+        patch-media__audio__audio_low_latency_input_output_unittest.cc patch-media__audio__linux__audio_manager_linux.cc
+        patch-media__audio__pulse__pulse_output.cc patch-media__audio__pulse__pulse_output.h
+        patch-media__filters__decrypting_audio_decoder.cc patch-media__media.gyp patch-native_client__build__common.gypi
+        patch-native_client__src__shared__platform__platform.gyp patch-native_client__src__trusted__debug_stub__debug_stub.gyp
+        patch-native_client__src__trusted__service_runtime__service_runtime.gyp patch-net__base__dns_reloader.cc
+        patch-net__base__net_util.cc patch-net__base__network_change_notifier.cc patch-net__dns__address_sorter_posix.cc
+        patch-net__net.gyp patch-net__proxy__proxy_config_service_linux.cc patch-net__proxy__proxy_service.cc
+        patch-net__socket__socks5_client_socket.cc patch-ppapi__shared_impl__private__net_address_private_impl.cc
+        patch-skia__ext__SkThread_chrome.cc patch-skia__ext__vector_platform_device_skia.cc patch-skia__ext__vector_platform_device_skia.h
+        patch-testing__gtest__include__gtest__internal__gtest-port.h patch-testing__gtest__src__gtest.cc
+        patch-third_party__WebKit__Source__ThirdParty__gyp__test__additional-targets__src__dir1__actions.gyp
+        patch-third_party__WebKit__Source__ThirdParty__gyp__test__library__src__library.gyp
+        patch-third_party__WebKit__Source__WTF__wtf__NumberOfCores.cpp patch-third_party__WebKit__Source__WebCore__config.h
+        patch-third_party__ffmpeg__libavcodec__pthread.c patch-third_party__ffmpeg__libavutil__mem.c
+        patch-third_party__leveldatabase__env_chromium.cc patch-third_party__libXNVCtrl__libXNVCtrl.gyp
+        patch-third_party__libjingle__source__talk__base__ipaddress.h patch-third_party__libjpeg_turbo__libjpeg.gyp
+        patch-third_party__libusb__libusb.gyp patch-third_party__libvpx__obj_int_extract.sh
+        patch-third_party__libvpx__unpack_lib_posix.sh patch-third_party__ots__include__opentype-sanitiser.h
+        patch-tools__clang__scripts__plugin_flags.sh patch-tools__gyp__pylib__gyp__generator__make.py
+        patch-ui__base__l10n__l10n_util.cc patch-ui__surface__transport_dib_linux.cc
+        patch-webkit__plugins__ppapi__ppapi_plugin_instance.cc
+        )
+source=(http://commondatastorage.googleapis.com/chromium-browser-official/$pkgname-$pkgver.tar.bz2
+        chromium.desktop
+        chromium.default
+        chromium.sh
+        ${port_patches[@]}
+)
+sha256sums=('7959f49e1cdf46203c1930a9ff7c2b4ed470e55aa5ef00cce4de8ae3e78476db'
+            '44061e1648ac4674ad0b9990c265c96c33de435679f6854e4b54a421d81cbe6c')
+
+build() {
+  cd "$srcdir/chromium-$pkgver"
+
+  for i in ${port_patches[@]}; do
+    msg "patch $i"
+    patch -p0 -i "${srcdir}/$i"
+  done
+
+  sed -i '' -e "s|linux|freebsd|" \
+		tools/gyp/pylib/gyp/generator/make.py
+
+###  NOTE: this part seems to not work / not be necessary on BSD
+#  # Use Python 2
+#  msg "Replacing python paths"
+#  find . -type f -exec sed -i '' -r \
+#    -e 's|/usr/local/bin/python$|&2|g' \
+#    -e 's|(/usr/local/bin/python2)\.4$|\1|g' \
+#    {} +
+
+  msg "Setting up a relative python path"
+  # There are still a lot of relative calls which need a workaround
+  mkdir "$srcdir/python2-path"
+  ln -s /usr/local/bin/python2 "$srcdir/python2-path/python"
+  export PATH="$srcdir/python2-path:$PATH"
+
+  CFLAGS="${CFLAGS} -Wno-error"
+
+  # CFLAGS are passed through release_extra_cflags below
+  export -n CFLAGS CXXFLAGS
+
+  msg "GYP configure"
+  python2 build/gyp_chromium chrome/chrome.gyp --depth . \
+    -Duse_cups=0 \
+    -Duse_gconf=0 \
+    -Duse_pulseaudio=0 \
+    -Duse_system_yasm=1 \
+    -Duse_system_libxml=1 \
+    -Duse_system_ffmpeg=0 \
+    -Duse_system_libusb=1 \
+    -Duse_system_libevent=1 \
+    -Duse_system_libvpx=1 \
+    -Dffmpeg_branding=Chrome \
+    -Dproprietary_codecs=1 \
+    -Dlinux_strip_binary=1 \
+    -Dlinux_use_tcmalloc=0 \
+    -Dlinux_use_heapchecker=0 \
+    -Dclang_use_chrome_plugins=0 \
+    -Ddisable_nacl=1 \
+    -Denable_webrtc=0 \
+    -Denable_openmax=1 \
+    -Denable_one_click_signin=1 \
+    -Dno_gc_sections=1 \
+    -Dprefix_dir=/usr/local \
+    -Dpython_ver=2.7 \
+    -Drelease_extra_cflags="$CFLAGS" \
+    -Dwerror= \
+    -Ddisable_glibc=1 \
+    -Ddisable_pnacl=1 \
+    -Dclang=1
+    
+  #make chrome chrome_sandbox BUILDTYPE=Release
+  msg "Running make:"
+  gmake chrome BUILDTYPE=Release GPERF=/usr/local/bin/gperf
+}
+
+package() {
+  cd "$srcdir/chromium-$pkgver"
+
+  install -dm755 "$pkgdir/usr/local/lib/chromium/"
+  install out/Release/chrome "$pkgdir/usr/local/lib/chromium/chromium"
+
+  cp out/Release/{*.pak,libffmpegsumo.so} \
+    "$pkgdir/usr/local/lib/chromium/"
+
+  # Allow users to override command-line options
+  install -dm755 "$pkgdir/usr/local/etc/chromium/"
+  install -m644 "$srcdir/chromium.default" "$pkgdir/usr/local/etc/chromium/default"
+
+  cp -a out/Release/locales "$pkgdir/usr/local/lib/chromium/"
+
+  install -dm755 "$pkgdir/usr/local/man/man1/"
+  install -m644 out/Release/chrome.1 "$pkgdir/usr/local/man/man1/chromium.1"
+
+  install -dm755 "$pkgdir/usr/local/share/applications/"
+  install -m644 "$srcdir/chromium.desktop" \
+    "$pkgdir/usr/local/share/applications/chromium.desktop"
+
+  for size in 22 24 48 64 128 256; do
+    install -dm755 "$pkgdir/usr/local/share/icons/hicolor/${size}x${size}/apps/"
+    install -m644 "chrome/app/theme/chromium/product_logo_$size.png" \
+      "$pkgdir/usr/local/share/icons/hicolor/${size}x${size}/apps/chromium.png"
+  done
+
+  for size in 16 32; do
+    install -dm755 "$pkgdir/usr/local/share/icons/hicolor/${size}x${size}/apps/"
+    install -m644 "chrome/app/theme/default_100_percent/chromium/product_logo_$size.png" \
+      "$pkgdir/usr/local/share/icons/hicolor/${size}x${size}/apps/chromium.png"
+  done
+
+  install -d "$pkgdir/usr/local/bin/"
+  install    "$srcdir/chromium.sh" "$pkgdir/usr/local/bin/chromium"
+
+  install -dm755 "$pkgdir/usr/local/share/licenses/chromium/"
+  install -m644 LICENSE "$pkgdir/usr/local/share/licenses/chromium/LICENSE"
+}
+
+# vim:set ts=2 sw=2 et:
+sha256sums=('a2cad6470c643e0399ccd081cdc1bf293510aba174331a10857cc426fe71d5b1'
+            '09bfac44104f4ccda4c228053f689c947b3e97da9a4ab6fa34ce061ee83d0322'
+            '478340d5760a9bd6c549e19b1b5d1c5b4933ebf5f8cfb2b3e2d70d07443fe232'
+            '1d5378845ea0be8acefa1ee71f92cd1d7bff428f16b0a8ca471326ace5d03155'
+            '73bf3e22c4507ca6e81886c7121ab0a4e0e83994a2858f93428de61562fed7f8'
+            '4abfc6189fe78bb269146141f6003cbf1452d5ffc0e48972384e46b2c1af64d3'
+            '102b62506bbf64aa3f1d6edd061aef1f1893941d26284418c41bf0f07a6bd98b'
+            '5a0ef100bcd464e5c607a4ef15caf2a7af0d988bddbe52f459fffffa874c2dfd'
+            '03a74adf06a62c73331ffb5e448324072fdadc4215d3e575401ceac0a7244afe'
+            'baeda3fb1bb6ec2c2e2cbc11f2af4664d89621fd9dabca39b68c55009742782d'
+            'ca5da77d445e7920b717156c76e931e709c39fd42e3f59fcf5c077db9defd704'
+            '032a225c8034aee9371e6adaa520d391ea2772b39206721a2253bffd7d128c63'
+            'c42b973937d0f2cf126b4c2c07f148b6beaf980fa9af2b8866da747a3e95f9c7'
+            '951804d35ab50db1e205c6eec9432f6136c20915381d1a8c3123c2e73e846d89'
+            '324adf15457443706801faf211af94e3c476e91fa292906e7949bec172f7cdcb'
+            '4c4a2e315a07dc3d012a751145d6d664f5818865e635acc0438a3e5c7e3c36d5'
+            '4e8c3e1eae8128caceca245ff1a671c6d08c198fe591e1da01c8e62a58d0693a'
+            'cb4019dfd49b049182005d1dcd5a62faf7bc81021ad4aa0fd7a08d16f4d01ea9'
+            'a70cdfc08152b8545f2f965da34718ab429de2ba49932b6a43c0297264a1654f'
+            'a4d9ffa949f6422a0b784af9f3b653ca6e6067fefb51df7a47d29239a9781bcc'
+            '9d97cfc522040597a2df1e01a0159f9bf198760db87be325f41d857f9ebd1d44'
+            'fbb69518023694bfaadba73c4e74f30a8086e888b069bfd43f70115713d22dc6'
+            '9d58a29c2a402325f6a6e614ac743adf6b90ece555c617d2dfb57ffd11c5c4ce'
+            '923bb6d3885c6af81f07d3d7593485216411bdee63d0edb5a026c4f690123455'
+            '5c1e144219cc1211133963399c3222631b8312174b4396be44dbd442a7f5f9bb'
+            '5f3feb0863edbcb7df738c95baffb363482bdaef915de896cdc9ed3e38135cde'
+            'e1ff14466d2eb217ab5997e5b4543ed06a1bd4347dded475733fcb1c49473f5e'
+            '835f183d9d0f95aad4d0002bdf191ca6360c885354e389fddbcb0167f5e12e0d'
+            'd3ef56f0233c95d1e761530eed4a17969d1157e1e8cda4b25fff3f8a8f73b25a'
+            'b2a5c9126844c320ce2d1f446135101e859a4b8b164b849b015b39027569a0f8'
+            '724d3b425fdad1f7b661b7b024e4b28f593cfcde758f39d9bcc0b2fa3fb0ee5a'
+            'e7f45d4f6c31b2abbcc677fd5065749cc40f9e7e552e8d0a8287e8350c63ea98'
+            '7b94f5c0e09774a0e777b8c961111646a0946e1a3fa8df8c1d51eb1d100329e4'
+            'df8538b2169f25039bddbfe1044c5afb4b8f908304353a9175fbffde2f1d4a64'
+            '11f786200ba11c88d676e327c7e1844e872d7b2edc3785605ef84bf22aff5dae'
+            '40571bfd6886c349e611c47578054faff29924dbe5c837142b923d154d532994'
+            '53697669fed25c9323560b936a8fd489e9855a352401ca1e350ab1eda4fda145'
+            '3e58aa106b07ec6899fd0711288ada0ed7850b703894ce9eb3c6f9ff009ad45d'
+            '969330b5116add1394a4cceeaf38cc00fbc59a19469a9b951a8d1eade01fc112'
+            'ea088a24df04096f59625a83aab4a3ebe933c3ebef8675a241f1b9090cc24d2b'
+            'dc1aca090f4a6a5256518d009697d6b5228cc9faf1d62dff1d27b59b2293a86a'
+            '78e69dced87b4007c7fa05f960a023fb49a0f8527274a5dfe8db7bbf5cedebf7'
+            'afab628c9c527de9dda8ad853371015f58e110f5e243548711db143f9711ae28'
+            'c7ff4ad8f1c12c4f19f5d9b6f6ec0f5fbeb8eaf41c26d41f186b090ef4fb968b'
+            '67dc22358b9ad3e6a11479dee94d53879dfd42330e43bee1f1387e6f40e36fe6'
+            'ff3fcf837bad2243be399d2d8575a896e27f710d7194918c472cde66a8cf489d'
+            'aa8622eb62739290d29b2a9edaf9e4af462d9d0a0f84f9c3abbb5fd537b3b23b'
+            '6bb823accf6d96837ac0c0476f918453df1847801a6607fbfd75671456496054'
+            '2c90532185a5e635ad3d58328033bb8f5448bc576e7374d51e408deb930c95bb'
+            'f1aced6f71e77f88a6bece36ebbc93604d2ab385bb2289d961e9b1dd908888b6'
+            '30e01198fa94bbd7002b965c6cc8bece111e48aaa8e6f0a7f111179f83c23735'
+            '5d5405ca9adf859df9847a14fe9b83df1b66a3b1f6b296bbf7eb6d3de4f6b20c'
+            '8bc6496a3b3854ed9251a10bfb0102620db5f61a514799025b8fec7530e364ee'
+            'eef9f2583c2eb8155160582b9899c36aa0cd46b8be2d1c4caa9c4d2962e262fc'
+            'e3931f00ca9f81fa32b5310378bd4e0d1107f956a5909395bb21d81ce2a6fe4c'
+            '26e448e6f699099b39a8da06aa0b072d9ba569af3ee3cd9c40c732c08f548476'
+            '210112b2a5344aa2d868a5693d59674be3e41e356d0bb18fefd416826abfe4d9'
+            '63be3fe947a4c607a20fabaca4cc409d000784d2e8117ce1c33c3570d964b16f'
+            '9682eb833b51e4fc4447689dda6b8a6cae18c4dd08e87ab037bc15af24a9cae7'
+            'b8d7943c4a6eb1f682d7a8e481a68ca9e2dae506ddc3a41c2b86f1b75897713a'
+            '72286dd8c2a6434d1bc2af45f6727eb1d6b3b53127ec43041cb632a10b1b87cc'
+            '47bb0a976e7903ea73d4d79b0d4f7119fe0440d4f19337063f90a9aa789b4207'
+            '3de6eadf46c00af21471656db716e82144ccb34f940738dc72f2e969f85182ba'
+            '3f816b035e2c0a937709b44df5888d709b65d87d2c5a8ae70db1e83331c5c4e8'
+            '2f90fdb748aa16d9fc2919be2b3d1fd056eb35ff377168cd9d1b9fb8e990fd8f'
+            'e5e8dc7f38b7a8ec9ca696fc2357441df8bb6c363bce6390dad28dab9ff1422d'
+            '4c83626b2bbc0a1768c7af645ff7f9c8776f9bb3480033f8a0e5770f88494587'
+            '5ab2ed336a52c45a085c7edf1af60dab73bbc894d8c0ab39c66335bf3e65f83d'
+            '9107b50d9fc8fd6e5367f33e95e5a3e574f08011c002776e444dc7f22c38df3f'
+            '3f0461e55784c6b181fb4a55a2491a506c9e84d7befa1193b321c5f38536ea3c'
+            '09710aed5028ad06b85e45c94785b9566aefcc2b5905267c267353c1c578bbb2'
+            '7a3cd005fc8f9ab18a761ff4827de75cfe9de36e17cc62daa8d8e57c8be1f720'
+            'ccad91517be9a0e55592681777211036fc58377de6726d105168d5f86b0f1370'
+            'e6f76316d5e5e4553685f15e00c94e641f9df58b646046785495af9de9ea181e'
+            'fcef66d0967aa1c5fb403d860537bd3682709cac7a4090f9dc55eb2bddbaf0e3'
+            '2060b2aa7a0566ec5d212d8728128c29a4e0ad3fc8730e89a4553f51d6cc8549'
+            'd9717d1668b4c3c9b3960d66bf99014acfe2f871983db8b89d655f4898758be6'
+            'ea89c474e6b5852092e09962a223d03d882c2f9aecb9c0bd678b78ec01a13591'
+            '6c563ec17cb75edfe20ab3c0e81d718048e4d41748c8e9a190e5c1a113498690'
+            'c2560e10a380fc3a0565b844fe67031e67454c217c350c7d03e94074ee70f720'
+            '2e1f431a1ee9df775d10f00ba418a87822b77afaea4f75a1e70020c624c15c1e'
+            '93ec2b3d0414da5a466d9167f56c537357513ba2c8d1a11a9f97ed1a8ec14f99'
+            'e911208b9044cad9584e923a52a451c11a97cca4a0d14594f9cc4a5be3609b3f'
+            'b44cf6438e0b13bdf8547668622a51d4212e8a265f06dc60df81b9ebed35607a'
+            '178d7fb999a6ca312c588028417c73fb245b2a8d07f877f39615e166285dd16b'
+            'c3617eaad1b80a1f10f41566369ff23db7a27b543d2af0c2ba23a9dff35d6bd4'
+            'f314962c529768a6dde4b1329a7777bd4cf05c2b618461be62984b08dfd92b81'
+            '12529a7e04fee4c141dfa65683e62980c3359829648d22481401b4393112d14b'
+            '22df1e7d2abf5251b4c384b09bbc7b21c93fd12e657a72a4df81ac94687845fc'
+            'cf562a1451767f0afeb424a7647ac171fd465f804294f5ce2a5ba5df00eac908'
+            '17ce043cb31c6e15a4a810c6f48a0abbd0ce0530bbe52b4d24783201eec6095d'
+            '9b0d1c96374f8c677e2e36e1643bfcd8ed5abdbe836dcbab96db9ba4bb8d76e5'
+            'e6ec717fdb144936aed4b653a8e3f95c5ba149c34dfe533267a41335a961d46b'
+            'e6462690d13292c25ca05b6aecc1865e7b4ce41d7a08b6e1a90099d49ccc3748'
+            '904978b8f91ac0f34aeaf5d75c5105f33b4241f92eb65ade8cc52c36476873df'
+            '29bbf8a33c256aaba64756135e8094af65c97bcfa4fc49aa081df6e372d50a1d'
+            'c58df11146b501a1e9ccd3eef96cf2580c90aefd88ce771d730916eebc0d28ff'
+            'a06559a4b82d3c6888fcb7ec88b9a0885321dcf75fc9f99ea8ef9451cba260aa'
+            '0569e4973b63a597a6e278cb434de2cabdb6a900fe1c45cea427e90655b6e3dc'
+            '52bceda53fac9281e91c12c44da4a7bfddc02aae27e3088bf1797e6c360e23f5'
+            '7037bfe5a639760e56f080ef2c8377193d907e8a45d7bdc51413d86e95758202'
+            'dd592576a508266f7db7488718068d2914d15c02b17b03b580ec9154478871e9'
+            '2aac013653939253df14977d7b952dfcbba98393c09f0cf99cf1e53f401c2542')
