@@ -10,8 +10,6 @@ license=('MPL' 'GPL' 'LGPL')
 depends=('gtk2' 'libxt' 'startup-notification' 'mime-types'
          'libnotify' 'desktop-file-utils' 'hicolor-icon-theme'
          'libvpx' 'libevent' 'nss>=3.14.1.1.93-4' 'hunspell' 'sqlite')
-depends=('gtk2' 'libxt' 'startup-notification' 'mime-types'
-         'libvpx' 'libevent' 'nss>=3.14.1.1.93-4' 'hunspell' 'sqlite')
 # nspr can be removed soon, added it because 4.9.4 rel 2 was required for linking since rel 1 lacked some symlinks
 makedepends=('unzip' 'zip' 'python2' 'yasm' 'mesa'
              'autoconf2.13' 'libidl2' 'xorg-server-xvfb' 'imake' 'nspr>=4.9.4-2')
@@ -27,9 +25,9 @@ patch-alsapulse patch-browser-app-nsBrowserApp.cpp patch-bug685258 patch-bug7229
 build() {
   cd mozilla-release
 
-  export CC=gcc
-  export CPP=cpp
-  export CXX=g++
+#  export CC=gcc
+#  export CPP=cpp
+#  export CXX=g++
 
   cp ../mozconfig .mozconfig
   patch -p1 -i "${srcdir}/firefox-install-dir.patch"
