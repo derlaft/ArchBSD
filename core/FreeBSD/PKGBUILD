@@ -4,6 +4,7 @@ pkgrel=1
 arch=('i686' 'x86_64')
 url="https://www.freebsd.org"
 license=('BSD')
+options=('!strip' 'emptydirs')
 source=('ARCHBSD_i686'
         'ARCHBSD_i686.patch'
         'ARCHBSD_x86_64'
@@ -129,8 +130,8 @@ backup=('boot/device.hints'
 package_freebsd-source() {
   pkgdesc="FreeBSD source matching FreeBSD kernel"
 
-  rm -rf ${srcdir}/${_gitname}/.git
   mkdir -p ${pkgdir}/usr/src
   cp -a ${srcdir}/${_gitname} ${pkgdir}/usr/src
+  rm -rf ${pkgdir}/.git
 }
 
