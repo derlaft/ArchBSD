@@ -131,7 +131,7 @@ package_freebsd-source() {
   pkgdesc="FreeBSD source matching FreeBSD kernel"
 
   mkdir -p ${pkgdir}/usr/src
-  cp -a ${srcdir}/${_gitname} ${pkgdir}/usr/src
-  rm -rf ${pkgdir}/.git
+  cp -a ${srcdir}/${_gitname}/* ${pkgdir}/usr/src
+  rm -rf ${pkgdir}/usr/src/.git
 }
 
