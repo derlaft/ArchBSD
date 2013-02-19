@@ -11,7 +11,7 @@ arch=('i686' 'x86_64')
 url="http://www.cmake.org/"
 license=('custom')
 depends=('curl' 'shared-mime-info')
-makedepends('expat')
+makedepends=('expat')
 optdepends=('qt: cmake-gui')
 options=('!docs')
 source=("http://www.cmake.org/files/v2.8/${pkgbase}-${pkgver}.tar.gz"
