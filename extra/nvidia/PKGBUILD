@@ -1,16 +1,23 @@
 # Contributor: Wolfgang Bumiller <blub at speed dot at>
 
-pkgname=nvidia
+pkgbase=nvidia
+# nvidia-utils and nvidia always go together, which means, ArchLinux' separation
+# makes little sense.
+# To not confuse people, we name the 2nd package nvidia-tools, which will contain
+# nvidia-settings - this is a separate package because it depends on additional
+# libraries.
+pkgname=('nvidia' 'nvidia-tools')
 pkgver=313.18
 pkgrel=1
-pkgdesc="NVidia graphics card binary drivers"
 arch=('i686' 'x86_64')
 license=('NVIDIA')
 makedepends=('freebsd-source')
 url="http://www.nvidia.com/"
-install=nvidia.install
-source=("ftp://download.nvidia.com/XFree86/FreeBSD-${CARCH}/${pkgver}/NVIDIA-FreeBSD-${CARCH}-${pkgver}.tar.gz")
-md5sums=('d698f4dcbcfd18fd447946e50e976c71')
+source=("ftp://download.nvidia.com/XFree86/FreeBSD-${CARCH}/${pkgver}/NVIDIA-FreeBSD-${CARCH}-${pkgver}.tar.gz"
+        nvidia-settings.in
+       )
+md5sums=('d698f4dcbcfd18fd447946e50e976c71'
+         '7f3ba646bc7bd44c7ef92dda414cbbba')
 
 build() {
   cd "${srcdir}/NVIDIA-FreeBSD-${CARCH}-${pkgver}/"
@@ -18,7 +25,9 @@ build() {
   make
 }
 
-package() {
+package_nvidia() {
+ pkgdesc="NVidia graphics card binary drivers"
+ install=nvidia.install
   cd "${srcdir}/NVIDIA-FreeBSD-${CARCH}-${pkgver}/"
 
 # Kernel module
@@ -42,10 +51,28 @@ package() {
 # X11 driver
   install -dm755 "${pkgdir}/usr/local/lib/xorg/modules/drivers"
   install -m755 "obj/nvidia_drv.so" "${pkgdir}/usr/local/lib/xorg/modules/drivers/nvidia_drv.so"
+}
+
+package_nvidia-tools() {
+ pkgdesc="NVidia driver tools like nvidia-settings"
+ depends=('gtk2' 'pango')
+  cd "${srcdir}/NVIDIA-FreeBSD-${CARCH}-${pkgver}/"
 
 # tools
   install -dm755 "${pkgdir}/usr/local/bin"
   install -m755 "obj/nvidia-bug-report.sh" "${pkgdir}/usr/local/bin/"
-  install -m755 "obj/nvidia-settings"      "${pkgdir}/usr/local/bin/"
   install -m755 "obj/nvidia-xconfig"       "${pkgdir}/usr/local/bin/"
+
+# work around nvidia relying on ports-hacks
+  install -dm755 "${pkgdir}/usr/local/lib/nvidia/tools"
+  install -m755 "obj/nvidia-settings"          "${pkgdir}/usr/local/lib/nvidia/tools/nvidia-settings"
+  install -m755 "${srcdir}/nvidia-settings.in" "${pkgdir}/usr/local/bin/nvidia-settings"
+  install -dm755 "${pkgdir}/usr/local/lib/nvidia/tools/lib"
+  for i in libgtk-x11-2.0.so libgdk-x11-2.0.so \
+  	       libpangox-1.0.so libpango-1.0.so \
+  	       libgobject-2.0.so libgmodule-2.0.so \
+  	       libglib-2.0.so
+  do
+    ln -s "/usr/local/lib/$i" "${pkgdir}/usr/local/lib/nvidia/tools/lib/${i}.0"
+  done
 }
