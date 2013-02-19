@@ -3,7 +3,6 @@
 # arg 2:  the old package version
 
 SYSCTL_CONFIG=etc/sysctl.conf
-LOADER_CONFIG=etc/rc.conf
 
 post_upgrade() {
   echo ">>> Updating linker.hints"
