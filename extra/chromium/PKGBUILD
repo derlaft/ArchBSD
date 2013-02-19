@@ -13,7 +13,9 @@ license=('BSD')
 depends=('gtk2' 'nss' 'xdg-utils' 'libevent' 'libxss'
          'libgcrypt' 'ttf-font' 'dbus' 'desktop-file-utils'
          'hicolor-icon-theme' 'libexecinfo'
-         'bash')
+         'bash'
+         'alsa-lib' 'libxslt' 'libvpx'
+         )
 makedepends=('python2' 'perl' 'gperf' 'yasm' 'mesa' 'libgnome-keyring'
              'flock' 'v4l-compat>=1.0.20110603')
 optdepends=('kdebase-kdialog: needed for file dialogs in KDE')
