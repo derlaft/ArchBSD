@@ -1,5 +1,5 @@
 pkgname=('freebsd-world' 'freebsd-kernel' 'freebsd-source')
-pkgver=20130216
+pkgver=20130219
 pkgrel=1
 arch=('i686' 'x86_64')
 url="https://www.freebsd.org"
@@ -130,6 +130,7 @@ package_freebsd-source() {
   pkgdesc="FreeBSD source matching FreeBSD kernel"
 
   rm -rf ${srcdir}/${_gitname}/.git
+  mkdir -p ${pkgdir}/usr/src
   cp -a ${srcdir}/${_gitname} ${pkgdir}/usr/src
 }
 
