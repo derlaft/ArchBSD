@@ -1,0 +1,50 @@
+# Contributor: Wolfgang Bumiller <blub at speed dot at>
+
+pkgname=rsync
+pkgver=3.0.9
+pkgrel=5
+pkgdesc="A file transfer program to keep remote files in sync"
+arch=('i686' 'x86_64')
+url="http://samba.anu.edu.au/rsync/"
+license=('GPL3')
+depends=('perl')
+backup=('usr/local/etc/rsyncd.conf')
+source=("http://rsync.samba.org/ftp/rsync/$pkgname-$pkgver.tar.gz"
+        'rsyncd.conf' 'rsyncd')
+md5sums=('5ee72266fe2c1822333c407e1761b92b'
+         '04b2d0c2366351bf1ea4ff9c10f9b8f3'
+         '647c3af97efd94827abe58bee470407b')
+
+build() {
+	cd "$srcdir/$pkgname-$pkgver"
+
+	sed -i '' -e 's|CFLAGS|CONFIGUREDCFLAGS|' \
+	          -e 's|perl.*||' \
+	          Makefile.in
+
+	sed -i '' -e 's:/etc/:/usr/local/etc/:g' rsync.h rsync.1 rsyncd.conf.5
+	sed -i '' -e 's|malloc.h|stdlib.h|g' rsync.h zlib/zutil.h
+
+	./configure --prefix=/usr/local \
+	            --disable-debug --enable-ipv6 \
+	            --with-rsyncd-conf=/usr/local/etc/rsyncd.conf \
+	            --with-included-popt
+	make
+}
+
+check() {
+	cd "$srcdir/$pkgname-$pkgver"
+	make test
+}
+
+package() {
+	cd "$srcdir/$pkgname-$pkgver"
+	make DESTDIR="$pkgdir" install
+	install -dm755 "${pkgdir}/usr/local/etc/init.d"
+
+	install -m755 ../rsyncd      "$pkgdir/usr/local/etc/init.d/rsyncd"
+
+	install -m644 ../rsyncd.conf "$pkgdir/usr/local/etc/rsyncd.conf"
+	install -dm755 "$pkgdir/usr/local/lib/rsync"
+	install -m755 support/rrsync "$pkgdir/usr/local/lib/rsync/rrsync"
+}
