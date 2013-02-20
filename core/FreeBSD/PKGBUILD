@@ -129,6 +129,7 @@ backup=('boot/device.hints'
 
 package_freebsd-source() {
   pkgdesc="FreeBSD source matching FreeBSD kernel"
+  options=('!strip')
 
   mkdir -p ${pkgdir}/usr/src
   cp -a ${srcdir}/${_gitname}/* ${pkgdir}/usr/src
