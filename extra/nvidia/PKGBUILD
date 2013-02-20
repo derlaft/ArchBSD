@@ -1,11 +1,6 @@
 # Contributor: Wolfgang Bumiller <blub at speed dot at>
 
 pkgbase=nvidia
-# nvidia-utils and nvidia always go together, which means, ArchLinux' separation
-# makes little sense.
-# To not confuse people, we name the 2nd package nvidia-tools, which will contain
-# nvidia-settings - this is a separate package because it depends on additional
-# libraries.
 pkgname=('nvidia' 'nvidia-utils')
 pkgver=313.18
 pkgrel=1
