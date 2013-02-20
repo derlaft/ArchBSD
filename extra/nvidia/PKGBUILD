@@ -59,8 +59,8 @@ package_nvidia-utils() {
 
 # vdpau
   install -dm755 "${pkgdir}/usr/local/lib/vdpau"
-  for i in libvdpau_trace.so.1 \
-           libvdpau_nvidia.so.1
+  # libvdpau_trace.so.1 is provided by libvdpau here as well
+  for i in libvdpau_nvidia.so.1
   do
     install -m755 "obj/$i" "${pkgdir}/usr/local/lib/vdpau/$i"
     ln -sv "$i" "${pkgdir}/usr/local/lib/vdpau/${i%%.1}"
