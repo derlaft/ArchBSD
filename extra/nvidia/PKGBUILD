@@ -3,7 +3,7 @@
 pkgbase=nvidia
 pkgname=('nvidia' 'nvidia-utils')
 pkgver=313.18
-pkgrel=1
+pkgrel=2
 arch=('i686' 'x86_64')
 license=('NVIDIA')
 makedepends=('freebsd-source')
@@ -49,15 +49,21 @@ package_nvidia-utils() {
 # OpenGL Libraries
   install -dm755 "${pkgdir}/usr/local/lib"
   for i in libGL.so.1 \
-  	       libnvidia-cfg.so.1 \
-  	       libnvidia-glcore.so.1 \
-  	       libnvidia-tls.so.1 \
-           libvdpau.so.1 \
-           libvdpau_trace.so.1 \
-           libvdpau_nvidia.so.1
+           libnvidia-cfg.so.1 \
+           libnvidia-glcore.so.1 \
+           libnvidia-tls.so.1
   do
     install -m755 "obj/$i" "${pkgdir}/usr/local/lib/$i"
     ln -sv "$i" "${pkgdir}/usr/local/lib/${i%%.1}"
+  done
+
+# vdpau
+  install -dm755 "${pkgdir}/usr/local/lib/vdpau"
+  for i in libvdpau_trace.so.1 \
+           libvdpau_nvidia.so.1
+  do
+    install -m755 "obj/$i" "${pkgdir}/usr/local/lib/vdpau/$i"
+    ln -sv "$i" "${pkgdir}/usr/local/lib/vdpau/${i%%.1}"
   done
 
 # tools
@@ -71,9 +77,9 @@ package_nvidia-utils() {
   install -m755 "${srcdir}/nvidia-settings.in" "${pkgdir}/usr/local/bin/nvidia-settings"
   install -dm755 "${pkgdir}/usr/local/lib/nvidia/tools/lib"
   for i in libgtk-x11-2.0.so libgdk-x11-2.0.so \
-  	       libpangox-1.0.so libpango-1.0.so \
-  	       libgobject-2.0.so libgmodule-2.0.so \
-  	       libglib-2.0.so
+           libpangox-1.0.so libpango-1.0.so \
+           libgobject-2.0.so libgmodule-2.0.so \
+           libglib-2.0.so
   do
     ln -s "/usr/local/lib/$i" "${pkgdir}/usr/local/lib/nvidia/tools/lib/${i}.0"
   done
