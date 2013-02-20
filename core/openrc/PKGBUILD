@@ -62,11 +62,11 @@ package() {
         install -m755 "${srcdir}/init.d-$i" "${pkgdir}/etc/init.d/$i"
     done
 
-  #Dunno if I should put these in this package
+   #Dunno if I should put these in this package
    install -d -m755 "${pkgdir}"/var/log
-   touch "${pkgdir}/var/log/{messages,security,auth.log,maillog,lpd-errs,xferlog,cron,debug.log,ppp.log}
+   touch "${pkgdir}"/var/log/{messages,security,auth.log,maillog,lpd-errs,xferlog,cron,debug.log,ppp.log}
 
-  #urandom seed fix
+   #urandom seed fix
    install -d -m755 "${pkgdir}/var/lib/misc"
    touch "${pkgdir}"/var/lib/misc/random-seed
 }
