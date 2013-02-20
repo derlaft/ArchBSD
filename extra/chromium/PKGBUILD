@@ -10,11 +10,13 @@ pkgdesc="The open-source project behind Google Chrome, an attempt at creating a 
 arch=('i686' 'x86_64')
 url="http://www.chromium.org/"
 license=('BSD')
+# Adding alsa-plugins as it is required for things like youtube-html5 player to even start playing at all
 depends=('gtk2' 'nss' 'xdg-utils' 'libevent' 'libxss'
          'libgcrypt' 'ttf-font' 'dbus' 'desktop-file-utils'
          'hicolor-icon-theme' 'libexecinfo'
          'bash'
          'alsa-lib' 'libxslt' 'libvpx'
+         'alsa-plugins'
          )
 makedepends=('python2' 'perl' 'gperf' 'yasm' 'mesa' 'libgnome-keyring'
              'flock' 'v4l-compat>=1.0.20110603')
