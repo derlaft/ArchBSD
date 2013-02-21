@@ -134,5 +134,6 @@ package_freebsd-source() {
   mkdir -p ${pkgdir}/usr/src
   cp -a ${srcdir}/${_gitname}/* ${pkgdir}/usr/src
   rm -rf ${pkgdir}/usr/src/.git
+  ln -s "${pkgdir}"/usr/src/sys/amd64 "${pkgdir}"/usr/src/sys/x86_64
 }
 
