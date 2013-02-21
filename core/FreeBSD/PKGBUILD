@@ -1,6 +1,6 @@
 pkgname=('freebsd-world' 'freebsd-kernel' 'freebsd-source')
-pkgver=20130219
-pkgrel=2
+pkgver=20130221
+pkgrel=1
 arch=('i686' 'x86_64')
 url="https://www.freebsd.org"
 license=('BSD')
@@ -19,8 +19,8 @@ md5sums=('1da3141782687c8d455b63ae747d6c32'
          'a5ecdc82304d6ff426fdb4182f9adc10'
          '92f91f5796ed8e59c666a7b4909d454b'
          '9ab0e68675bab4a90a07dc7f0ae19d79'
-         'd9387be7af3cc48ffc7b9da6bb0bb250'
-         'ccdc27d9269f497b67b9abed4ddea14a'
+         '40aae455d07111b6a38a2792f3dccb66'
+         '461507865683b0d07a090df9bcef6e16'
          '920ec7eb5ef71c8356e6cef8a191c66d'
          '0e9495f2a632d85404634fdbc2eb0850'
          'c3146af4b1ba8467d6b27a1fc22e322e')
