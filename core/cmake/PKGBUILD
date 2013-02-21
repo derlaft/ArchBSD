@@ -1,12 +1,10 @@
-# $Id: PKGBUILD 172096 2012-11-28 07:27:35Z andrea $
 # Maintainer: Andrea Scarpino <andrea@archlinux.org>
 # Contributor: Pierre Schmitz <pierre@archlinux.de>
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
-pkgbase=cmake
+pkgname=cmake
 pkgver=2.8.9
-pkgrel=1
-pkgname=("${pkgbase}" "${pkgbase}-modules")
+pkgrel=2
 arch=('i686' 'x86_64')
 url="http://www.cmake.org/"
 license=('custom')
@@ -14,8 +12,9 @@ depends=('curl' 'shared-mime-info')
 makedepends=('expat')
 optdepends=('qt: cmake-gui')
 options=('!docs')
-source=("http://www.cmake.org/files/v2.8/${pkgbase}-${pkgver}.tar.gz"
-        patch-CMakeLists.txt
+conflicts=('cmake-modules')
+provides=('cmake-modules')
+source=("http://www.cmake.org/files/v2.8/${pkgname}-${pkgver}.tar.gz"
         patch-Modules_FindDCMTK.cmake
         patch-Modules_FindJava.cmake
         patch-Modules_FindQt4.cmake
@@ -36,7 +35,6 @@ build() {
   cd "${srcdir}/${pkgbase}-${pkgver}"
 
 # Ports patches
-  patch -p0 -i "${srcdir}/patch-CMakeLists.txt"
   patch -p0 -i "${srcdir}/patch-Modules_FindDCMTK.cmake"
   patch -p0 -i "${srcdir}/patch-Modules_FindJava.cmake"
   patch -p0 -i "${srcdir}/patch-Modules_FindQt4.cmake"
@@ -71,7 +69,7 @@ build() {
 #   make test
 # }
 
-package_cmake() {
+package() {
   pkgname="cmake"
   pkgdesc="A cross-platform open-source make system"
   install="${pkgname}.install"
@@ -91,33 +89,4 @@ package_cmake() {
 
   install -dm755 "${pkgdir}"/usr/local/share/licenses/${pkgname}-${pkgver}
   install -m644 Copyright.txt "${pkgdir}"/usr/local/share/licenses/${pkgname}-${pkgver}/LICENSE
-}
-
-package_cmake-modules() {
-  pkgname="cmake-modules"
-  pkgdesc="Modules and Templates for CMake"
-
-  cd "${srcdir}/${pkgbase}-${pkgver}"
-
-  install -dm755 "${pkgdir}/usr/local/share/cmake/Modules"
-  install -dm755 "${pkgdir}/usr/local/share/cmake/Templates"
-  cp -R Modules/* "${pkgdir}/usr/local/share/cmake/Modules/"
-  find "${pkgdir}/usr/local/share/cmake/Modules" -type d -exec chmod 755 '{}' ';'
-  find "${pkgdir}/usr/local/share/cmake/Modules" -type f -exec chmod 644 '{}' ';'
-  cp -R Templates/* "${pkgdir}/usr/local/share/cmake/Templates/"
-  find "${pkgdir}/usr/local/share/cmake/Templates" -type d -exec chmod 755 '{}' ';'
-  find "${pkgdir}/usr/local/share/cmake/Templates" -type f -exec chmod 644 '{}' ';'
-
-# clean up
-  msg "Cleaning up Modules"
-  # This is just really taking its time... why???
-  find "${pkgdir}/usr/local/share/cmake/Modules" -name '*-e' -delete
-  ## find "${pkgdir}/usr/local/share/cmake/Modules" -type d -exec sh -c 'rm -v {}/*-e' ';'
-  msg "Cleaning up Templates"
-  find "${pkgdir}/usr/local/share/cmake/Templates" -name '*-e' -delete
-  ## find "${pkgdir}/usr/local/share/cmake/Templates" -type d -exec sh -c 'rm -v {}/*-e' ';'
-
-
-  install -dm755 "${pkgdir}/usr/local/share/licenses/${pkgname}-${pkgver}"
-  install -m644 Copyright.txt "${pkgdir}/usr/local/share/licenses/${pkgname}-${pkgver}/LICENSE"
 }
