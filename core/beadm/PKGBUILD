@@ -3,14 +3,11 @@
 pkgname=beadm
 _pkgsrcname=vermaden-beadm-a7c1c73
 pkgver=0.8.5
-pkgrel=1
+pkgrel=2
 pkgdesc="Solaris-like utility to manage Boot Environments on ZFS"
 arch=('i686' 'x86_64')
 url="http://www.FreeBSD.org"
-depends=('xproto>=7.0.18')
-makedepends=('pkgconf')
-license=('custom')
-#options=('!libtool')
+license=('BSD')
 source=(http://downloads.sourceforge.net/project/beadm/dist/${pkgname}-${pkgver}.tar.gz)
 sha1sums=('c8b0c79a8b72187bb188ab1a017fe95e0c09c7e7')
 
