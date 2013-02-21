@@ -130,3 +130,11 @@
  
  
  # Shared library target to build.
+@@ -578,6 +577,7 @@
+ # ---------------- End of platform-specific section ---------------- #
+ 
+ INSTALL_CONTRIB=@INSTALL_CONTRIB@
++include $(GLSRCDIR)/drivers.mak
+ include $(GLSRCDIR)/unixhead.mak
+ include $(GLSRCDIR)/gs.mak
+ # psromfs.mak must precede lib.mak
