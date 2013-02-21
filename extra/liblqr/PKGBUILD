@@ -1,4 +1,5 @@
 # Maintainer: Tobias Powalowski <tpowa@archlinux.org>
+# Contributor: Wolfgang Bumiller <archbsd at bumiller dot com>
 
 pkgname=liblqr
 pkgver=0.4.1
