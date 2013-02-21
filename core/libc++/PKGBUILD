@@ -1,0 +1,25 @@
+pkgname=libc++
+pkgver=1.0
+pkgrel=1
+pkgdesc="c++ standard library providing C++11 functionality"
+arch=('i686' 'x86_64')
+url="https://libcxx.llvm.org"
+makedepends=('freebsd-source')
+license=('MIT')
+
+export MAKEOBJDIRPREFIX="$srcdir/obj"
+build() {
+	cd "${srcdir}"
+	unset CFLAGS CXXFLAGS CPPFLAGS LDFLAGS
+	export CC=clang CXX=clang++ CPP=clang-cpp
+	make -C /usr/src/lib/libc++ obj
+	make -C /usr/src/lib/libc++ depend
+	make -C /usr/src/lib/libc++ 
+}
+
+package() {
+	cd "${pkgdir}"
+	install -dm755 "usr/lib"
+	install -dm755 "usr/include/c++/v1/ext"
+	make -C /usr/src/lib/libc++   DESTDIR="${pkgdir}" install
+}

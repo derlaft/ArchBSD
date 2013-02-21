@@ -1,0 +1,25 @@
+pkgname=libcxxrt
+pkgver=9.1
+pkgrel=1
+pkgdesc="C++11 compliant C++ runtime library"
+arch=('i686' 'x86_64')
+url="https://libcxx.llvm.org"
+makedepends=('freebsd-source')
+license=('MIT')
+
+export MAKEOBJDIRPREFIX="$srcdir/obj"
+build() {
+	cd "${srcdir}"
+	unset CFLAGS CXXFLAGS CPPFLAGS LDFLAGS
+	export CC=clang CXX=clang++ CPP=clang-cpp
+	make -C /usr/src/lib/libcxxrt obj
+	make -C /usr/src/lib/libcxxrt depend
+	make -C /usr/src/lib/libcxxrt
+}
+
+package() {
+	cd "${pkgdir}"
+	install -dm755 "usr/lib"
+	install -dm755 "lib"
+	make -C /usr/src/lib/libcxxrt DESTDIR="${pkgdir}" install
+}
