@@ -9,6 +9,7 @@ arch=('i686' 'x86_64')
 license=('custom')
 url="http://xorg.freedesktop.org/"
 depends=('libx11' 'xorg-xauth')
+groups=('xorg')
 makedepends=('xorg-util-macros')
 optdepends=('xorg-twm' 'xterm')
 backup=('usr/local/etc/skel/.xinitrc'
