@@ -1,0 +1,54 @@
+# Maintainer : Ionut Biru <ibiru@archlinux.org>
+# Contributor: damir <damir@archlinux.org>
+# Contributor: Paul Mattal <paul@archlinux.org>
+
+pkgname=x264
+pkgver=20121113
+pkgrel=1
+pkgdesc="free library for encoding H264/AVC video streams"
+arch=('i686' 'x86_64')
+url="http://www.videolan.org/developers/x264.html"
+license=('GPL')
+makedepends=('yasm')
+source=(ftp://ftp.videolan.org/pub/videolan/x264/snapshots/x264-snapshot-$pkgver-2245-stable.tar.bz2
+        patch-Makefile patch-common_cpu.c
+)
+md5sums=('c37851c8534ef5d7b1935145f8f5a725')
+
+build() {
+    cd "$pkgname-snapshot-$pkgver-2245-stable"
+
+    patch -p0 -i "$srcdir"/patch-common_cpu.c
+
+    # This patch changes the ARCH recognition in the Makefile (x86_64 vs amd64)
+    # patch -p0 -i "$srcdir"/patch-Makefile
+    # Instead we make ./configure recognize amd64 the same way as x86_64
+    sed -i '' -e 's/ x86_64)/ x86_64|amd64)/' configure
+
+    sed -i '' -e 's|-lpthread|-pthread|g; s|/bin/bash|/usr/local/bin/bash|; s|gpac_static|gpac|g' configure
+    sed -i '' -e 's|bash|sh|' version.sh
+    sed -i '' -e 's|\$(libdir)/pkgconfig|/usr/local/libdata/pkgconfig|' \
+              -e 's|\${libdir}/pkgconfig|/usr/local/libdata/pkgconfig|' \
+              Makefile
+
+    ./configure \
+        --extra-cflags="${CPPFLAGS} ${CFLAGS} -fPIC -I/usr/local/include" \
+        --extra-ldflags="${LDFLAGS} -L/usr/local/lib" \
+        --enable-static --enable-shared
+
+    gmake
+}
+package() {
+    cd "$pkgname-snapshot-$pkgver-2245-stable"
+
+    gmake DESTDIR="$pkgdir" \
+      bindir=/usr/local/bin \
+      libdir=/usr/local/lib \
+      includedir=/usr/local/include \
+      install
+}
+
+# vim:set ts=2 sw=2 et:
+md5sums=('c37851c8534ef5d7b1935145f8f5a725'
+         'f06e9a8db553d4edc3c2db3e1ac278b0'
+         'a0849bc82e299da08d8c353b10538801')
