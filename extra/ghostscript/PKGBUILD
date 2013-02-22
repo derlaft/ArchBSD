@@ -93,7 +93,7 @@ build() {
 	--with-omni \
 	--with-x \
 	--with-drivers=ALL \
-	--with-fontpath=/usr/local/share/fonts \
+	--with-fontpath=/usr/local/share/fonts/Type1:/usr/local/share/fonts \
 	--with-install-cups \
 	--enable-fontconfig \
 	--enable-freetype \

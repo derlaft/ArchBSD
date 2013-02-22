@@ -25,19 +25,26 @@ build() {
   
   # fix build with poppler 0.22
   patch -Np0 -i ${srcdir}/poppler_buildfix.diff
-  
-  export CC=gcc CXX=g++ CPP=cpp
+
+#  sed -i '' -e 's/AM_CONFIG_HEADER/AC_CONFIG_HEADER/g' configure.ac
+#  sed -i '' -e 's/_PROGRAMS = pdftoopvp/_PROGRAMS = /' Makefile.am
+#  autoreconf --install
+
   ZLIB_CFLAGS=" " \
   ZLIB_LIBS="-lz" \
   LIBQPDF_CFLAGS="`pkg-config --cflags libqpdf`" \
   LIBQPDF_LIBS="`pkg-config --libs libqpdf`" \
   PKG_CONFIG_PATH="${PKG_CONFIG_PATH}:/usr/local/libdata/pkgconfig" \
-  CFLAGS="$CFLAGS -std=gnu99" \
+  CFLAGS="$CFLAGS" \
+  CXXFLAGS="$CXXFLAGS -stdlib=libc++ -std=c++11" \
+  CPPFLAGS="$CPPFLAGS -I/usr/local/include" \
+  LDFLAGS="$LDFLAGS -L/usr/local/lib" \
   ./configure --prefix=/usr/local \
     --sysconfdir=/usr/local/etc \
     --with-rcdir=no \
     --with-test-font-path=/usr/local/lib/X11/fonts/dejavu/DejaVuSans.ttf
-  make
+  sed -i '' -e 's/^\(DLOPEN_LIBS =\).*$/\1/' Makefile
+  gmake
 }
 
 check() {
