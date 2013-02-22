@@ -22,6 +22,7 @@ build() {
   	docs/lqr_style.xsl
   sed -i '' -e 's|/usr.*docbookx.dtd|/usr/local/share/xml/docbook/4.5/docbookx.dtd|' \
   	docs/liblqr_manual.docbook
+  CFLAGS="$CFLAGS -std=gnu89" \
   ./configure
   gmake
 }
