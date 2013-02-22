@@ -31,8 +31,8 @@ build() {
   ./configure --prefix=/usr/local \
               --enable-ipv6 \
 	      --with-proxy \
-	      --sysconfdir=/usr/local/etc
-
+	      --sysconfdir=/usr/local/etc \
+	      --with-perl-lib=vendor
   sed -i ''  -e 's|/usr|/usr/local|' -e 's|/etc|/usr/local&|' \
                 ${srcdir}/${pkgname}-${pkgver}/docs/irssi.1
 
