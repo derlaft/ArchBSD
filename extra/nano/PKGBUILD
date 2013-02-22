@@ -5,7 +5,7 @@
 
 pkgname=nano
 pkgver=2.2.6
-pkgrel=3
+pkgrel=4
 pkgdesc="Pico editor clone with enhancements"
 arch=('i686' 'x86_64')
 license=('GPL')
@@ -41,6 +41,6 @@ build() {
 package() {
   cd ${srcdir}/${pkgname}-${pkgver}
   make DESTDIR=${pkgdir} install
-  install -dm755 ${pkgdir}/usr/local/etc/nanorc
+  install -dm755 ${pkgdir}/usr/local/etc/
   install -m644 ${srcdir}/${pkgname}-${pkgver}/doc/nanorc.sample ${pkgdir}/usr/local/etc/nanorc
 }

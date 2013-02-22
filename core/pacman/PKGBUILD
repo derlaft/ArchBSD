@@ -1,6 +1,6 @@
 pkgname=pacman
 pkgver=4.0.3
-pkgrel=7
+pkgrel=8
 pkgdesc="A library-based package manager with dependency support"
 arch=('i686' 'x86_64')
 url="http://www.archlinux.org/pacman/"
@@ -24,7 +24,7 @@ md5sums=('387965c7125e60e5f0b9ff3b427fe0f9'
          '02db451be806335ce189ffadb5cf84b9'
          '9926eb703225b8e34d54e222685d63d8'
          'cf1c19a9c10154103825fc68d480e9f0'
-         'c2f603b062e90b617603770d0f844f32'
+         '3f2aa60e0ca732c5b380fdd859ac80d6'
          'a4a3867810d26de84ba52ce123d02658'
          '556dec34824e44600409b28ab88fc8ba')
 
