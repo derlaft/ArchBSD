@@ -21,7 +21,7 @@ build() {
    patch -p0 -i ${srcdir}/patch-menu-cached.c
 
   ./configure --prefix=/usr/local/ --sysconfdir=/usr/local/etc \
-              --libexecdir=/usr/local/lib/menu-cache \
+              --libexecdir=/usr/local/libexec/menu-cache \
               --disable-static
   gmake
 }

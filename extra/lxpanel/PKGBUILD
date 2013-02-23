@@ -18,7 +18,8 @@ source=(ftp://ftp.archbsd.net/$pkgname-$pkgver.tar.gz
 sha256sums=('5f003c38035009fbfcdbb1f1ed8d15cbbdd1216310d1d67a843fe632049996d4'
             '8e2f3a419c247de33462cd69a1e3b644bcd50c1dfeac374ec35e25b8fa864881'
             'ce8114b99e0af89eda91d0dee1d47ae7cb886ccebee3fd616bfaeb47e41b8f93'
-            '216f69ae28f541b00e848eb7bbce44897834717001d8170a19d4f08647f62a21')
+            '216f69ae28f541b00e848eb7bbce44897834717001d8170a19d4f08647f62a21'
+            '52dcfa6d2b4492efd5bcdebf5294a01e43cf68798bfbbba42e35854dc9964783')
 
 build() {
   cd $srcdir/$pkgname-$pkgver
@@ -33,10 +34,10 @@ build() {
   sed -i ''  -e 's,$$(DATADIRNAME)/locale,share/locale,' \
                  $srcdir/$pkgname-$pkgver/po/Makefile.in.in
 ./autogen.sh
- CFLAGS+=' -lgmodule-2.0' 
+# CFLAGS+=' -lgmodule-2.0' 
 ./configure \
-    --sysconfdir=/etc \
-    --prefix=/usr \
+    --sysconfdir=/usr/local/etc \
+    --prefix=/usr/local \
     --with-plugins=volume,deskno,kbled,xkb,batt \
     --disable-alsa \
     --enable-man \
