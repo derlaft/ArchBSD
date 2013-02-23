@@ -1,7 +1,6 @@
 pkgname=lxde-common
 pkgver=0.5.5
-pkgrel=3
-category=misc
+pkgrel=2
 pkgdesc='Common files of the LXDE Desktop'
 arch=('any')
 url='http://lxde.org/'
@@ -9,18 +8,23 @@ license=('GPL2')
 groups=('lxde')
 backup=(usr/local/etc/xdg/lxsession/LXDE/desktop.conf
         usr/local/etc/xdg/lxsession/LXDE/autostart)
-depends=('gtk2' 'lxde-icon-theme' 'lxsession')
+depends=('libx11' 'glib2' 'lxde-icon-theme' 'lxsession')
 makedepends=('automake')
+source=(http://downloads.sourceforge.net/lxde/${pkgname}-${pkgver}.tar.gz
+        startlxde.patch)
+md5sums=('e51a6b2a815a89fda1f497b509465a97'
+         '13fd5edbe6f4b57cc14447712c9d6209')
+
 build() {
-  cd "${portsdir}/${category}/${pkgname}"
-  make clean
-  make
-  make deinstall
-  make package PACKAGES="${srcdir}"
+    cd $srcdir/$pkgname-$pkgver
+    ./configure --sysconfdir=/usr/local/etc --prefix=/usr/local
+    gmake
+#    patch -Np0 -i $srcdir/startlxde.patch
 }
 
 package() {
-  cd "${pkgdir}"
-  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_${pkgrel}.txz"
+    cd $srcdir/$pkgname-$pkgver
+    make DESTDIR=$pkgdir install
+    install -dm755 $pkgdir/usr/local/share/applications/
+    install -m644 lxde-logout.desktop $pkgdir/usr/local/share/applications/
 }
-

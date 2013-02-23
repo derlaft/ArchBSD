@@ -1,28 +1,25 @@
 pkgname=lxsession
 pkgver=0.4.6.1
-pkgrel=1
-category=x11-wm
+pkgrel=3
 pkgdesc='Lightweight X11 session manager'
 arch=('i686' 'x86_64')
 url="http://lxde.org/"
 license=('GPL2')
 groups=('lxde')
-depends=('gtk2' 'hal')
-makedepends=('bdftopcf' 'bigreqsproto' 'bison' 'cmake' 'cmake-modules' 'docbook-to-man' 'fontsproto' 'gccmakedep' 'gmp' 'imake' 'jade' 'libXfont' 'libcheck' 'm4' 'makedepend' 'mingw32-bin-msvcrt' 'mingw32-binutils' 'mingw32-gcc' 
-'mpc' 'mpfr' 'v4l_compat' 'xcb-proto' 'xcmiscproto' 'xf86bigfontproto' 'xorg-cf-files')
-
+depends=('gtk2' 'dbus')
+makedepends=('pkgconf' 'intltool')
 replaces=('lxde-settings-daemon' 'lxsession-lite')
+conflicts=('lxsession-lite' 'lxde-settings-daemon')
+source=(http://downloads.sourceforge.net/lxde/$pkgname-$pkgver.tar.gz)
+md5sums=('e456b64c5ab3652a4dec661ec706dc6e')
 
 build() {
-  cd "${portsdir}/${category}/${pkgname}"
-  make clean
-  make
-  make deinstall
-  make package PACKAGES="${srcdir}"
+  cd $srcdir/$pkgname-$pkgver
+  ./configure --sysconfdir=/usr/local/etc --prefix=/usr/local/
+  gmake
 }
 
 package() {
-  cd "${pkgdir}"
-  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_${pkgrel}.txz"
+  cd $srcdir/$pkgname-$pkgver
+  gmake DESTDIR=$pkgdir install
 }
-

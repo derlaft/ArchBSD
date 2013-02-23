@@ -1,11 +1,11 @@
 post_install() {
-    /usr/local/bin/gtk-update-icon-cache -q -f usr/local/share/icons/nuoveXT2 2>/dev/null || /usr/bin/true
+  gtk-update-icon-cache -q -t -f usr/local/share/icons/nuoveXT2
 }
 
 post_upgrade() {
-    /usr/local/bin/gtk-update-icon-cache -q -f usr/local/share/icons/nuoveXT2 2>/dev/null || /usr/bin/true
+  post_install
 }
 
 post_remove() {
-    /usr/local/bin/gtk-update-icon-cache -q -f usr/local/share/icons/nuoveXT2 2>/dev/null || /usr/bin/true
+  post_install
 }
