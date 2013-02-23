@@ -1,26 +1,26 @@
 pkgname=lxterminal
 pkgver=0.1.11
-pkgrel=1
-category=sysutils
+pkgrel=2
 pkgdesc="VTE-based terminal emulator (part of LXDE)"
 arch=('i686' 'x86_64')
 license=('GPL2')
 url="http://lxde.org/"
 groups=('lxde')
-depends=('vte')
-makedepends=('bdftopcf' 'bigreqsproto' 'cmake' 'cmake-modules' 'fontsproto' 'gmp' 'libxfont' 'libcheck' 'libgcrypt' 'libgpg-error' 'libxslt' 'mingw32-bin-msvcrt' 'mingw32-binutils' 'mingw32-gcc' 'mpc' 'mpfr' 'xcb-proto' 
-'xcmiscproto' 'xf86bigfontproto')
+depends=('fontconfig' 'libx11' 'glib2' 'vte' 'gtk2')
+makedepends=('pkgconf' 'intltool')
+source=(http://downloads.sourceforge.net/sourceforge/lxde/${pkgname}-${pkgver}.tar.gz)
+md5sums=('fd9140b45c0f28d021253c4aeb8c4aea')
 
 build() {
-  cd "${portsdir}/${category}/${pkgname}"
-  make clean
-  make
-  make deinstall
-  make package PACKAGES="${srcdir}"
+	cd "$srcdir"/$pkgname-$pkgver
+
+#	patch -Np1 -i "$srcdir"/shift-keybinds.patch
+
+	./configure --sysconfdir=/usr/local/etc --prefix=/usr/local
+	gmake
 }
 
 package() {
-  cd "${pkgdir}"
-  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}_${pkgrel}.txz"
+	cd "$srcdir"/$pkgname-$pkgver
+	gmake DESTDIR="$pkgdir" install
 }
-
