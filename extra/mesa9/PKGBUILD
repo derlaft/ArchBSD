@@ -115,14 +115,15 @@ package_libgl() {
 
 package_mesa() {
   # check also gl.pc
-  depends=('libgl' 'libx11>=1.5.0' 'libxext>=1.3.1' 'libxdamage' 'libxfixes' 'libxcb' 'libxxf86vm'
+  depends=('libx11>=1.5.0' 'libxext>=1.3.1' 'libxdamage' 'libxfixes' 'libxcb' 'libxxf86vm'
            'libdrm')
   conflicts=('libglaphi' 'osmesa' 'khrplatform-devel' 'libgles')
   provides=("libglapi=${pkgver}-${pkgrel}"
             "osmesa=${pkgver}-${pkgrel}"
             "khrplatform-devel=${pkgver}-${pkgrel}"
             "libgles=${pkgver}-${pkgrel}")
-  optdepends=('opengl-man-pages: for the OpenGL API man pages')
+  optdepends=('opengl-man-pages: for the OpenGL API man pages'
+              'libgl: OpenGL library')
   pkgdesc="Mesa 3-D graphics libraries and include files"
 
   gmake -C ${srcdir}/?esa-*/src/mesa DESTDIR="${pkgdir}" install-glHEADERS
