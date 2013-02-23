@@ -1,26 +1,36 @@
 pkgname=menu-cache
-pkgver=0.3.3
+pkgver=0.4.1
 pkgrel=1
-category=x11
 pkgdesc='Caching mechanism for freedesktop.org compliant menus'
 arch=('i686' 'x86_64')
 license=('GPL2')
 url='http://lxde.org/'
 groups=('lxde')
-depends=('gtk2')
-makedepends=('bdftopcf' 'bigreqsproto' 'bison' 'cmake' 'cmake-modules' 'fontsproto' 'gmp' 'libXfont' 'libcheck' 'libgcrypt' 'libgpg-error' 'libxslt' 'm4' 'mingw32-bin-msvcrt' 'mingw32-binutils' 'mingw32-gcc' 'mpc' 'mpfr' 
-'xcb-proto' 'xcmiscproto' 'xf86bigfontproto')
+depends=('intltool' 'glib2')
+options=('!libtool')
+makedepends=('pkgconf')
+source=(http://downloads.sourceforge.net/lxde/$pkgname-$pkgver.tar.gz
+	'patch-menu-cached.c')
+
+sha256sums=('4fa9408e353fedba5b7314cbf6b6cd06d873a1424e281aa050d88bb9c0a0191e'
+            'ec6d3d49583be4bf5ecd5cdac3f0e98e36712257b60fb690f63dad4d7d99e8fc')
 
 build() {
-  cd "${portsdir}/${category}/${pkgname}"
-  make clean
-  make
-  make deinstall
-  make package PACKAGES="${srcdir}"
+  cd $srcdir/$pkgname-$pkgver
+
+   patch -p0 -i ${srcdir}/patch-menu-cached.c
+
+  ./configure --prefix=/usr/local/ --sysconfdir=/usr/local/etc \
+              --libexecdir=/usr/local/lib/menu-cache \
+              --disable-static
+  gmake
 }
 
 package() {
-  cd "${pkgdir}"
-  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
-}
+  cd $srcdir/$pkgname-$pkgver
+  gmake DESTDIR=$pkgdir install
 
+  install -dm755 ${pkgdir}/usr/local/libdata
+  cp -R ${pkgdir}/usr/local/lib/pkgconfig/libmenu-cache.pc ${pkgdir}/usr/local/libdata/
+  rm -rf ${pkgdir}/usr/local/lib/pkgconfig/
+}
