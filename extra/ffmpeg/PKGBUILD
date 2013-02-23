@@ -73,7 +73,8 @@ build() {
 package() {
   cd $pkgname-$pkgver
   gmake DESTDIR="$pkgdir" install install-man
-  install -D -m755 tools/qt-faststart "$pkgdir/usr/local/bin/qt-faststart"
+  install -dm755 "$pkgdir/usr/local/bin"
+  install -m755 tools/qt-faststart "$pkgdir/usr/local/bin/qt-faststart"
 }
 
 # vim:set ts=2 sw=2 et:
