@@ -1,6 +1,6 @@
 pkgname=lxpanel
 pkgver=0.5.10
-pkgrel=1
+pkgrel=2
 pkgdesc='Lightweight X11 desktop panel for LXDE'
 arch=('i686' 'x86_64')
 license=('GPL2')
@@ -33,20 +33,23 @@ build() {
                  $srcdir/$pkgname-$pkgver/src/plugins/volume/volume-impl.c
   sed -i ''  -e 's,$$(DATADIRNAME)/locale,share/locale,' \
                  $srcdir/$pkgname-$pkgver/po/Makefile.in.in
-./autogen.sh
-# CFLAGS+=' -lgmodule-2.0' 
-./configure \
-    --sysconfdir=/usr/local/etc \
-    --prefix=/usr/local \
-    --with-plugins=volume,deskno,kbled,xkb,batt \
-    --disable-alsa \
-    --enable-man \
-    CPPFLAGS="-I/usr/local/include" \
-    LDFLAGS="-L/usr/local/lib"
-  gmake
+  ./autogen.sh
+  CPPFLAGS="-I/usr/local/include" \
+  LDFLAGS="-L/usr/local/lib" \
+  ./configure \
+      --sysconfdir=/usr/local/etc \
+      --prefix=/usr/local \
+      --with-plugins=volume,deskno,kbled,xkb,batt \
+      --disable-alsa \
+      --enable-man
+    gmake
 }
 
 package() {
   cd $srcdir/$pkgname-$pkgver
   gmake DESTDIR=$pkgdir install
+
+  install -dm755 "${pkgdir}/usr/local/libdata"
+  mv "${pkgdir}/usr/local/lib/pkgconfig" \
+     "${pkgdir}/usr/local/libdata/pkgconfig"
 }
