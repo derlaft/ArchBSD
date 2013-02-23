@@ -12,7 +12,8 @@ optdepends=('wireless_management: wifimgr')
 source=(ftp://ftp.archbsd.net/$pkgname-$pkgver.tar.gz
 	patch-src__plugins__batt__batt.c
 	patch-src__plugins__batt__batt_sys.c
-	patch-src__plugins__batt__batt_sys.h)
+	patch-src__plugins__batt__batt_sys.h
+	automake.patch)
 
 sha256sums=('5f003c38035009fbfcdbb1f1ed8d15cbbdd1216310d1d67a843fe632049996d4'
             '8e2f3a419c247de33462cd69a1e3b644bcd50c1dfeac374ec35e25b8fa864881'
@@ -25,13 +26,14 @@ build() {
    patch -p0 -i $srcdir/patch-src__plugins__batt__batt_sys.h
    patch -p0 -i $srcdir/patch-src__plugins__batt__batt_sys.c
    patch -p0 -i $srcdir/patch-src__plugins__batt__batt.c
+   patch -p0 -i ${srcdir}/automake.patch
 
   sed -i '' -e 's,linux,sys,' \
                  $srcdir/$pkgname-$pkgver/src/plugins/volume/volume-impl.c
   sed -i ''  -e 's,$$(DATADIRNAME)/locale,share/locale,' \
                  $srcdir/$pkgname-$pkgver/po/Makefile.in.in
-
-#  CFLAGS+=' -lgmodule-2.0' 
+./autogen.sh
+ CFLAGS+=' -lgmodule-2.0' 
 ./configure \
     --sysconfdir=/etc \
     --prefix=/usr \
