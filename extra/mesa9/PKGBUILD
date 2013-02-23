@@ -133,29 +133,18 @@ package_mesa() {
 
 #  gmake -C ${srcdir}/?esa-*/src/gallium/targets/xa-vmwgfx DESTDIR="${pkgdir}" install
 
+  
 # libglapi {{
   gmake -C ${srcdir}/?esa-*/src/mapi/shared-glapi DESTDIR="${pkgdir}" install
 # }}
 
 # osmesa {{
-  # fix linking because of splitted package
-  gmake -C ${srcdir}/?esa-*/src/mapi/shared-glapi DESTDIR="${pkgdir}" install
-
   gmake -C ${srcdir}/?esa-*/src/mesa/drivers/osmesa DESTDIR="${pkgdir}" install
-
-  # fix linking because of splitted package - cleanup
-  gmake -C ${srcdir}/?esa-*/src/mapi/shared-glapi DESTDIR="${pkgdir}" uninstall
 # }}
 
 # libgles {{
-  # fix linking because of splitted package
-  gmake -C ${srcdir}/?esa-*/src/mapi/shared-glapi DESTDIR="${pkgdir}" install
-
   gmake -C ${srcdir}/?esa-*/src/mapi/es1api DESTDIR="${pkgdir}" install
   gmake -C ${srcdir}/?esa-*/src/mapi/es2api DESTDIR="${pkgdir}" install
-
-  # fix linking because of splitted package - cleanup
-  gmake -C ${srcdir}/?esa-*/src/mapi/shared-glapi DESTDIR="${pkgdir}" uninstall
 # }}
 
 # khrplatform-devel {{
@@ -183,7 +172,7 @@ package_mesa() {
 ##    pkgdesc="Mesa EGL libraries and headers"
 ##  
 ##    gmake -C ${srcdir}/?esa-*/src/gallium/targets/egl-static DESTDIR="${pkgdir}" install
-##    install -m755 -d "${pkgdir}/usr/share/doc/libegl"
+##    install -m755 -d "${pkgdir}/usr/local/share/doc/libegl"
 ##    install -m644 ${srcdir}/?esa-*/docs/egl.html "${pkgdir}/usr/local/share/doc/libegl/"
 ##    
 ##    # fix linking because of splitted package
