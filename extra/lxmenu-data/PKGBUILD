@@ -1,24 +1,22 @@
 pkgname=lxmenu-data
 pkgver=0.1.2
 pkgrel=1
-category=x11
 pkgdesc="freedesktop.org desktop menus for LXDE"
 arch=('i686' 'x86_64')
 license=('GPL2')
 url="http://lxde.org/"
 groups=('lxde')
-depends=('gettext' 'libxmu')
+source=("http://downloads.sourceforge.net/lxde/$pkgname-$pkgver.tar.gz")
+makedepends=('intltool')
+md5sums=('2184ab3746d572477f1bea7e98e230a8')
 
 build() {
-  cd "${portsdir}/${category}/${pkgname}"
-  make clean
-  make
-  make deinstall
-  make package PACKAGES="${srcdir}"
+  cd "$srcdir/$pkgname-$pkgver"
+  ./configure --prefix=/usr/local --sysconfdir=/usr/local/etc
+  gmake
 }
 
 package() {
-  cd "${pkgdir}"
-  tar xpf "${srcdir}/${category}/${pkgname}-${pkgver}.txz"
+  cd "$srcdir/$pkgname-$pkgver"
+  gmake DESTDIR="$pkgdir" install
 }
-

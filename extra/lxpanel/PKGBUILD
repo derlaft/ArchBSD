@@ -1,5 +1,5 @@
 pkgname=lxpanel
-pkgver=0.5.12
+pkgver=0.5.10
 pkgrel=1
 pkgdesc='Lightweight X11 desktop panel for LXDE'
 arch=('i686' 'x86_64')
@@ -9,22 +9,19 @@ groups=('lxde')
 depends=('gtk2' 'menu-cache' 'lxmenu-data' 'libwnck')
 makedepends=('docbook-xml' 'docbook-xsl' )
 optdepends=('wireless_management: wifimgr')
-source=(ftp://ftp.archlinux.org/other/community/$pkgname/$pkgname-$pkgver.tar.xz
-        lxpanel-0.5.12-automake-1.13-support.patch
+source=(ftp://ftp.archbsd.net/$pkgname-$pkgver.tar.gz
 	patch-src__plugins__batt__batt.c
 	patch-src__plugins__batt__batt_sys.c
 	patch-src__plugins__batt__batt_sys.h)
-sha256sums=('c29997c522f138e4beb02fc549c84136fc840a836c1f69b400d90d2d4e91de1b'
-            'b5774aa79b65faa740d5be37f98d8f2baa71a05a36f6decb45a0d16658f5512f'
-            '8058bef6d5f344f15125b96bd01250b5aa8db1823147594cbd7f134de98847c1'
+
+sha256sums=('5f003c38035009fbfcdbb1f1ed8d15cbbdd1216310d1d67a843fe632049996d4'
+            '8e2f3a419c247de33462cd69a1e3b644bcd50c1dfeac374ec35e25b8fa864881'
             'ce8114b99e0af89eda91d0dee1d47ae7cb886ccebee3fd616bfaeb47e41b8f93'
             '216f69ae28f541b00e848eb7bbce44897834717001d8170a19d4f08647f62a21')
 
 build() {
   cd $srcdir/$pkgname-$pkgver
    unset CC CPP CXX
-   patch -Np0 -i $srcdir/lxpanel-0.5.12-automake-1.13-support.patch
-  ./autogen.sh
    patch -p0 -i $srcdir/patch-src__plugins__batt__batt_sys.h
    patch -p0 -i $srcdir/patch-src__plugins__batt__batt_sys.c
    patch -p0 -i $srcdir/patch-src__plugins__batt__batt.c
@@ -34,7 +31,8 @@ build() {
   sed -i ''  -e 's,$$(DATADIRNAME)/locale,share/locale,' \
                  $srcdir/$pkgname-$pkgver/po/Makefile.in.in
 
-  CFLAGS+=' -lgmodule-2.0' ./configure \
+#  CFLAGS+=' -lgmodule-2.0' 
+./configure \
     --sysconfdir=/etc \
     --prefix=/usr \
     --with-plugins=volume,deskno,kbled,xkb,batt \
@@ -47,5 +45,5 @@ build() {
 
 package() {
   cd $srcdir/$pkgname-$pkgver
-  make DESTDIR=$pkgdir install
+  gmake DESTDIR=$pkgdir install
 }
