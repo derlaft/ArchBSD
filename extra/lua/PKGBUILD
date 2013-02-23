@@ -1,6 +1,7 @@
 # Maintainer: Sébastien Luttringer <seblu@archlinux.org>
 # Contributor: Juergen Hoetzel <juergen@archlinux.org>
 # Contributor: Damir Perisa <damir.perisa@bluewin.ch>
+# Contributor: Wolfgang Bumiller <archbsd at bumiller dot com>
 
 pkgname=lua
 pkgver=5.2.1
