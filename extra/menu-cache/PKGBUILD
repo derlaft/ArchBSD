@@ -1,6 +1,6 @@
 pkgname=menu-cache
 pkgver=0.4.1
-pkgrel=1
+pkgrel=2
 pkgdesc='Caching mechanism for freedesktop.org compliant menus'
 arch=('i686' 'x86_64')
 license=('GPL2')
@@ -30,7 +30,7 @@ package() {
   cd $srcdir/$pkgname-$pkgver
   gmake DESTDIR=$pkgdir install
 
-  install -dm755 ${pkgdir}/usr/local/libdata
-  cp -R ${pkgdir}/usr/local/lib/pkgconfig/libmenu-cache.pc ${pkgdir}/usr/local/libdata/
-  rm -rf ${pkgdir}/usr/local/lib/pkgconfig/
+  install -dm755 "${pkgdir}/usr/local/libdata"
+  mv "${pkgdir}/usr/local/lib/pkgconfig" \
+     "${pkgdir}/usr/local/libdata/pkgconfig"
 }
