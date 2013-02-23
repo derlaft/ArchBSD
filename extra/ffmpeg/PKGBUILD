@@ -1,0 +1,79 @@
+# Maintainer : Ionut Biru <ibiru@archlinux.org>
+# Contributor: Tom Newsom <Jeepster@gmx.co.uk>
+# Contributor: Paul Mattal <paul@archlinux.org>
+
+pkgname=ffmpeg
+pkgver=1.0.1
+pkgrel=1
+epoch=1
+pkgdesc="Complete and free Internet live audio and video broadcasting solution for Linux/Unix"
+arch=('i686' 'x86_64')
+url="http://ffmpeg.org/"
+license=('GPL')
+depends=(alsa-lib gsm lame libpulse libtheora libva libvorbis libvpx opencore-amr openjpeg rtmpdump schroedinger sdl speex v4l-utils x264 xvidcore zlib)
+makedepends=('yasm' 'git' 'libvdpau' 'gmake')
+source=(http://ffmpeg.org/releases/$pkgname-$pkgver.tar.bz2
+        patch-configure
+        patch-libavdevice-bktr.c
+        patch-libavdevice-oss_audio.c
+        patch-libavformat-udp.c
+        patch-libavutil-common.h
+        )
+md5sums=('dbbb88ce5525dea22b24aaa098a9bcc2')
+
+build() {
+  cd $pkgname-$pkgver
+  for i in patch-configure patch-libavdevice-bktr.c \
+           patch-libavdevice-oss_audio.c patch-libavformat-udp.c \
+           patch-libavutil-common.h
+  do
+    patch -p0 -i "${srcdir}/$i"
+  done
+
+  sed -i '' -e 's|$$(LIBDIR)/pkgconfig|${PREFIX}/libdata/pkgconfig|' subdir.mak
+  sed -i '' -e 's|/etc/ffserver.conf|${PREFIX}/etc/ffserver.conf|' ffserver.c
+  sed -i '' -E \
+    -e "s|(EXTRALIBS[[:space:]]*=)|\1-L/usr/local/lib |g" \
+    -e 's|%%LOCALBASE%%|/usr/local}|g' \
+    configure
+  sed -i '' -e 's|-ldl||;' configure
+  sed -i '' -e 's|/usr/bin/perl|/usr/local/bin/perl}|g' doc/texi2pod.pl
+
+  ./configure \
+    --prefix=/usr \
+    --enable-libmp3lame \
+    --enable-libvorbis \
+    --enable-libxvid \
+    --enable-libx264 \
+    --enable-libvpx \
+    --enable-libtheora \
+    --enable-libgsm \
+    --enable-libspeex \
+    --enable-postproc \
+    --enable-shared \
+    --enable-x11grab \
+    --enable-libopencore_amrnb \
+    --enable-libopencore_amrwb \
+    --enable-libschroedinger \
+    --enable-libopenjpeg \
+    --enable-librtmp \
+    --enable-libpulse \
+    --enable-libv4l2 \
+    --enable-gpl \
+    --enable-version3 \
+    --enable-runtime-cpudetect \
+    --disable-debug \
+    --disable-static
+
+  gmake
+  gmake tools/qt-faststart
+  gmake doc/ff{mpeg,play,server}.1
+}
+
+package() {
+  cd $pkgname-$pkgver
+  gmake DESTDIR="$pkgdir" install install-man
+  install -D -m755 tools/qt-faststart "$pkgdir/usr/local/bin/qt-faststart"
+}
+
+# vim:set ts=2 sw=2 et:
