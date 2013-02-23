@@ -1,6 +1,6 @@
 pkgname=pacman
 pkgver=4.0.3
-pkgrel=8
+pkgrel=9
 pkgdesc="A library-based package manager with dependency support"
 arch=('i686' 'x86_64')
 url="http://www.archlinux.org/pacman/"
@@ -77,4 +77,14 @@ package() {
 
   install -dm755 "${pkgdir}/usr/local/share/pacman"
   install -m644 "${srcdir}/makepkg.site" "${pkgdir}/usr/local/share/pacman/makepkg.site"
+
+  # install completion files
+  install -dm755 "$pkgdir/usr/local/etc/bash_completion.d"
+  install -m755 contrib/bash_completion "$pkgdir/usr/local/etc/bash_completion.d/bash_completion.sh"
+  for f in makepkg pacman-key; do
+    ln -s pacman "$pkgdir/usr/local/etc/bash_completion.d/${f}.sh"
+  done
+
+  install -dm755 $pkgdir/usr/local/share/zsh/site-functions
+  install -m644 contrib/zsh_completion $pkgdir/usr/local/share/zsh/site-functions/_pacman
 }
