@@ -1,7 +1,7 @@
 pkgbase=gtk2
 pkgname=('gtk2' 'gtk-update-icon-cache')
-pkgver=2.24.14
-pkgrel=3
+pkgver=2.24.16
+pkgrel=2
 arch=('i686' 'x86_64')
 url="http://www.gtk.org/"
 makedepends=('atk' 'pango' 'libxcursor' 'libxinerama' 'libxrandr' 'libxi' 'libxcomposite' 'libxdamage'
@@ -19,9 +19,11 @@ source=(http://ftp.gnome.org/pub/gnome/sources/gtk+/2.24/gtk+-$pkgver.tar.xz
 	patch-gdk-2.0.pc.in
 	patch-gtk_gtkbuilderparser.c
 	patch-gtk_gtksignal.h
-	patch-gtk_updateiconcache.c)
+	patch-gtk_updateiconcache.c
+	gdk-thread-hack.diff
+	)
 
-sha256sums=('8bd1b8b511a3004e8972badf467ce829e6855cdff15540b9344dc934c68008ac'
+sha256sums=('93cd69cc2cecf9a3aa31a50caf4a24752a6928a48c527ae967b109df6f9302d3'
             '88a5f572a78f3f2095e8ad3fca5003103f71b25c8071fd0261ade8c431aaa248'
             '3a090e37a543b71ee7fd37fffbbaeadd212dd0ad9f84ad4f8788488c14dfa2d9'
             '166fe68fae64720d805c6df7e2650884b41d19e051452e28ec74a7ddfd061322'
@@ -31,7 +33,8 @@ sha256sums=('8bd1b8b511a3004e8972badf467ce829e6855cdff15540b9344dc934c68008ac'
             '30ee3e7e46d39474ed52f4afdd84132de53f9dea1b0c2b4b27b8a9a380ed7d89'
             '7a2089acc9553f48c73a18d31bd302b82a65b06d7a0a61f72077961ddb4b33ee'
             'b7cd69118b2847d5f5e0b250ad548cccdc579d50826b421c6ee6afedf05ae32c'
-            '5e082f9e0109a1a63e713d1997d277251a3f7760efedccd4c9253e5e9aaae8a9')
+            '5e082f9e0109a1a63e713d1997d277251a3f7760efedccd4c9253e5e9aaae8a9'
+            'ba22671269e3d20dc3c0013ee1ac36bbb1cde890e4597ee4a60badc101b7dced')
 
 build() {
     cd gtk+-$pkgver
@@ -45,6 +48,7 @@ build() {
 	patch -p0 -i ${srcdir}/patch-gtk_gtkbuilderparser.c
 	patch -p0 -i ${srcdir}/patch-gtk_gtksignal.h
 	patch -p0 -i ${srcdir}/patch-gtk_updateiconcache.c	
+	patch -p0 -i ${srcdir}/gdk-thread-hack.diff
 
     CXX=/usr/bin/false ./configure --prefix=/usr/local \
         --sysconfdir=/usr/local/etc/ \
@@ -86,4 +90,3 @@ package_gtk-update-icon-cache() {
     install -dm755 $pkgdir/usr/local/bin/
     install -m755 gtk-update-icon-cache $pkgdir/usr/local/bin/
 }
-
