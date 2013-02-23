@@ -95,8 +95,7 @@ build() {
       --disable-xfbdev \
       --disable-xfake \
       --disable-devel-docs --without-xmlto --disable-docs \
-      --without-dtrace \
-      --enable-debug
+      --without-dtrace
   make V=1
 
   # Disable subdirs for make install rule to make splitting easier
