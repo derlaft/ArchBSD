@@ -1,0 +1,49 @@
+# Maintainer: Sébastien Luttringer <seblu@archlinux.org>
+# Contributor: Juergen Hoetzel <juergen@archlinux.org>
+# Contributor: Damir Perisa <damir.perisa@bluewin.ch>
+# Contributor: Wolfgang Bumiller <archbsd at bumiller dot com>
+
+pkgname=lua
+pkgver=5.1.5
+pkgrel=3
+pkgdesc='A powerful light-weight programming language designed for extending applications'
+arch=('i686' 'x86_64')
+url='http://www.lua.org/'
+license=('MIT')
+options=('!makeflags' '!emptydirs')
+source=("http://www.lua.org/ftp/$pkgname-$pkgver.tar.gz"
+        'liblua.so.patch' 'lua.pc' 'LICENSE')
+md5sums=('2e115fe26e435e33b0d5c022e4490567'
+         'bdc663c7b82ffc0b5df67611621fb625'
+         'e7ba6c2b695b0b84a5ea0cbff5fc9067'
+         '0e2bd67b909b9ff673da844ca3480df2')
+
+build() {
+  cd $pkgname-$pkgver
+#  patch -p1 -i "$srcdir/liblua.so.patch"
+#  patch -p0 -i "$srcdir/patch-src__liolib.c"
+#  patch -p0 -i "$srcdir/patch-src__Makefile"
+  [[ $CARCH == x86_64 ]] && export CFLAGS="$CFLAGS -fPIC"
+  sed -i '' -e 's|-ldl | |g' src/Makefile
+  export LUA_SONAME="liblua-5.1.so.1"
+  gmake MYCFLAGS="$CFLAGS" MYLDFLAGS="$LDFLAGS" freebsd
+  sed "s/%VER%/${pkgver%.*}/g;s/%REL%/$pkgver/g" ../lua.pc > lua.pc
+}
+
+package() {
+  cd $pkgname-$pkgver
+  gmake \
+    TO_LIB="liblua.a" \
+    INSTALL_TOP="$pkgdir/usr/local" \
+    INSTALL_MAN="$pkgdir/usr/local/man/man1" \
+    install
+  install -dm755 "$pkgdir/usr/local/libdata/pkgconfig"
+  install -m644 lua.pc "$pkgdir/usr/local/libdata/pkgconfig/lua.pc"
+  # Install the documentation
+  install -d "$pkgdir/usr/local/share/doc/lua"
+  install -m644 doc/*.{gif,png,css,html} "$pkgdir/usr/local/share/doc/lua"
+  install -dm755 "$pkgdir/usr/local/share/licenses/$pkgname"
+  install -m644 "$srcdir/LICENSE" "$pkgdir/usr/local/share/licenses/$pkgname/LICENSE"
+}
+
+# vim:set ts=4 sw=4 et:

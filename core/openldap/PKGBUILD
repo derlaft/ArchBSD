@@ -59,7 +59,7 @@ build() {
   export CPPFLAGS="${CPPFLAGS} -I/usr/local/include"
 # have to explicitly disable libmdb - it's not built anywhere in ports/archlinux
 # but it seems to still try anyway - but it requires O_DSYNC which does not exist on BSD
-  ./configure --prefix=/usr/local --mandir=/usr/local/man --libexecdir=/usr/local/lib \
+  ./configure --prefix=/usr/local --mandir=/usr/local/man --libexecdir=/usr/local/libexec \
     --sysconfdir=/usr/local/etc --localstatedir=/var/db \
     --enable-ipv6 --enable-syslog --enable-local \
     --enable-bdb --enable-hdb \

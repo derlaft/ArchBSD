@@ -3,7 +3,7 @@
 
 pkgname=glib2
 pkgver=2.34.3
-pkgrel=2
+pkgrel=3
 pkgdesc="Common C routines used by GTK+ and other libs"
 url="http://www.gtk.org/"
 arch=(i686 x86_64)
@@ -123,7 +123,7 @@ build() {
       --with-pcre=system \
       --disable-fam \
       --target=$CHOST \
-      PTHREAD_CFLAGS="-pthread" \
+      PTHREAD_CFLAGS="" \
       PTHREAD_LIBS="-pthread" \
       LDFLAGS="-L/usr/local/lib -lintl" \
       CFLAGS="-I/usr/local/include" \
