@@ -22,9 +22,13 @@ sha256sums=('1368f80069ce71f5928cad59c8e60c0b95876942ca9e02c53853e54ae24aedc1'
             'c8a06fc76f5d2ac08a0e93d28d69feccfca751d898549ff37d0e4d197108c42a')
 build() {
 	cd $srcdir/$pkgname-$pkgver
+	CC="$CC $(pkg-config lua5.1 --cflags)" \
+	LUA_CFLAGS=" " \
+	LUA_LIBS="$(pkg-config lua5.1 --libs)" \
 	./configure --prefix=/usr/local/ \
 		--libdir=/usr/local/lib/lighttpd/ \
 		--sysconfdir=/usr/local/etc/lighttpd \
+		--enable-static \
 		--with-mysql \
 		--with-ldap \
 		--with-attr \
@@ -33,8 +37,9 @@ build() {
 		--without-fam \
 		--with-gdbm \
 		--with-memcache \
+		--with-bzip2 \
 		--with-lua
-	grep -lr -e '-l-pthread' ./ src/ | xargs sed -i '' -e 's/-l-pthread/-pthread/g' 
+	find . -name Makefile | xargs sed -i '' -e 's/-l-pthread/-pthread/g'
 	make
 }
 
@@ -54,11 +59,11 @@ package() {
 	install -dm 755 $pkgdir/srv/
 	install -dm755 $pkgdir/srv/http/
 
-	install -dm755 $pkgdir/etc/init.d/
-	install -dm755 $pkgdir/etc/conf.d/
+	install -dm755 $pkgdir/usr/local/etc/init.d/
+	install -dm755 $pkgdir/usr/local/etc/conf.d/
 
-	install -m755 ${srcdir}/lighttpd.rc.d $pkgdir/etc/init.d/lighttpd
-	install -m755 ${srcdir}/lighttpd.conf.d $pkgdir/etc/conf.d/lighttpd
+	install -m755 ${srcdir}/lighttpd.rc.d $pkgdir/usr/local/etc/init.d/lighttpd
+	install -m755 ${srcdir}/lighttpd.conf.d $pkgdir/usr/local/etc/conf.d/lighttpd
 
 	pushd doc/config >/dev/null
 	install -dm755 $pkgdir/usr/local/share/doc/lighttpd/config/{conf.d,vhosts.d}
