@@ -1,3 +1,7 @@
+> [!WARNING]  
+> I forked this repository years ago and since then the original repo disappeared. I have nothing to do with the original project, but will keep it for the historical purposes.
+
+
 Welcome to the ArchBSD project, currently work is still under process and there is still
 quite a bit of work to be done. However I am approaching to release a test ISO soon after
 months of work.
